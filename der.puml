@@ -1,0 +1,59 @@
+@startuml der
+
+entity Usuario {
+  * id_usuario : int
+  --
+  nombre : varchar
+  apellido : varchar
+  mail : varchar
+  rol : varchar
+  contrasena : varchar
+}
+
+entity Aula {
+  * id_aula : int
+  --
+  nombre : varchar
+  capacidad : int
+  piso : int
+  ubicacion : varchar
+}
+
+entity Evento {
+  * id_evento : int
+  --
+  titulo : varchar
+  tipo : varchar
+  fecha : date
+  horaInicio : time
+  horaFin : time
+  estado : varchar
+}
+
+entity Notificacion {
+  * id_notificacion : int
+  --
+  mensaje : varchar
+  fecha : datetime
+  leida : boolean
+}
+
+entity Aviso {
+  * id_aviso : int
+  --
+  mensaje : varchar
+  fecha : datetime
+}
+
+' RELACIONES
+
+Usuario ||--o{ Evento : responsable
+Aula ||--o{ Evento : asignada
+
+Usuario ||--o{ Notificacion : recibe
+Evento ||--o{ Notificacion : genera
+
+Usuario ||--o{ Aviso : crea
+Evento ||--o{ Aviso : contiene
+
+@enduml
