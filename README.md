@@ -4,7 +4,7 @@ El objetivo es desarrollar una plataforma web que permita gestionar, asignar y c
 
 ---
 
-### ⚙️ Funcionamiento
+## ⚙️ Funcionamiento
 
 El sistema se organiza mediante distintos roles de usuario, donde cada uno posee funcionalidades y permisos específicos dentro de la plataforma.
 
@@ -18,7 +18,7 @@ Además, cuenta con un sistema de **avisos y notificaciones** que permite manten
 
 ---
 
-### 🧩 Arquitectura
+## 🧩 Arquitectura
 
 La aplicación utiliza una arquitectura cliente-servidor separada en frontend y backend. El sistema permite gestionar aulas y eventos académicos, brindando funcionalidades específicas según el rol del usuario.
 
