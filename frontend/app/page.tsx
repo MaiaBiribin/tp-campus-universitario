@@ -1,4 +1,5 @@
-//import { redirect } from "next/navigation"
+import { redirect } from "next/navigation"
+import Link from "next/link"
 export default function Home(){
   return (
     <div id="inicio">
@@ -8,28 +9,33 @@ export default function Home(){
         'use server'
         const usuario = formData.get('usuario')
         console.log("Usuario ingresado:", usuario)
+
+        redirect("/DashboardPage")
       }}>
         <label htmlFor="usuario">Usuario:</label>
         <input 
           type="text" 
           name="usuario" 
           id="usuario" 
-          placeholder="Ej:"
+          placeholder="Ej:pedro"
           required 
         />
-        <br />
+        <br/>
         <label htmlFor="contraseña">contraseña</label>
         <input
           type="password"
           name="contraseña"
           id="contraseña"
-          placeholder="Ej:"
+          placeholder="Ej:*****"
           required
           ></input>
           <br />
         <button type="submit">Ingresar</button>
+        
         <br />
-       <p>no tines usario? crea uno</p>
+       <p>
+        no tines usario? crea uno <Link href="/registro" style={{ color: 'blue', textDecoration: 'underline' }}></Link>
+       </p>
       </form>
     </div>
   )
