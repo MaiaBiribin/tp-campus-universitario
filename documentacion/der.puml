@@ -1,5 +1,11 @@
 @startuml der
 
+entity Rol {
+    * id_rol : int <PK>
+    --
+    * nombre : varchar(50)
+}
+
 entity Usuario {
   * id_usuario : int
   --
@@ -47,6 +53,13 @@ entity Aviso {
 
 ' RELACIONES
 
+note right of Rol
+Valores posibles:
+- User
+- Admin
+- Teacher
+end note
+
 Usuario ||--o{ Evento : responsable
 Aula ||--o{ Evento : asignada
 
@@ -55,5 +68,7 @@ Evento ||--o{ Notificacion : genera
 
 Usuario ||--o{ Aviso : crea
 Evento ||--o{ Aviso : contiene
+
+Usuario ||--o{ Rol : asignada
 
 @enduml
