@@ -45,6 +45,7 @@
 
 ## 🛠️ Funcionalidades para administradores
 - El administrador debe contar con un panel exclusivo de administración.
+- El administrador carga usuarios en la base de datos.
 - El administrador debe gestionar aulas.
 - El administrador debe asignar aulas a eventos.
 - El administrador debe administrar la información general del sistema.
