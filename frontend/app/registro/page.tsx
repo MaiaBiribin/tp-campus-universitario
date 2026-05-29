@@ -15,19 +15,7 @@ export default function Registrarse(){
       <h2>Crear una nueva cuenta</h2>
       <p>Completa los datos para registrarte en el sistema.</p>
 
-      <form action={async (formData) => {
-        'use server'
-
-        const usuario = formData.get('usuario') as string;
-        const contrasena = formData.get('contraseña') as string;
-
-       
-        const resultado = await registrarUsuarioEnBaseDeDatos(usuario, contrasena);
-
-        if (resultado.success) {
-           redirect("/")
-        }
-      }}>
+      <form>
         <label htmlFor="usuario">Elige un nombre de usuario:</label>
         <br />
         <input type="text" name="usuario" id="usuario" required />
