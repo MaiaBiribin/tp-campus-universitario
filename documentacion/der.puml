@@ -1,7 +1,7 @@
 @startuml der
 
 entity Rol {
-    * id_rol : int <PK>
+    * id_rol : int (PK)
     --
     * nombre : varchar(50)
 }
@@ -12,8 +12,9 @@ entity Usuario {
   nombre : varchar
   apellido : varchar
   mail : varchar
-  rol : varchar
   contrasena : varchar
+  id_rol : int (FK)
+  
 }
 
 entity Aula {
@@ -58,6 +59,11 @@ Valores posibles:
 - User
 - Admin
 - Teacher
+end note
+
+note right of Usuario
+Usuario (muchos) → Rol (uno)
+  rol: int (FK)         id_rol: int (PK)
 end note
 
 Usuario ||--o{ Evento : responsable

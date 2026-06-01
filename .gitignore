@@ -1,2 +1,12 @@
+# Builds
 dist/
+
+# Dependencias
 node_modules/
+
+# Variables de entorno
+backend/.env
+frontend/.env.local
+
+# Opcional: ignorar .env en cualquier subcarpeta
+**/.env
