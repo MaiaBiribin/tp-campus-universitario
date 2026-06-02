@@ -19,6 +19,12 @@ export class Usuario {
   @Column()
   contrasena!: string;
 
+  @Column({ unique: true })
+  dni!: string;
+
+  @Column({ default: false })
+  habilitado!: boolean;
+
   // Relación con Rol
   @ManyToOne(() => Rol, { eager: true })
   @JoinColumn({ name: 'id_rol' })

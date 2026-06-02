@@ -11,6 +11,7 @@ entity Usuario {
   --
   nombre : varchar
   apellido : varchar
+  dni : int
   mail : varchar
   contrasena : varchar
   id_rol : int (FK)
