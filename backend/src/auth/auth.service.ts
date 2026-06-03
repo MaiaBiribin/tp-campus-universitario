@@ -1,4 +1,4 @@
-import { Injectable,UnauthorizedException } from '@nestjs/common';
+import { Injectable,UnauthorizedException, BadRequestException } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
 import { UsuariosService } from '../usuarios/usuarios.service';
@@ -39,5 +39,19 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async register(mail: string, dni: string, contrasena: string) {
+
+  // 1. Verifica que el mail no esté ya registrado
+  const usuarioExistente = await this.usuariosService.findByMail(mail);
+  if (usuarioExistente) {
+    throw new BadRequestException('El mail ya está registrado');
+  }
+
+  // 2. Crea el usuario con habilitado=false y rol=Alumno
+  await this.usuariosService.create(mail, dni, contrasena);
+
+  return { mensaje: 'Solicitud de registro enviada. Aguardá la habilitación del administrador.' };
   }
 }
