@@ -1,14 +1,5 @@
 @import "tailwindcss";
 
-#inicio{
-    background-color: darkblue;
-    height: 100vh;           
-    display: flex;          
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center;     
-    color: white;
-}
 
 #forum{
   background-color: rgba(255, 255, 255, 0.144); 
