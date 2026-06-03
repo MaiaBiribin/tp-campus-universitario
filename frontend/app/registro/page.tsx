@@ -1,38 +1,87 @@
-import Link from "next/link";
-import { Redirect } from "next";
-import { redirect } from "next/dist/server/api-utils";
-import { RedirectType } from "next/navigation";
+import { useRouter } from "next/router";
+import { SubmitEvent } from "react";
 
 
-async function registrarUsuarioEnBaseDeDatos (usuario:string,contrasena:string) {
-    console.log(`Guardando en la DB -> Usuario: ${usuario}, Clave:${contrasena}`);
-  return { success: true };
-}
 
 export default function Registrarse(){
+  const ruta=useRouter();
+  
+  async function MandarDatos(event:SubmitEvent<HTMLFormElement>){
+    event.preventDefault(); 
+
+    const formData = new FormData(event.currentTarget); // 
+    const datosUsuario = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch("http://localhost/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datosUsuario),
+      });
+
+      if (response.ok) {
+        alert("su usario fue creado corectamente,el administrador tiene que confirmar al usario.")
+         const respuestaAdmin=await fetch("")
+          
+         if(respuestaAdmin){
+          ruta.push("/estudiante") ;
+         }else{
+          console.error("no se admitio el usario.")
+         }
+        
+      } else {
+        alert("Hubo un error en el registro.");
+      
+      }
+    } catch (error) {
+      console.error("Error al conectar con el servidor:", error);
+    }
+
+  }
+  
+  
   return (
-    <div id="registro" style={{ padding: '20px' }}>
-      <h2>Crear una nueva cuenta</h2>
-      <p>Completa los datos para registrarte en el sistema.</p>
-
-      <form>
-        <label htmlFor="usuario">Elige un nombre de usuario:</label>
+   <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden p-8 flex flex-col justify-between font-sans antialiased">
+   <main className="relative flex flex-col grow justify-between">
+      <header className="flex justify-between items-start w-full">
+        <h1 className="text-3xl font-extrabold tracking-tight">Crea tu nueva cuenta</h1>
+        <p className="leading-relaxed">completa tus datos para registrarte en AulaAsync</p>
+      </header>
+     
+      <form onSubmit={MandarDatos} 
+       className="flex flex-col grow justify-between " >
+        <label htmlFor="dni">DNI</label>
+        <input 
+         type="number"
+         name="Dni"
+         id="Dni"
+         placeholder="Ej:456495"
+         required
+        />
         <br />
-        <input type="text" name="usuario" id="usuario" required />
-        <br /><br />
-
-        <label htmlFor="contraseña">Elige una contraseña:</label>
+        <label htmlFor="Email">Correo Electronico</label>
+        <input 
+         type="email"
+         name="email"
+         id="Email"
+         placeholder="Ej:aula@gmail.com"
+         required
+        />
         <br />
-        <input type="password" name="contraseña" id="contraseña" required />
-        <br /><br />
-
-        <button type="submit">Registrarse y Crear Cuenta</button>
+        <label htmlFor="contraseña">Contraseña</label>
+        <input 
+         type="password" 
+         name="contraseña"
+         id="Contraseña"
+         placeholder="****"
+         required
+        />
+        <button type="submit">Crear cuenta</button>
       </form>
-
-      <br />
-      <p>
-        ¿Ya tienes cuenta? <Link href="/">Volver al Login</Link>
-      </p>
+    </main>
+  
     </div>
   );
 }

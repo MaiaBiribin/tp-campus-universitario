@@ -1,5 +1,17 @@
 export default function home(){
-    return(){
+    return(
+       <div>
+          <main>
+             <header>
+                <h1>pantalla de cursos</h1>
+             </header>
+          </main>
+
+
+       </div>
+
+
+    )
         
-    }
+    
 }
