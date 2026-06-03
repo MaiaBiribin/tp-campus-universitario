@@ -12,5 +12,10 @@ export class AuthController {
     @Post('login')
     signIn(@Body() body: { mail: string; contrasena: string }) {
     return this.authService.signIn(body.mail, body.contrasena);
-  }
+    }
+
+    @Post('register')
+    register(@Body() body: { mail: string; dni: string; contrasena: string }) {
+    return this.authService.register(body.mail, body.dni, body.contrasena);
+    }
 }
