@@ -8,13 +8,13 @@ El objetivo es desarrollar una plataforma web que permita gestionar, asignar y c
 
 El sistema se organiza mediante distintos roles de usuario, donde cada uno posee funcionalidades y permisos específicos dentro de la plataforma.
 
-El **administrador** es quien crea los eventos académicos, asigna aulas disponibles a cada evento y administra la información general del sistema (como la creación, edición o eliminación de aulas).
+El **administrador** es responsable de administrar el funcionamiento académico del sistema. Puede gestionar usuarios (aprobar o rechazar solicitudes de registro), crear eventos académicos, asignar aulas disponibles, evitar conflictos de horarios y administrar la información general del sistema (como la creación, edición o eliminación de aulas).
 
-El **docente** solo interactúa con los eventos que le fueron asignados. Puede visualizar su agenda de clases y, en caso de inconvenientes (por ejemplo, retrasos o ausencias), puede cargar avisos informativos.
+El **docente** interactúa únicamente con los eventos académicos que le fueron asignados. Puede visualizar su agenda académica, consultar el detalle de cada evento y crear avisos informativos ante situaciones como retrasos, ausencias o cancelaciones.
 
-El **estudiante** únicamente consulta la información: puede ver en qué aula tiene clase, los horarios asignados y recibir notificaciones ante cambios o avisos realizados por el docente o el sistema.
+El **estudiante** utiliza la plataforma para consultar rápidamente dónde debe asistir y cuándo. Puede visualizar sus próximos eventos, consultar horarios, aulas asignadas, detalles del evento, ubicación de aulas y recibir notificaciones ante cambios o avisos importantes.
 
-Además, cuenta con un sistema de **avisos y notificaciones** que permite mantener informados a los usuarios ante cambios relevantes en eventos académicos o en la disponibilidad de aulas.
+Además, el sistema cuenta con un módulo de **avisos y notificaciones** que mantiene informados a los usuarios ante cambios relevantes como modificaciones de aula, cancelaciones, retrasos o nuevos avisos asociados a eventos académicos.
 
 ---
 
