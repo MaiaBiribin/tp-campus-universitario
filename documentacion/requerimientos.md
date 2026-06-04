@@ -2,6 +2,9 @@
 
 ## 👤 Gestión de usuarios
 - El sistema debe permitir el registro de usuarios.
+- El estudiante debe registrarse ingresando nombre, apellido, mail, DNI y contraseña.
+- El sistema debe generar una solicitud de registro en estado pendiente.
+- El sistema no debe permitir el inicio de sesión hasta que el administrador apruebe el registro.
 - El sistema debe permitir el inicio de sesión.
 - El sistema debe permitir el cierre de sesión.
 - El sistema debe permitir la gestión de perfiles de usuario.
@@ -22,33 +25,61 @@
 - El sistema debe validar la disponibilidad de aulas.
 - El sistema debe evitar conflictos de horarios.
 - El sistema debe permitir consultar horarios y fechas de eventos.
+- Tipos de evento:
+  - Clase
+  - Parcial
+  - Final
 
 ---
 
 ## 🎓 Funcionalidades para estudiantes
+**Objetivo:** consultar rápidamente dónde tiene que estar, cuándo y recibir cambios.
 - El estudiante debe poder visualizar las aulas asignadas a sus clases o exámenes.
 - El estudiante debe poder consultar horarios y fechas.
+- El estudiante debe poder visualizar el mapa de aulas.
 - El estudiante debe recibir notificaciones ante cambios o avisos importantes.
+El estudiante debe visualizar:
+  - próximos eventos ordenados por fecha y hora
+  - eventos del día actual destacados
+  - información resumida del evento: materia, tipo de evento (Clase / Parcial / Final), horario, aula
+- El estudiante debe poder consultar:
+  - nombre del evento
+  - materia
+  - aula asignada
+  - mapa del aula
+  - fecha y horario
+  - docente responsable
+  - avisos relacionados
 
 ---
 
 ## 👨‍🏫 Funcionalidades para docentes
+**Objetivo:** consultar agenda académica y comunicar cambios.
 - El docente debe poder visualizar sus eventos académicos asignados.
-- El docente debe poder cargar avisos relacionados con eventos académicos.
-
-### Ejemplos:
-- retrasos
-- ausencias
-- cancelaciones
+- El docente debe poder visualizar asignaciones de aulas para sus clases o exámenes.
+- El docente debe poder visualizar el mapa de aulas.
+- El docente debe poder cargar, editar y eliminar avisos relacionados con eventos académicos:
+  - retrasos
+  - ausencias
+  - cancelaciones
+- Al crear un aviso, el sistema debe generar notificaciones para estudiantes afectados.
 
 ---
 
 ## 🛠️ Funcionalidades para administradores
-- El administrador debe contar con un panel exclusivo de administración.
-- El administrador carga usuarios en la base de datos.
+- El administrador debe habilitar perfiles.
+- El administrador debe gestionar usuarios.
 - El administrador debe gestionar aulas.
 - El administrador debe asignar aulas a eventos.
+- El administrador debe crear eventos académicos.
 - El administrador debe administrar la información general del sistema.
+- El administrador debe visualizar accesos a:
+  - solicitudes de registro
+  - gestión de eventos, aulas y usuarios
+  - notificaciones del sistema
+- El administrador debe poder:
+  - visualizar solicitudes pendientes
+  - rechazar y aprobar registros
 
 ---
 
