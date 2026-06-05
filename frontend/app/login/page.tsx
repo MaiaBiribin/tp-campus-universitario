@@ -1,6 +1,5 @@
 "use client";
 
-"use client"
 import Link from "next/link"
 
 import { useRouter } from "next/navigation";
@@ -51,6 +50,47 @@ export default function Home(){
       alert("Hubo un problema al conectar con el servidor.");
     }
   }
+  // async function handleSumit(evento:SubmitEvent<HTMLFormElement>){
+  //    evento.preventDefault()
+  //    const formData =new FormData(evento.currentTarget)
+  //    const DatosLogin=Object.fromEntries(formData.entries())
+    
+  //   try {
+      
+  //     const response = await fetch("http://localhost:4000/auth/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(DatosLogin), 
+  //     });
+
+      
+  //     if (response.ok) {
+  //       const usuario = await response.json(); 
+  //       localStorage.setItem("token", usuario.token)
+
+  //       alert(`¡Bienvenido! Rol: ${usuario.rol}`);
+
+       
+  //       if (usuario.rol === "estudiante") {
+  //         router.push("/estudiante/home");
+  //       } else if (usuario.rol === "profesor") {
+  //         router.push("/profesor/home");
+  //       } else {
+  //         router.push("/dashboard/home"); 
+  //       }
+
+  //     } else {
+  //       const errorData = await response.json().catch(() => ({}));
+  //       alert(errorData.mensaje || "Credenciales incorrectas. Verificá tus datos.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error al conectar con el servidor:", error);
+  //     alert("Hubo un problema al conectar con el servidor.");
+  //   }
+
+  // }
   
   
   return (
