@@ -6,8 +6,6 @@ export default function home(){
                 <h1>pantalla de cursos</h1>
              </header>
           </main>
-
-
        </div>
 
 

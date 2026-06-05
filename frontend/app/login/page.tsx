@@ -1,13 +1,14 @@
 "use client";
 
+"use client"
 import Link from "next/link"
 
 import { useRouter } from "next/navigation";
 
 export default function Home(){
-  const router=useRouter()
+  const ruta=useRouter()
 
-  async function handleSubmit(evento: React.FormEvent<HTMLFormElement>){
+ async function handleSubmit(evento: React.FormEvent<HTMLFormElement>){
     evento.preventDefault()
     const formData = new FormData(evento.currentTarget)
     const DatosLogin = Object.fromEntries(formData.entries())
@@ -28,19 +29,17 @@ export default function Home(){
         const data = await response.json(); 
         localStorage.setItem("token", data.access_token)
 
-      
+  
         const payload = JSON.parse(atob(data.access_token.split('.')[1]));
 
         alert(`¡Bienvenido ${payload.nombre}!`);
 
         if (payload.rol === "Admin") {
-          router.push("/administrador/home");
+          ruta.push("/administrador/home");
         } else if (payload.rol === "Profesor") {
-          router.push("/profesor/home");
+          ruta.push("/profesor/home");
         } else if (payload.rol === "Alumno") {
-          router.push("/alumno/home");
-        }else{
-          console.error("no existe ese rol.")
+          ruta.push("/alumno/home");
         }
 
       } else {
@@ -52,7 +51,6 @@ export default function Home(){
       alert("Hubo un problema al conectar con el servidor.");
     }
   }
-  
   
   
   return (
@@ -71,7 +69,7 @@ export default function Home(){
           <label htmlFor="usuario">Email:</label>
          <input className=""
           type="Email" 
-          name="email" 
+          name="mail" 
           id="Email" 
           placeholder="Ej:Aula@gmail.com"
           required 
@@ -80,7 +78,7 @@ export default function Home(){
          <label htmlFor="contraseña">contraseña</label>
          <input className=""
           type="password"
-          name="contraseña"
+          name="contrasena"
           id="contraseña"
           placeholder="Ej:*****"
           required
