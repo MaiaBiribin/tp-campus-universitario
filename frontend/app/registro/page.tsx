@@ -1,19 +1,20 @@
-import { useRouter } from "next/router";
-import { SubmitEvent } from "react";
+"use client";
+import { useRouter } from "next/navigation";
+
 
 
 
 export default function Registrarse(){
   const ruta=useRouter();
   
-  async function MandarDatos(event:SubmitEvent<HTMLFormElement>){
+  async function MandarDatos(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault(); 
 
     const formData = new FormData(event.currentTarget); // 
     const datosUsuario = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch("http://localhost/auth/register", {
+      const response = await fetch("http://localhost:4000/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,15 +23,8 @@ export default function Registrarse(){
       });
 
       if (response.ok) {
-        alert("su usario fue creado corectamente,el administrador tiene que confirmar al usario.")
-         const respuestaAdmin=await fetch("")
-          
-         if(respuestaAdmin){
-          ruta.push("/estudiante") ;
-         }else{
-          console.error("no se admitio el usario.")
-         }
-        
+        alert("solicitud creada,espera a que el administrador acepta la solicitud.")
+         ruta.push("/login")
       } else {
         alert("Hubo un error en el registro.");
       
