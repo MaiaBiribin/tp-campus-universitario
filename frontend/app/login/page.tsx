@@ -50,81 +50,44 @@ export default function Home(){
       alert("Hubo un problema al conectar con el servidor.");
     }
   }
-  // async function handleSumit(evento:SubmitEvent<HTMLFormElement>){
-  //    evento.preventDefault()
-  //    const formData =new FormData(evento.currentTarget)
-  //    const DatosLogin=Object.fromEntries(formData.entries())
-    
-  //   try {
-      
-  //     const response = await fetch("http://localhost:4000/auth/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(DatosLogin), 
-  //     });
-
-      
-  //     if (response.ok) {
-  //       const usuario = await response.json(); 
-  //       localStorage.setItem("token", usuario.token)
-
-  //       alert(`¡Bienvenido! Rol: ${usuario.rol}`);
-
-       
-  //       if (usuario.rol === "estudiante") {
-  //         router.push("/estudiante/home");
-  //       } else if (usuario.rol === "profesor") {
-  //         router.push("/profesor/home");
-  //       } else {
-  //         router.push("/dashboard/home"); 
-  //       }
-
-  //     } else {
-  //       const errorData = await response.json().catch(() => ({}));
-  //       alert(errorData.mensaje || "Credenciales incorrectas. Verificá tus datos.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error al conectar con el servidor:", error);
-  //     alert("Hubo un problema al conectar con el servidor.");
-  //   }
-
-  // }
-  
+ 
   
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden p-8 flex flex-col justify-between font-sans antialiased">
-      <main className="relative flex flex-col grow justify-between">
-        <header className="flex justify-between items-start w-full"> 
-          <div className="flex items-center gap-3">
-          <h1 className="text-purple-400 font-sans font-size 20">Iniciar sesion</h1>
+    <div className="relative min-h-screen bg-[#070b19] text-white p-4 flex items-center justify-center font-sans antialiased">
+      <main className="bg-[#0d1527] border border-[#1e293b] rounded-2xl p-8 md:p-12 max-w-lg w-full shadow-2xl flex flex-col items-center">
+        <header className="flex flex-col items-center text-center mb-8 w-full"> 
+          <div >
+          <h1  className="text-2xl font-bold text-white mb-2" >Iniciar sesion</h1>
           </div>
-          <div className="flex items-center gap-3">
-          <p className="">ingrese su mail y contraseña de la pagina</p>
+          <div >
+          <p className="text-sm text-slate-400 leading-relaxed">ingrese su mail y contraseña de la pagina</p>
           </div>
         </header>
 
-       <form className="relative min-h-screen text-white flex-col justify-between" onSubmit={handleSubmit}>
-          <label htmlFor="usuario">Email:</label>
-         <input className=""
+       <form className="w-full flex flex-col gap-5"  onSubmit={handleSubmit}>
+          <label htmlFor="usuario" className="text-sm font-medium text-slate-300 block mb-1.5">Email:</label>
+         <input
           type="Email" 
           name="mail" 
           id="Email" 
           placeholder="Ej:Aula@gmail.com"
           required 
+          className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
           />
          <br/>
-         <label htmlFor="contraseña">contraseña</label>
-         <input className=""
+         <label htmlFor="contraseña" className="text-sm font-medium text-slate-300 block mb-1.5">contraseña</label>
+         <input 
           type="password"
           name="contrasena"
           id="contraseña"
           placeholder="Ej:*****"
           required
+          className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
           ></input>
           <br />
-         <button className="" type="submit">Ingresar</button>
+         <button  type="submit" className="w-full bg-[#5842e3] hover:bg-[#4732c8] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors mt-4 shadow-lg shadow-[#5842e3]/20">
+         Ingresar
+         </button>
         
          <br/>
        

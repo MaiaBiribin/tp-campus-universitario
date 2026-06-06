@@ -2,7 +2,7 @@ export default interface usario{
     email:string
     contraseña:string
     rol:number
-    eventos:evento
+    eventos:[]
     habilitado:boolean
 }
 

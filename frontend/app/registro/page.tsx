@@ -37,42 +37,45 @@ export default function Registrarse(){
   
   
   return (
-   <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden p-8 flex flex-col justify-between font-sans antialiased">
-   <main className="relative flex flex-col grow justify-between">
-      <header className="flex justify-between items-start w-full">
-        <h1 className="text-3xl font-extrabold tracking-tight">Crea tu nueva cuenta</h1>
-        <p className="leading-relaxed">completa tus datos para registrarte en AulaAsync</p>
+   <div className="relative min-h-screen bg-[#070b19] text-white p-4 flex items-center justify-center font-sans antialiased">
+   <main className="bg-[#0d1527] border border-[#1e293b] rounded-2xl p-8 md:p-12 max-w-lg w-full shadow-2xl flex flex-col items-center" >
+      <header className="flex flex-col items-center text-center mb-8 w-full" >
+        <h1 className="text-2xl font-bold text-white mb-2">Crea tu nueva cuenta</h1>
+        <p className="text-sm text-slate-400 leading-relaxed">completa tus datos para registrarte en AulaAsync</p>
       </header>
      
       <form onSubmit={MandarDatos} 
-       className="flex flex-col grow justify-between " >
-        <label htmlFor="dni">DNI</label>
+       className="w-full flex flex-col gap-5" >
+        <label htmlFor="dni" className="text-sm font-medium text-slate-300 block mb-1.5">DNI</label>
         <input 
          type="number"
          name="Dni"
          id="Dni"
          placeholder="Ej:456495"
          required
+        className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
         />
         <br />
-        <label htmlFor="Email">Correo Electronico</label>
+        <label htmlFor="Email" className="text-sm font-medium text-slate-300 block mb-1.5">Correo Electronico</label>
         <input 
          type="email"
          name="email"
          id="Email"
          placeholder="Ej:aula@gmail.com"
          required
+         className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
         />
         <br />
-        <label htmlFor="contraseña">Contraseña</label>
+        <label htmlFor="contraseña" className="text-sm font-medium text-slate-300 block mb-1.5">Contraseña</label>
         <input 
          type="password" 
          name="contraseña"
          id="Contraseña"
          placeholder="****"
          required
+         className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
         />
-        <button type="submit">Crear cuenta</button>
+        <button type="submit" className="w-full bg-[#5842e3] hover:bg-[#4732c8] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors mt-4 shadow-lg shadow-[#5842e3]/20">Crear cuenta</button>
       </form>
     </main>
   
