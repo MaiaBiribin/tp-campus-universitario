@@ -1,45 +1,54 @@
 'use client';
 
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
-// Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
-const links = [
-  { name: 'Home', href: '/PaginaPrincipal',  },
-  {
-    name: 'Invoices',
-    href: '/PaginaPrincipal/Home/cursos',
-   
-  },
-  { name: 'Customers', href: '/dashboard/customers', },
-];
+const linksByRole = {
+  admin: [
+    { name: 'Usuarios', href: '/dashboard/admin/usuarios' },
+    { name: 'Eventos', href: '/dashboard/admin/eventos' },
+    { name: 'Aulas', href: '/dashboard/admin/aulas' },
+  ],
+
+  docente: [
+    { name: 'Agenda', href: '/dashboard/docente/agenda' },
+    { name: 'Eventos', href: '/dashboard/docente/eventos' },
+    { name: 'Avisos', href: '/dashboard/docente/avisos' },
+  ],
+
+  estudiante: [
+    { name: 'Mis eventos', href: '/dashboard/estudiante/eventos' },
+    { name: 'Notificaciones', href: '/dashboard/estudiante/notificaciones' },
+    { name: 'Aulas', href: '/dashboard/estudiante/aulas' },
+  ],
+};
 
 export default function NavLinks() {
-    const pathname = usePathname();
+  const pathname = usePathname();
+
+  // por ahra queda asi
+  const role: 'admin' | 'docente' | 'estudiante' = 'estudiante';
+
+  const links = linksByRole[role];
+
   return (
     <>
-      {links.map((link) => {
-        const LinkIcon = link.icon;
-        return (
-          
-       <Link
-            key={link.name}
-            href={link.href}
-               className={clsx(
-              'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
-              {
-                'bg-sky-100 text-blue-600': pathname === link.href,
-              },
-            )}
-          >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
-          </Link> 
-          
-        );
-      })}
+      {links.map((link) => (
+        <Link
+          key={link.name}
+          href={link.href}
+          className={clsx(
+            'flex h-[48px] items-center rounded-md px-3 text-sm font-medium transition-colors',
+            'hover:bg-sky-100 hover:text-blue-600',
+            {
+              'bg-sky-100 text-blue-600': pathname === link.href,
+            }
+          )}
+        >
+          <p className="md:block">{link.name}</p>
+        </Link>
+      ))}
     </>
   );
 }
