@@ -1,14 +1,17 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '../decorators/roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-
     // 1. Lee los roles requeridos por la ruta (@Roles(['Admin']))
     const rolesRequeridos = this.reflector.get(Roles, context.getHandler());
 
@@ -25,7 +28,9 @@ export class RolesGuard implements CanActivate {
     const tieneRol = rolesRequeridos.includes(usuario?.rol);
 
     if (!tieneRol) {
-      throw new ForbiddenException('No tenés permisos para acceder a este recurso');
+      throw new ForbiddenException(
+        'No tenés permisos para acceder a este recurso',
+      );
     }
 
     return true;

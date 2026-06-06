@@ -8,10 +8,8 @@ import { EventosModule } from './eventos/eventos.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { RolesModule } from './roles/roles.module';
 
-
 @Module({
   imports: [
-    
     // 1. Carga el .env y lo hace disponible en todo el proyecto
     ConfigModule.forRoot({
       isGlobal: true, // no hace falta importarlo en cada módulo
@@ -31,14 +29,13 @@ import { RolesModule } from './roles/roles.module';
       }),
       inject: [ConfigService],
     }),
-    
-    
-    
-    AuthModule, 
-    AulasModule, 
-    EventosModule, 
-    UsuariosModule, 
-    RolesModule,],
+
+    AuthModule,
+    AulasModule,
+    EventosModule,
+    UsuariosModule,
+    RolesModule,
+  ],
   controllers: [],
   providers: [],
 })

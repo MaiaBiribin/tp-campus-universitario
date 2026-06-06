@@ -10,11 +10,9 @@ import { jwtConstants } from '../constants';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-
     // 1. Extrae el token del header de la petición
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
@@ -31,7 +29,6 @@ export class AuthGuard implements CanActivate {
 
       // 3. Guarda los datos del usuario en la request
       request['user'] = payload;
-
     } catch {
       throw new UnauthorizedException('Token inválido o expirado');
     }

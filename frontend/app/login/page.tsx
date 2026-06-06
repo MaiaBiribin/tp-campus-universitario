@@ -33,11 +33,11 @@ export default function Home(){
 
         alert(`¡Bienvenido ${payload.nombre}!`);
 
-        if (payload.rol === "Admin") {
+        if (payload.rol === "admin") {
           ruta.push("/administrador/home");
-        } else if (payload.rol === "Profesor") {
+        } else if (payload.rol === "profesor") {
           ruta.push("/profesor/home");
-        } else if (payload.rol === "Alumno") {
+        } else if (payload.rol === "alumno") {
           ruta.push("/alumno/home");
         }
 
@@ -57,17 +57,17 @@ export default function Home(){
       <main className="bg-[#0d1527] border border-[#1e293b] rounded-2xl p-8 md:p-12 max-w-lg w-full shadow-2xl flex flex-col items-center">
         <header className="flex flex-col items-center text-center mb-8 w-full"> 
           <div >
-          <h1  className="text-2xl font-bold text-white mb-2" >Iniciar sesion</h1>
+          <h1  className="text-2xl font-bold text-white mb-2" >Iniciar sesión</h1>
           </div>
           <div >
-          <p className="text-sm text-slate-400 leading-relaxed">ingrese su mail y contraseña de la pagina</p>
+          <p className="text-sm text-slate-400 leading-relaxed">Ingresá tu mail y contraseña para acceder al sistema.</p>
           </div>
         </header>
 
        <form className="w-full flex flex-col gap-5"  onSubmit={handleSubmit}>
           <label htmlFor="usuario" className="text-sm font-medium text-slate-300 block mb-1.5">Email:</label>
          <input
-          type="Email" 
+          type="email" 
           name="mail" 
           id="Email" 
           placeholder="Ej:Aula@gmail.com"
@@ -75,7 +75,7 @@ export default function Home(){
           className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
           />
          <br/>
-         <label htmlFor="contraseña" className="text-sm font-medium text-slate-300 block mb-1.5">contraseña</label>
+         <label htmlFor="contraseña" className="text-sm font-medium text-slate-300 block mb-1.5">Contraseña</label>
          <input 
           type="password"
           name="contrasena"
@@ -88,13 +88,22 @@ export default function Home(){
          <button  type="submit" className="w-full bg-[#5842e3] hover:bg-[#4732c8] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors mt-4 shadow-lg shadow-[#5842e3]/20">
          Ingresar
          </button>
-        
-         <br/>
-       
-         <Link href={"/registro"}
-         className="flex items center gap-2 font-medium text-lg text-white">
-          no tines usario? crea uno
-         </Link>      
+          <p className="text-center text-slate-400 text-sm">
+            ¿No tenés usuario?
+            <Link
+              href="/registro"
+              className="text-[#8b5cf6] hover:text-[#a78bfa] ml-1 font-medium"
+            >
+              Creá una cuenta
+            </Link>
+          </p>
+          
+        <div className="mt-8 pt-4 border-t border-[#1e293b]">
+          <p className="text-center text-sm text-slate-500">
+            Los usuarios deben ser aprobados por un administrador antes de poder iniciar sesión.
+          </p>
+        </div>
+    
        </form>
       </main>
     </div>

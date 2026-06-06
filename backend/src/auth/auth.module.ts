@@ -9,7 +9,6 @@ import { jwtConstants } from './constants';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-
 @Module({
   imports: [
     UsuariosModule,
