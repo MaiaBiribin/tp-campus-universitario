@@ -1,14 +1,41 @@
-import { Controller, Get, Post, Patch, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Put, Delete, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@Controller('/')
+//Guards para proteger roles
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+
+@Controller('usuarios')
 export class UsuariosController {
+
+    // Lista todos los usuarios - solo Admin
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(['Admin'])
+    @Get()
+    getUsuarios() {
+    return { mensaje: 'Lista de usuarios - solo Admin puede ver esto' };
+    }
+
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(['Profesor'])
+    @Get('mis-eventos')
+    getMisEventos() {
+    return { mensaje: 'Solo Profesor puede ver esto' };
+    }
+
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(['Admin', 'Profesor'])
+    @Get('aulas')
+    getAulas() {
+    return { mensaje: 'Admin y Profesor pueden ver esto' };
+    }
 
     @ApiTags('Usuarios')
     @Get('/usuarios/:id')
     @ApiOperation({summary: 'Devuelve los datos de un usuario'})
     getEventos(){
-        return ''
+    return ''
     }
 
     @ApiTags('Usuarios')
