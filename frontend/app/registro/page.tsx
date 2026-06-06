@@ -1,42 +1,38 @@
-import { useRouter } from "next/router";
-import { SubmitEvent } from "react";
-
-
+"use client"
+import { useRouter } from "next/navigation";
 
 export default function Registrarse(){
   const ruta=useRouter();
   
-  async function MandarDatos(event:SubmitEvent<HTMLFormElement>){
+  async function MandarDatos(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault(); 
 
-    const formData = new FormData(event.currentTarget); // 
+    const formData = new FormData(event.currentTarget); 
     const datosUsuario = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch("http://localhost/auth/register", {
+      const response = await fetch("http://localhost:4000/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(datosUsuario),
+        body:JSON.stringify({
+          mail: datosUsuario.mail,
+          dni: datosUsuario.dni,
+          contrasena: datosUsuario.contrasena,
+        }),
       });
 
       if (response.ok) {
-        alert("su usario fue creado corectamente,el administrador tiene que confirmar al usario.")
-         const respuestaAdmin=await fetch("")
-          
-         if(respuestaAdmin){
-          ruta.push("/estudiante") ;
-         }else{
-          console.error("no se admitio el usario.")
-         }
-        
+        alert("Tu usuario fue creado correctamente. El administrador debe habilitarlo antes de que puedas ingresar.");
+        ruta.push("/login");
       } else {
-        alert("Hubo un error en el registro.");
-      
+        const errorData = await response.json().catch(() => ({}));
+        alert(errorData.message || "Hubo un error en el registro.");
       }
     } catch (error) {
       console.error("Error al conectar con el servidor:", error);
+      alert("Hubo un problema al conectar con el servidor.");
     }
 
   }
@@ -55,7 +51,7 @@ export default function Registrarse(){
         <label htmlFor="dni">DNI</label>
         <input 
          type="number"
-         name="Dni"
+         name="dni" //imporante que queda asi para el backend
          id="Dni"
          placeholder="Ej:456495"
          required
@@ -64,7 +60,7 @@ export default function Registrarse(){
         <label htmlFor="Email">Correo Electronico</label>
         <input 
          type="email"
-         name="email"
+         name="mail" //imporante que queda asi para el backend
          id="Email"
          placeholder="Ej:aula@gmail.com"
          required
@@ -73,7 +69,7 @@ export default function Registrarse(){
         <label htmlFor="contraseña">Contraseña</label>
         <input 
          type="password" 
-         name="contraseña"
+         name="contrasena" //imporante que queda asi para el backend
          id="Contraseña"
          placeholder="****"
          required

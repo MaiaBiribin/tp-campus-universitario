@@ -15,6 +15,7 @@ entity Usuario {
   mail : varchar
   contrasena : varchar
   id_rol : int (FK)
+  habilitado : boolean
   
 }
 
