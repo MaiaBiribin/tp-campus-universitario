@@ -5,7 +5,7 @@ export default function Registrarse(){
   const ruta=useRouter();
   
   async function MandarDatos(event:React.FormEvent<HTMLFormElement>){
-    event.preventDefault(); 
+    event.preventDefault(); //evita que se recargue la pagina = Por defecto los formularios HTML recargan la página — esto lo cancela.
 
     const formData = new FormData(event.currentTarget); 
     const datosUsuario = Object.fromEntries(formData.entries());
@@ -51,7 +51,7 @@ export default function Registrarse(){
         <label htmlFor="dni">DNI</label>
         <input 
          type="number"
-         name="dni" //imporante que queda asi para el backend
+         name="dni" //imporante que quede asi para el backend
          id="Dni"
          placeholder="Ej:456495"
          required
@@ -60,7 +60,7 @@ export default function Registrarse(){
         <label htmlFor="Email">Correo Electronico</label>
         <input 
          type="email"
-         name="mail" //imporante que queda asi para el backend
+         name="mail" //imporante que quede asi para el backend
          id="Email"
          placeholder="Ej:aula@gmail.com"
          required
@@ -69,7 +69,7 @@ export default function Registrarse(){
         <label htmlFor="contraseña">Contraseña</label>
         <input 
          type="password" 
-         name="contrasena" //imporante que queda asi para el backend
+         name="contrasena" //imporante que quede asi para el backend
          id="Contraseña"
          placeholder="****"
          required
