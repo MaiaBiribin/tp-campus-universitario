@@ -1,14 +1,13 @@
+"use client";
 
-"use client"
 import Link from "next/link"
-//import { SubmitEvent } from "react";
+
 import { useRouter } from "next/navigation";
 
-
 export default function Home(){
-  const router=useRouter()
+  const ruta=useRouter()
 
-  async function handleSubmit(evento: React.FormEvent<HTMLFormElement>){
+ async function handleSubmit(evento: React.FormEvent<HTMLFormElement>){
     evento.preventDefault()
     const formData = new FormData(evento.currentTarget)
     const DatosLogin = Object.fromEntries(formData.entries())
@@ -29,17 +28,17 @@ export default function Home(){
         const data = await response.json(); 
         localStorage.setItem("token", data.access_token)
 
-        // Decodificamos el token para leer el rol
+  
         const payload = JSON.parse(atob(data.access_token.split('.')[1]));
 
         alert(`¡Bienvenido ${payload.nombre}!`);
 
         if (payload.rol === "Admin") {
-          router.push("/administrador/home");
+          ruta.push("/administrador/home");
         } else if (payload.rol === "Profesor") {
-          router.push("/profesor/home");
+          ruta.push("/profesor/home");
         } else if (payload.rol === "Alumno") {
-          router.push("/alumno/home");
+          ruta.push("/alumno/home");
         }
 
       } else {
@@ -51,75 +50,44 @@ export default function Home(){
       alert("Hubo un problema al conectar con el servidor.");
     }
   }
-  // async function handleSumit(evento:SubmitEvent<HTMLFormElement>){
-  //    evento.preventDefault()
-  //    const formData =new FormData(evento.currentTarget)
-  //    const DatosLogin=Object.fromEntries(formData.entries())
-    
-  //   try {
-      
-  //     const response = await fetch("http://localhost:4000/auth/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(DatosLogin), 
-  //     });
-
-      
-  //     if (response.ok) {
-  //       const usuario = await response.json(); 
-  //       localStorage.setItem("token", usuario.token)
-
-  //       alert(`¡Bienvenido! Rol: ${usuario.rol}`);
-
-       
-  //       if (usuario.rol === "estudiante") {
-  //         router.push("/estudiante/home");
-  //       } else if (usuario.rol === "profesor") {
-  //         router.push("/profesor/home");
-  //       } else {
-  //         router.push("/dashboard/home"); 
-  //       }
-
-  //     } else {
-  //       const errorData = await response.json().catch(() => ({}));
-  //       alert(errorData.mensaje || "Credenciales incorrectas. Verificá tus datos.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error al conectar con el servidor:", error);
-  //     alert("Hubo un problema al conectar con el servidor.");
-  //   }
-
-  // }
-  
-  
+ 
   
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden p-8 flex flex-col justify-between font-sans antialiased">
-      <main className="relative flex flex-col grow justify-between">
-            <p>bienvenido a nuestra app por favor ingrese su usuario</p>
-            <p>Por favor ingrse su usuario</p>
-       <form id="forum" onSubmit={handleSubmit}>
-          <label htmlFor="usuario">Email:</label>
-         <input 
+    <div className="relative min-h-screen bg-[#070b19] text-white p-4 flex items-center justify-center font-sans antialiased">
+      <main className="bg-[#0d1527] border border-[#1e293b] rounded-2xl p-8 md:p-12 max-w-lg w-full shadow-2xl flex flex-col items-center">
+        <header className="flex flex-col items-center text-center mb-8 w-full"> 
+          <div >
+          <h1  className="text-2xl font-bold text-white mb-2" >Iniciar sesion</h1>
+          </div>
+          <div >
+          <p className="text-sm text-slate-400 leading-relaxed">ingrese su mail y contraseña de la pagina</p>
+          </div>
+        </header>
+
+       <form className="w-full flex flex-col gap-5"  onSubmit={handleSubmit}>
+          <label htmlFor="usuario" className="text-sm font-medium text-slate-300 block mb-1.5">Email:</label>
+         <input
           type="Email" 
           name="mail" 
           id="Email" 
           placeholder="Ej:Aula@gmail.com"
           required 
+          className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
           />
          <br/>
-         <label htmlFor="contraseña">contraseña</label>
-         <input
+         <label htmlFor="contraseña" className="text-sm font-medium text-slate-300 block mb-1.5">contraseña</label>
+         <input 
           type="password"
           name="contrasena"
           id="contraseña"
           placeholder="Ej:*****"
           required
+          className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
           ></input>
           <br />
-         <button type="submit">Ingresar</button>
+         <button  type="submit" className="w-full bg-[#5842e3] hover:bg-[#4732c8] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors mt-4 shadow-lg shadow-[#5842e3]/20">
+         Ingresar
+         </button>
         
          <br/>
        
