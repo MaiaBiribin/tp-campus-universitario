@@ -3,9 +3,12 @@
 import Link from "next/link"
 
 import { useRouter } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
 
 export default function Home(){
   const ruta=useRouter()
+  const searchParams = useSearchParams();
+  const accesoDenegado = searchParams.get('acceso') === 'denegado';
 
  async function handleSubmit(evento: React.FormEvent<HTMLFormElement>){
     evento.preventDefault()
@@ -26,19 +29,23 @@ export default function Home(){
 
       if (response.ok) {
         const data = await response.json(); 
-        localStorage.setItem("token", data.access_token)
+        //localStorage.setItem("token", data.access_token)
 
-  
+        document.cookie = `token=${data.access_token}; path=/`;
+
         const payload = JSON.parse(atob(data.access_token.split('.')[1]));
 
         alert(`¡Bienvenido ${payload.nombre}!`);
 
-        if (payload.rol === "admin") {
-          ruta.push("/administrador/home");
-        } else if (payload.rol === "profesor") {
-          ruta.push("/profesor/home");
-        } else if (payload.rol === "alumno") {
-          ruta.push("/alumno/home");
+        if (payload.rol === "Admin") {
+          //ruta.push("/dashboard/admin");
+          window.location.href = "/dashboard/admin";
+        } else if (payload.rol === "Profesor") {
+          //ruta.push("/dashboard/docente");
+          window.location.href = "/dashboard/docente";
+        } else if (payload.rol === "Alumno") {
+          //ruta.push("/dashboard/estudiante");
+          window.location.href = "/dashboard/estudiante";
         }
 
       } else {
@@ -65,6 +72,13 @@ return (
           Ingresá tu mail y contraseña para acceder al sistema.
         </p>
       </header>
+
+      {/* Mensaje de acceso denegado */}
+      {accesoDenegado && (
+        <p className="text-red-400 text-sm mb-4 text-center">
+          Debés iniciar sesión para acceder a esa página.
+        </p>
+      )}
 
       <form
         className="w-full flex flex-col gap-8"
