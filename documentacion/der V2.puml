@@ -22,6 +22,35 @@ entity Usuario {
   id_materia : int (FK)
 }
 
+' ─── CARRERAS Y MATERIAS ───
+entity Carrera {
+  * id_carrera : int (PK)
+  --
+  nombre : varchar
+}
+
+entity Materia {
+  * id_materia : int (PK)
+  --
+  nombre : varchar
+  cuatrimestre : int
+  id_carrera : int (FK)
+}
+
+entity AlumnoMateria {
+  * id : int (PK)
+  --
+  id_usuario : int (FK)
+  id_materia : int (FK)
+}
+
+entity DocenteMateria {
+  * id : int (PK)
+  --
+  id_usuario : int (FK)
+  id_materia : int (FK)
+}
+
 ' ─── AULAS Y EVENTOS ───
 entity Aula {
   * id_aula : int (PK)
@@ -48,11 +77,8 @@ entity Evento {
   estado : varchar
   id_aula : int (FK)
   id_tipo_evento : int (FK)
-  id_materia
+  id_materia : int (FK)
 }
-
-' ─── TABLAS INTERMEDIAS ───
-
 
 ' ─── NOTIFICACIONES ───
 entity Notificacion {
@@ -96,8 +122,16 @@ end note
 ' ─── RELACIONES ───
 Usuario }o--|| Rol : tiene
 
+Carrera ||--o{ Materia : tiene
+Materia ||--o{ AlumnoMateria : inscripto
+Usuario ||--o{ AlumnoMateria : cursa
+
+Materia ||--o{ DocenteMateria : asignada
+Usuario ||--o{ DocenteMateria : dicta
+
 Aula ||--o{ Evento : asignada
 TipoEvento ||--o{ Evento : clasifica
+Materia ||--o{ Evento : pertenece
 
 Evento ||--o{ Notificacion : genera
 Usuario ||--o{ Notificacion : recibe
