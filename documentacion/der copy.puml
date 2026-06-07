@@ -19,6 +19,7 @@ entity Usuario {
   contrasena : varchar
   id_rol : int (FK)
   habilitado : boolean
+  id_materia : int (FK)
 }
 
 ' ─── AULAS Y EVENTOS ───
@@ -47,21 +48,11 @@ entity Evento {
   estado : varchar
   id_aula : int (FK)
   id_tipo_evento : int (FK)
+  id_materia
 }
 
 ' ─── TABLAS INTERMEDIAS ───
-entity EventoProfesor {
-  * id_evento : int (FK)
-  * id_usuario : int (FK)
-}
 
-entity AsistenciaEvento {
-  * id_asistencia : int (PK)
-  --
-  id_evento : int (FK)
-  id_usuario : int (FK)
-  estado : varchar
-}
 
 ' ─── NOTIFICACIONES ───
 entity Notificacion {
@@ -86,28 +77,20 @@ note right of Rol
   - Alumno
 end note
 
-note right of TipoEvento
+note left of TipoEvento
   - Parcial
   - Clase
   - Reunión
   - Examen Final
+  - Recuperatorio
 end note
 
 note right of Evento
   Estados:
-  - pendiente
   - aceptado
-  - rechazado
   - en_curso
   - finalizado
   - cancelado
-end note
-
-note right of AsistenciaEvento
-  Estados:
-  - pendiente
-  - confirmado
-  - rechazado
 end note
 
 ' ─── RELACIONES ───
@@ -115,12 +98,6 @@ Usuario }o--|| Rol : tiene
 
 Aula ||--o{ Evento : asignada
 TipoEvento ||--o{ Evento : clasifica
-
-Evento ||--o{ EventoProfesor : tiene
-Usuario ||--o{ EventoProfesor : responsable
-
-Evento ||--o{ AsistenciaEvento : genera
-Usuario ||--o{ AsistenciaEvento : confirma
 
 Evento ||--o{ Notificacion : genera
 Usuario ||--o{ Notificacion : recibe

@@ -7,6 +7,9 @@ import { AulasModule } from './aulas/aulas.module';
 import { EventosModule } from './eventos/eventos.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { RolesModule } from './roles/roles.module';
+import { CarrerasModule } from './carreras/carreras.module';
+import { MateriasModule } from './materias/materias.module';
+
 
 @Module({
   imports: [
@@ -35,6 +38,10 @@ import { RolesModule } from './roles/roles.module';
     EventosModule,
     UsuariosModule,
     RolesModule,
+    CarrerasModule,
+    MateriasModule,
+    CarrerasModule,
+    MateriasModule,
   ],
   controllers: [],
   providers: [],
