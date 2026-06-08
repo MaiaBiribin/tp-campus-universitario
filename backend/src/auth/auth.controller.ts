@@ -15,7 +15,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -24,8 +24,8 @@ export class AuthController {
   }
 
   @Post('register')
-  register(@Body() body: { mail: string; dni: string; contrasena: string }) {
-    return this.authService.register(body.mail, body.dni, body.contrasena);
+  register(@Body() body: { nombre: string; apellido: string; mail: string; dni: string; contrasena: string }) {
+    return this.authService.register(body.nombre, body.apellido, body.mail, body.dni, body.contrasena);
   }
 
   // Ruta protegida de prueba

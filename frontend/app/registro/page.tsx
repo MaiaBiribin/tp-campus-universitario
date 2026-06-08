@@ -1,8 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-
-
-
+import Link from "next/link";
 
 export default function Registrarse(){
   const ruta=useRouter();
@@ -29,7 +27,7 @@ export default function Registrarse(){
       });
 
       if (response.ok) {
-        alert("solicitud creada,espera a que el administrador acepta la solicitud.")
+        alert("Solicitud creada. Esperá a que un administrador apruebe tu registro.")
          ruta.push("/login")
       } else {
         const errorData = await response.json().catch(() => ({}));
@@ -61,6 +59,43 @@ return (
         onSubmit={MandarDatos}
         className="w-full flex flex-col gap-8"
       >
+        <div>
+          <label
+            htmlFor="nombre"
+            className="block text-sm font-medium text-slate-300 mb-2"
+          >
+            Nombre
+          </label>
+
+          <input
+            type="text"
+            name="nombre"
+            id="nombre"
+            autoComplete="given-name"
+            placeholder="Ej: Julieta"
+            required
+            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="apellido"
+            className="block text-sm font-medium text-slate-300 mb-2"
+          >
+            Apellido
+          </label>
+
+          <input
+            type="text"
+            name="apellido"
+            id="apellido"
+            autoComplete="family-name"
+            placeholder="Ej: Pérez"
+            required
+            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
+          />
+        </div>
         <div>
           <label
             htmlFor="dni"
@@ -124,12 +159,12 @@ return (
 
         <p className="text-center text-slate-400 text-sm">
           ¿Ya tenés una cuenta?
-          <a
+          <Link
             href="/login"
             className="text-[#8b5cf6] hover:text-[#a78bfa] ml-1 font-medium"
           >
             Iniciá sesión
-          </a>
+          </Link>
         </p>
 
         <div className="mt-4 pt-5 border-t border-[#1e293b]">
