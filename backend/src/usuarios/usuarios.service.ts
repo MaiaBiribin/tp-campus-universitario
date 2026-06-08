@@ -18,6 +18,8 @@ export class UsuariosService {
   }
 
   async create(
+    nombre: string,
+    apellido: string,
     mail: string,
     dni: string,
     contrasena: string,
@@ -26,8 +28,8 @@ export class UsuariosService {
       mail,
       dni,
       contrasena,
-      nombre: '',
-      apellido: '',
+      nombre,
+      apellido,
       habilitado: false,
       rol: { id_rol: 3 }, // 3 = Alumno
     });

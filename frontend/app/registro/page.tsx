@@ -20,6 +20,8 @@ export default function Registrarse(){
           "Content-Type": "application/json",
         },
         body:JSON.stringify({
+          nombre : datosUsuario.nombre,
+          apellido : datosUsuario.apellido,
           mail: datosUsuario.mail,
           dni: datosUsuario.dni,
           contrasena: datosUsuario.contrasena,
