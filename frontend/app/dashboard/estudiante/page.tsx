@@ -2,21 +2,29 @@
 
 
 export default function EstudianteHome(){
-    return(
+ 
+  return(
    <div>
     <main>
       
         <div>
           
           <header>
-             <p>
-               bienvenido 
-             </p>
+             
+             <h1>Bienvenido:</h1>
           </header>
-
-           
+          
         </div>
+
+       <section>
+          <div>
+            <h2>Lista de eventos del dia</h2>
+            <ol>
+              <li></li>
+            </ol>
+          </div>
         
+        </section>      
        
             
        

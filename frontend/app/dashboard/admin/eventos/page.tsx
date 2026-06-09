@@ -71,7 +71,16 @@ export default function CreacionEventos(){
           })
 
           if(respuesta.ok){
+            
             alert("El evento se a creado,pronto se avisara a los alumnos y profesores")
+
+            setTitulo("");
+            setFecha("");
+            setCarreraSelecionada("");
+            setMateriaSelecionada("");
+            setAulaSelecionada("");
+            setMaterias([]);
+            window.location.href="/dashboard/admin"
           }else{
             alert("Hubo un error al crear el evento")
           }

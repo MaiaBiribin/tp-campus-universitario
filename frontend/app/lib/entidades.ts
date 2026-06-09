@@ -3,11 +3,18 @@ export default interface evento{
     tipo:string
 }
 
+export default interface materia{
+   nombre:string
+   tipo:string
+}
 
 export default interface usario{
+    idUsuario:number
+    nombre:string
+    apellido:string
     email:string
     contraseña:string
-    rol:number
+    rol:"alumno"|"profesor"|"admin"
     eventos:evento[]
     habilitado:boolean
 }
@@ -27,10 +34,7 @@ export default interface Rol{
     nombre:string 
 }
 
-export default interface materia{
-   nombre:string
-   tipo:string
-}
+
 
 export default interface Carrera{
     id_carrera:number

@@ -11,7 +11,6 @@ export default function AdminHome(){
         </header>
 
         <div>
-           
             <Link href={"app/dashboard/admin/eventos"}
             className="
             flex
