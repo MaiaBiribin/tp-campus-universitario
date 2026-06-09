@@ -1,40 +1,53 @@
-import { Controller, Get, Post, Put, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Patch, Delete, Body, Param } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AulasService } from './aulas.service';
 
-@Controller('/')
+@ApiTags('Aulas')
+@Controller('aulas')
 export class AulasController {
-  @ApiTags('Aulas')
-  @Get('/aulas/:id')
-  @ApiOperation({ summary: 'Devuelve lo que contenga el aula' })
-  getAulas() {
-    return 'aqui se verán las aulas';
+  constructor(private readonly aulasService: AulasService) {}
+  
+  @Get()
+  @ApiOperation({ summary: 'Devuelve todas las aulas' })
+  findAll() {
+    return this.aulasService.findAll();
   }
 
-  @ApiTags('Aulas')
-  @Post('/aulas')
+  @Get(':id')
+  @ApiOperation({ summary: 'Devuelve los detalles de un aula' })
+  findOne(@Param('id') id: string) {
+    return this.aulasService.findOne(+id);
+  }
+
+  @Post()
   @ApiOperation({ summary: 'Crea una nueva aula' })
-  createAulas() {
-    return '';
+  async createAulas(@Body() body: any) { 
+    // Si al probar desde Swagger la terminal imprime "Datos recibidos: {}"
+    // significa que Swagger no está enviando el cuerpo en formato JSON.
+    console.log("Datos recibidos en el controlador:", body);
+    
+    if (!body || Object.keys(body).length === 0) {
+      throw new Error("El cuerpo de la petición (Body) está vacío. Verifica el formato JSON.");
+    }
+    
+    return await this.aulasService.create(body);
   }
 
-  @ApiTags('Aulas')
-  @Patch('/aulas/:id')
+  @Patch(':id')
   @ApiOperation({ summary: 'Modifica parcialmente los datos de un aula' })
-  patchAulas() {
-    return '';
+  patchAulas(@Param('id') id: string, @Body() updateData: any) {
+    return this.aulasService.update(+id, updateData);
   }
 
-  @ApiTags('Aulas')
-  @Put('/aulas/:id')
+  @Put(':id')
   @ApiOperation({ summary: 'Reemplaza completamente los datos de un aula' })
-  putAulas() {
-    return '';
+  putAulas(@Param('id') id: string, @Body() aulaData: any) {
+    return this.aulasService.replace(+id, aulaData);
   }
 
-  @ApiTags('Aulas')
-  @Delete('/aulas/:id')
+  @Delete(':id')
   @ApiOperation({ summary: 'Elimina un aula' })
-  deleteAulas() {
-    return '';
+  deleteAulas(@Param('id') id: string) {
+    return this.aulasService.delete(+id);
   }
 }
