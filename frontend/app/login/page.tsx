@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from 'next/navigation';
 
 export default function Home(){
-  const ruta=useRouter()
+  
   const searchParams = useSearchParams();
   const accesoDenegado = searchParams.get('acceso') === 'denegado';
 
