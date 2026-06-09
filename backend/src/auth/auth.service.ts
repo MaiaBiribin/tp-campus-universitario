@@ -46,7 +46,7 @@ export class AuthService {
     };
   }
 
-  async register(mail: string, dni: string, contrasena: string) {
+  async register(nombre: string, apellido: string, mail: string, dni: string, contrasena: string) {
     // 1. Verifica que el mail no esté ya registrado
     const usuarioExistente = await this.usuariosService.findByMail(mail);
     if (usuarioExistente) {
@@ -54,7 +54,7 @@ export class AuthService {
     }
 
     // 2. Crea el usuario con habilitado=false y rol=Alumno
-    await this.usuariosService.create(mail, dni, contrasena);
+    await this.usuariosService.create(nombre, apellido, mail, dni, contrasena);
 
     return {
       mensaje:

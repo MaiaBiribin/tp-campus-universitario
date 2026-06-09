@@ -89,7 +89,7 @@ return (
             htmlFor="mail"
             className="block text-sm font-medium text-slate-300 mb-2"
           >
-            Mail
+            Correo electrónico
           </label>
 
           <input

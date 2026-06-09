@@ -1,0 +1,142 @@
+@startuml der
+
+skinparam linetype ortho
+
+' ─── USUARIOS Y ROLES ───
+entity Rol {
+  * id_rol : int (PK)
+  --
+  * nombre : varchar(50)
+}
+
+entity Usuario {
+  * id_usuario : int (PK)
+  --
+  nombre : varchar
+  apellido : varchar
+  dni : int
+  mail : varchar
+  contrasena : varchar
+  id_rol : int (FK)
+  habilitado : boolean
+  id_materia : int (FK)
+}
+
+' ─── CARRERAS Y MATERIAS ───
+entity Carrera {
+  * id_carrera : int (PK)
+  --
+  nombre : varchar
+}
+
+entity Materia {
+  * id_materia : int (PK)
+  --
+  nombre : varchar
+  cuatrimestre : int
+  id_carrera : int (FK)
+}
+
+entity AlumnoMateria {
+  * id : int (PK)
+  --
+  id_usuario : int (FK)
+  id_materia : int (FK)
+}
+
+entity DocenteMateria {
+  * id : int (PK)
+  --
+  id_usuario : int (FK)
+  id_materia : int (FK)
+}
+
+' ─── AULAS Y EVENTOS ───
+entity Aula {
+  * id_aula : int (PK)
+  --
+  nombre : varchar
+  capacidad : int
+  piso : int
+  ubicacion : varchar
+}
+
+entity TipoEvento {
+  * id_tipo_evento : int (PK)
+  --
+  * nombre : varchar(50)
+}
+
+entity Evento {
+  * id_evento : int (PK)
+  --
+  titulo : varchar
+  fecha : date
+  horaInicio : time
+  horaFin : time
+  estado : varchar
+  id_aula : int (FK)
+  id_tipo_evento : int (FK)
+  id_materia : int (FK)
+}
+
+' ─── NOTIFICACIONES ───
+entity Notificacion {
+  * id_notificacion : int (PK)
+  --
+  mensaje : varchar
+  fecha : datetime
+  leida : boolean
+}
+
+entity Aviso {
+  * id_aviso : int (PK)
+  --
+  mensaje : varchar
+  fecha : datetime
+}
+
+' ─── NOTAS ───
+note right of Rol
+  - Admin
+  - Profesor
+  - Alumno
+end note
+
+note left of TipoEvento
+  - Parcial
+  - Clase
+  - Reunión
+  - Examen Final
+  - Recuperatorio
+end note
+
+note right of Evento
+  Estados:
+  - aceptado
+  - en_curso
+  - finalizado
+  - cancelado
+end note
+
+' ─── RELACIONES ───
+Usuario }o--|| Rol : tiene
+
+Carrera ||--o{ Materia : tiene
+Materia ||--o{ AlumnoMateria : inscripto
+Usuario ||--o{ AlumnoMateria : cursa
+
+Materia ||--o{ DocenteMateria : asignada
+Usuario ||--o{ DocenteMateria : dicta
+
+Aula ||--o{ Evento : asignada
+TipoEvento ||--o{ Evento : clasifica
+Materia ||--o{ Evento : pertenece
+
+Evento ||--o{ Notificacion : genera
+Usuario ||--o{ Notificacion : recibe
+
+Evento ||--o{ Aviso : contiene
+Usuario ||--o{ Aviso : crea
+
+@enduml
