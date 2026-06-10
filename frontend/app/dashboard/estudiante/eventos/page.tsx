@@ -2,6 +2,7 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
+import RenderizarEventos from "../../components/renderizarEventosSemana";
 
 export default function Eventos(){
     return(
@@ -10,8 +11,13 @@ export default function Eventos(){
          <main className={styles.main}>
             <div>
               <header>
-                <h1>Pestaña de eventos</h1>
+                <h1>Eventos de la semana:</h1>
               </header>
+
+              <div>
+                <RenderizarEventos/>
+              </div>
+
             </div>
          </main>
        </div>

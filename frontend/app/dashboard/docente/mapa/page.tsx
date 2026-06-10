@@ -26,6 +26,11 @@ export default function zonaMapa(){
 
           </map>
        </div>
+         
+      <div>
+         <Link href={"/docente"}><button>Volver a pagina principal de la cuenta</button></Link>
+       </div>
+
 
         </div>
      </main>
