@@ -6,6 +6,8 @@ import {
 
 import { JwtService } from '@nestjs/jwt';
 import { UsuariosService } from '../usuarios/usuarios.service';
+import { EstadoUsuario } from '../usuarios/usuario.entity';
+
 
 @Injectable()
 export class AuthService {
@@ -27,11 +29,11 @@ export class AuthService {
     }
 
     // 3. Verifica que el usuario esté habilitado
-    if (!usuario.habilitado) {
+    if (usuario.estado === EstadoUsuario.HABILITADO) {
       throw new UnauthorizedException('Usuario no habilitado');
     }
 
-    // 4. Genera el JWT con los datos del usuario
+    // 4. Genera el JWT con los datos del usuar¿io
     const payload = {
       sub: usuario.id_usuario,
       mail: usuario.mail,

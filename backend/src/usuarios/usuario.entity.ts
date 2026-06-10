@@ -8,6 +8,12 @@ import {
 
 import { Rol } from '../roles/rol.entity';
 
+export enum EstadoUsuario {
+  PENDIENTE = 'pendiente',
+  HABILITADO = 'habilitado',
+  RECHAZADO = 'rechazado',
+}
+
 @Entity('usuarios')
 export class Usuario {
   @PrimaryGeneratedColumn() // Esta columna es la clave primaria (PK) y El valor se genera automáticamente
@@ -28,8 +34,8 @@ export class Usuario {
   @Column({ unique: true })
   dni!: string;
 
-  @Column({ default: false })
-  habilitado!: boolean;
+  @Column({ type: 'enum', enum: EstadoUsuario})
+  estado!: EstadoUsuario;
 
   // Relación con Rol
   @ManyToOne(() => Rol, { eager: true })
