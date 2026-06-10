@@ -1,43 +1,37 @@
 "use client";
 
 import NavLinks from "./navLinks";
+import { usePathname } from "next/navigation";
 
 export default function SideBar() {
 
-  const token =
-    localStorage.getItem("token");
+  const pathname =
+    usePathname();
 
   let role:
     "admin"
     | "docente"
-    | "estudiante"
-    = "estudiante";
+    | "estudiante";
 
-  if (token) {
-
-  const payload =
-    JSON.parse(
-      atob(
-        token.split(".")[1]
-      )
-    );
-
-  console.log(payload);
-
-  if (payload.rol === "Admin") {
+  if (
+    pathname.startsWith(
+      "/dashboard/admin"
+    )
+  ) {
     role = "admin";
   }
 
-  else if (payload.rol === "Profesor") {
+  else if (
+    pathname.startsWith(
+      "/dashboard/docente"
+    )
+  ) {
     role = "docente";
   }
 
-  else if (payload.rol === "Alumno") {
+  else {
     role = "estudiante";
   }
-}
-
-console.log("ROL SIDEBAR:", role);
 
   return (
 
@@ -65,9 +59,7 @@ console.log("ROL SIDEBAR:", role);
         </span>
       </h1>
 
-      <NavLinks
-        role={role}
-      />
+      <NavLinks role={role} />
 
     </aside>
 

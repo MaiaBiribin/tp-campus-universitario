@@ -1,9 +1,22 @@
 "use client";
 
-import {useEffect, useState,} from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
+
 import styles from "./page.module.css";
-import {Carrera, Materia,} from "../../../lib/entidades";
-import { getCarreras, getMateriasPorCarrera,} from "../../../lib/services";
+
+import {
+  Carrera,
+  Materia,
+} from "../../../lib/entidades";
+
+import {
+  getCarreras,
+  getMateriasPorCarrera,
+} from "../../../lib/services";
+
 export default function AcademicoAdmin() {
 
   const [
@@ -39,20 +52,18 @@ export default function AcademicoAdmin() {
         const data =
           await getCarreras();
 
+        console.log("CARRERAS:", data);
+
         setCarreras(data);
 
         if (
           data.length > 0
         ) {
 
-          setCarreraSeleccionada(
-            data[0].id
-          );
+          setCarreraSeleccionada(data[0].id_carrera);
 
           const materiasData =
-            await getMateriasPorCarrera(
-              data[0].id
-            );
+            await getMateriasPorCarrera(data[0].id_carrera);
 
           setMaterias(
             materiasData
@@ -65,7 +76,11 @@ export default function AcademicoAdmin() {
       catch (
         error
       ) {
-        console.error(error);
+
+        console.error(
+          error
+        );
+
       }
 
       finally {
@@ -93,13 +108,9 @@ export default function AcademicoAdmin() {
     try {
 
       const data =
-        await getMateriasPorCarrera(
-          id
-        );
+        await getMateriasPorCarrera(id);
 
-      setMaterias(
-        data
-      );
+      setMaterias(data);
 
     }
 
@@ -107,9 +118,7 @@ export default function AcademicoAdmin() {
       error
     ) {
 
-      console.error(
-        error
-      );
+      console.error(error);
 
     }
 
@@ -120,6 +129,7 @@ export default function AcademicoAdmin() {
   ) {
 
     return (
+
       <main
         className={
           styles.main
@@ -129,6 +139,7 @@ export default function AcademicoAdmin() {
         Cargando...
 
       </main>
+
     );
 
   }
@@ -250,39 +261,34 @@ export default function AcademicoAdmin() {
               }
             >
 
-              {carreras.map(
-                (
-                  carrera
-                ) => (
+              {
+                carreras.map(
+                  (
+                    carrera
+                  ) => (
 
-                  <button
-                    key={
-                      carrera.id
-                    }
+                    <button
+                      key={carrera.id_carrera}
 
-                    onClick={() =>
-                      cambiarCarrera(
-                        carrera.id
-                      )
-                    }
+                      onClick={() =>cambiarCarrera(carrera.id_carrera)}
 
-                    className={`${styles.item}
-                    ${
-                      carreraSeleccionada ===
-                      carrera.id
-                        ? styles.active
-                        : ""
-                    }`}
-                  >
+                      className={`${styles.item}
+                      ${
+                        carreraSeleccionada ===carrera.id_carrera
+                          ? styles.active
+                          : ""
+                      }`}
+                    >
 
-                    {
-                      carrera.nombre
-                    }
+                      {
+                        carrera.nombre
+                      }
 
-                  </button>
+                    </button>
 
+                  )
                 )
-              )}
+              }
 
             </div>
 
@@ -304,41 +310,45 @@ export default function AcademicoAdmin() {
               }
             >
 
-              {materias.map(
-                (
-                  materia
-                ) => (
+              {
+                materias.map(
+                  (
+                    materia
+                  ) => (
 
-                  <div
-                    key={
-                      materia.id
-                    }
-
-                    className={
-                      styles.subject
-                    }
-                  >
-
-                    <h3>
-                      {
-                        materia.nombre
-                      }
-                    </h3>
-
-                    <p>
-
-                      Cuatrimestre{" "}
-
-                      {
-                        materia.cuatrimestre
+                    <div
+                      key={
+                        materia.id_materia
                       }
 
-                    </p>
+                      className={
+                        styles.subject
+                      }
+                    >
 
-                  </div>
+                      <h3>
 
+                        {
+                          materia.nombre
+                        }
+
+                      </h3>
+
+                      <p>
+
+                        Cuatrimestre{" "}
+
+                        {
+                          materia.cuatrimestre
+                        }
+
+                      </p>
+
+                    </div>
+
+                  )
                 )
-              )}
+              }
 
             </div>
 

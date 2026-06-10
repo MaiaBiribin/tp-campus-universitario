@@ -33,10 +33,20 @@ export default function Login() {
 
     const data = await response.json();
 
-    document.cookie = `token=${data.access_token}; path=/`;
+    // guardar para el proxy
+    document.cookie =
+   `token=${data.access_token}; path=/`;
+
+    // guardar para api.ts
+    localStorage.setItem(
+    "token",
+     data.access_token
+    );
 
     const payload = JSON.parse(
-      atob(data.access_token.split(".")[1])
+      atob(
+    data.access_token.split(".")[1]
+    )
     );
     console.log("PAYLOAD COMPLETO:", payload);
     console.log("TOKEN PAYLOAD:", payload);
