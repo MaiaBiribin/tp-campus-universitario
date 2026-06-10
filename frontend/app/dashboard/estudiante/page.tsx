@@ -2,47 +2,12 @@
 
 import Link from "next/link";
 import styles from "./page.module.css";
+import SideBar from "../components/sideBar";
 
 export default function DashboardEstudiante() {
   return (
     <div className={styles.layout}>
-
-      <aside className={styles.sidebar}>
-
-        <h1 className={styles.logo}>
-          Aula
-          <span>Sync</span>
-        </h1>
-
-        <nav className={styles.nav}>
-
-          {[
-            ["Inicio", "/dashboard/estudiante"],
-            ["Mis eventos", "/dashboard/estudiante/eventos"],
-            ["Mapa de aulas", "/dashboard/estudiante/mapa"],
-            ["Notificaciones", "/dashboard/estudiante/notificaciones"],
-          ].map(([texto, ruta]) => (
-            <Link
-              key={ruta}
-              href={ruta}
-              className={styles.link}
-            >
-              {texto}
-            </Link>
-          ))}
-
-        </nav>
-
-        <div className={styles.logoutContainer}>
-          <Link href="/">
-            <button className={styles.logout}>
-              Cerrar sesión
-            </button>
-          </Link>
-        </div>
-
-      </aside>
-
+      <SideBar />
       <main className={styles.main}>
 
         <div className={styles.content}>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link"
-
+import { api } from "../lib/api";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from 'next/navigation';
 
@@ -16,22 +16,26 @@ export default function Home(){
     const DatosLogin = Object.fromEntries(formData.entries())
     
     try {
-      const response = await fetch("http://localhost:4000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mail: DatosLogin.mail,
-          contrasena: DatosLogin.contrasena,
-        }), 
-      });
+      const response = await api(
+        "/auth/login",
+    {
+      method: "POST",
+
+      body: JSON.stringify({
+        mail:
+          DatosLogin.mail,
+
+        contrasena:
+          DatosLogin.contrasena,
+      }),
+    }
+  );
 
       if (response.ok) {
         const data = await response.json(); 
         //localStorage.setItem("token", data.access_token)
 
-        document.cookie = `token=${data.access_token}; path=/`;
+        localStorage.setItem("token", data.access_token);
 
         const payload = JSON.parse(atob(data.access_token.split('.')[1]));
 
