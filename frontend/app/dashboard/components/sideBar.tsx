@@ -1,9 +1,37 @@
+"use client";
+
 import NavLinks from "./navLinks";
+import { usePathname } from "next/navigation";
 
 export default function SideBar() {
 
-  const role =
-    "admin";
+  const pathname =
+    usePathname();
+
+  let role:
+    "admin"
+    | "docente"
+    | "estudiante";
+
+  if (
+    pathname.startsWith(
+      "/dashboard/admin"
+    )
+  ) {
+    role = "admin";
+  }
+
+  else if (
+    pathname.startsWith(
+      "/dashboard/docente"
+    )
+  ) {
+    role = "docente";
+  }
+
+  else {
+    role = "estudiante";
+  }
 
   return (
 
@@ -31,9 +59,7 @@ export default function SideBar() {
         </span>
       </h1>
 
-      <NavLinks
-        role={role}
-      />
+      <NavLinks role={role} />
 
     </aside>
 
