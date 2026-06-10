@@ -1,9 +1,18 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+
 import Link from "next/link";
+
 import { api } from "../lib/api";
 
+import layout from "../styles/layout.module.css";
+import forms from "../styles/forms.module.css";
+import buttons from "../styles/buttons.module.css";
+import cards from "../styles/cards.module.css";
 export default function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -65,72 +74,132 @@ export default function Login() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#070b19] text-white p-4 flex items-center justify-center font-sans antialiased">
 
-      <main className="bg-[#0d1527] border border-[#1e293b] rounded-2xl p-8 md:p-12 max-w-lg w-full shadow-2xl flex flex-col items-center">
+    <div
+      className={
+        layout.centeredPage
+      }
+    >
 
-        <header className="flex flex-col items-center text-center w-full mb-10">
-          <h1 className="text-2xl font-bold text-white mb-3">
+      <main
+        className={
+          forms.formCard
+        }
+      >
+
+        <header
+          className={
+            layout.header
+          }
+        >
+
+          <h1>
             Iniciar sesión
           </h1>
 
-          <p className="text-sm text-slate-400">
-            Ingresá tu mail y contraseña para acceder al sistema.
+          <p>
+            Ingresá tu mail y contraseña
+            para acceder al sistema.
           </p>
+
         </header>
 
         {accesoDenegado && (
-          <p className="text-red-400 text-sm mb-4 text-center">
-            Debés iniciar sesión para acceder a esa página.
-          </p>
+
+          <div
+            className={
+              cards.errorCard
+            }
+          >
+
+            Debés iniciar sesión para
+            acceder a esa página.
+
+          </div>
+
         )}
 
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-8">
+        <form
+          onSubmit={
+            handleSubmit
+          }
+
+          className={
+            forms.form
+          }
+        >
 
           <div>
-            <label className="block text-sm text-slate-300 mb-2">
+
+            <label>
+
               Correo electrónico
+
             </label>
 
             <input
               type="email"
               name="mail"
               required
-              placeholder="Ej: aula@gmail.com"
-              className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3"
+              placeholder=" Ej: aula@gmail.com "
+              className={forms.input}
             />
+
           </div>
 
           <div>
-            <label className="block text-sm text-slate-300 mb-2">
+
+            <label>
+
               Contraseña
+
             </label>
 
             <input
               type="password"
               name="contrasena"
               required
-              placeholder="••••••••"
-              className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3"
+              placeholder=" ******** "
+              className={forms.input}
             />
+
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#5842e3] hover:bg-[#4732c8] text-white font-semibold py-3 rounded-xl"
+            className={
+              buttons.primary
+            }
           >
+
             Ingresar
+
           </button>
 
-          <p className="text-center text-slate-400 text-sm">
-            ¿No tenés usuario?
-            <Link href="/registro" className="text-[#8b5cf6] ml-1">
-              Creá una cuenta
-            </Link>
-          </p>
+          <p
+className={
+forms.formFooter
+}
+>
+
+¿No tenés usuario?
+
+<Link
+href="/registro"
+>
+
+Creá una cuenta
+
+</Link>
+
+</p>
 
         </form>
+
       </main>
+
     </div>
+
   );
+
 }
