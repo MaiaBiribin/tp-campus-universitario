@@ -7,12 +7,11 @@
 - El sistema no debe permitir el inicio de sesión hasta que el administrador apruebe el registro.
 - El sistema debe permitir el inicio de sesión.
 - El sistema debe permitir el cierre de sesión.
-- El sistema debe permitir la gestión de perfiles de usuario.
 
 ---
 
 ## 🏫 Gestión de aulas
-- El sistema debe permitir editar y eliminar aulas.
+- El sistema debe permitir editar, crear y eliminar aulas.
 - El sistema debe permitir visualizar la ubicación de las aulas.
 
 ---
@@ -21,7 +20,6 @@
 - El sistema debe permitir crear eventos académicos.
 - El sistema debe permitir asignar aulas a eventos académicos.
 - El sistema debe validar la disponibilidad de aulas.
-- El sistema debe evitar conflictos de horarios.
 - El sistema debe permitir consultar horarios y fechas de eventos.
 - Tipos de evento:
   - Clase
@@ -64,9 +62,8 @@ El estudiante debe visualizar:
 ---
 
 ## 🛠️ Funcionalidades para administradores
-- El administrador debe habilitar perfiles.
-- El administrador debe gestionar usuarios.
-- El administrador debe gestionar aulas.
+- El administrador debe gestionar y habilitar usuarios.
+- El administrador debe gestionar y poder crear aulas.
 - El administrador debe asignar aulas a eventos.
 - El administrador debe crear eventos académicos.
 - El administrador debe administrar la información general del sistema.

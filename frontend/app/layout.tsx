@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import {
+  Geist,
+  Geist_Mono,
+} from "next/font/google";
+
+import "./styles/globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AulaSync",
-  description: "Sistema de gestión académica",
+  description:
+    "Sistema de gestión académica",
 };
 
 export default function RootLayout({
@@ -22,14 +27,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
+
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`
+        ${geistSans.variable}
+        ${geistMono.variable}
+      `}
     >
-      <body className="font-sans bg-[#050816] text-white min-h-screen">
+
+      <body>
+
         {children}
+
       </body>
+
     </html>
+
   );
+
 }

@@ -1,0 +1,96 @@
+.page {
+  min-height: 100vh;
+  padding: 42px 54px;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.title span {
+  color: var(--primary);
+}
+
+.infoBox {
+  max-width: 380px;
+}
+
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  padding: 80px 0;
+}
+
+.heroTitle {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.heroTitle span {
+  color: var(--primary);
+}
+
+.heroText {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+.divider {
+  width: 120px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+}
+
+.loginButton {
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 24px;
+  }
+
+  .topBar {
+    flex-direction: column;
+  }
+
+  .infoBox {
+    max-width: 100%;
+  }
+}

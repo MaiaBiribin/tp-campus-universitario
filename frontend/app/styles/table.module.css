@@ -1,0 +1,67 @@
+.tableContainer {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: rgb(255 255 255 / 0.03);
+}
+
+.table th {
+  text-align: left;
+  padding: 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  padding: 18px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.table tbody tr {
+  transition: background-color var(--transition);
+}
+
+.table tbody tr:hover {
+  background: var(--card-hover);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    padding: 14px;
+  }
+}

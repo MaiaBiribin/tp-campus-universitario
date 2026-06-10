@@ -1,7 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import forms from "../styles/forms.module.css";
+import cards from "../styles/cards.module.css";
+import buttons from "../styles/buttons.module.css";
+import layout from "../styles/layout.module.css";
 export default function Registrarse(){
   const ruta=useRouter();
   
@@ -41,141 +44,98 @@ export default function Registrarse(){
   }
   
   
-return (
-  <div className="relative min-h-screen bg-[#070b19] text-white p-4 flex items-center justify-center font-sans antialiased">
-    <main className="bg-[#0d1527] border border-[#1e293b] rounded-2xl p-8 md:p-12 max-w-lg w-full shadow-2xl flex flex-col items-center">
+  return (
+    <div className={layout.centeredPage}>
 
-      <header className="flex flex-col items-center text-center w-full mb-10">
-        <h1 className="text-2xl font-bold text-white mb-3">
-          Crear cuenta
-        </h1>
+      <main className={forms.formCard}>
 
-        <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-          Completá tus datos para solicitar acceso al sistema.
-        </p>
-      </header>
+        {/* HEADER */}
+        <header className={layout.header}>
+          <h1>Crear cuenta</h1>
 
-      <form
-        onSubmit={MandarDatos}
-        className="w-full flex flex-col gap-8"
-      >
-        <div>
-          <label
-            htmlFor="nombre"
-            className="block text-sm font-medium text-slate-300 mb-2"
-          >
-            Nombre
-          </label>
-
-          <input
-            type="text"
-            name="nombre"
-            id="nombre"
-            autoComplete="given-name"
-            placeholder="Ej: Julieta"
-            required
-            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="apellido"
-            className="block text-sm font-medium text-slate-300 mb-2"
-          >
-            Apellido
-          </label>
-
-          <input
-            type="text"
-            name="apellido"
-            id="apellido"
-            autoComplete="family-name"
-            placeholder="Ej: Pérez"
-            required
-            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="dni"
-            className="block text-sm font-medium text-slate-300 mb-2"
-          >
-            DNI
-          </label>
-
-          <input
-            type="number"
-            name="dni"
-            id="dni"
-            placeholder="Ej: 45649587"
-            required
-            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="mail"
-            className="block text-sm font-medium text-slate-300 mb-2"
-          >
-            Correo electrónico
-          </label>
-
-          <input
-            type="email"
-            name="mail"
-            id="mail"
-            placeholder="Ej: alumno@universidad.edu"
-            required
-            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="contrasena"
-            className="block text-sm font-medium text-slate-300 mb-2"
-          >
-            Contraseña
-          </label>
-
-          <input
-            type="password"
-            name="contrasena"
-            id="contrasena"
-            placeholder="••••••••"
-            required
-            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-[#5842e3] hover:bg-[#4732c8] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center transition-colors mt-2 shadow-lg shadow-[#5842e3]/20"
-        >
-          Solicitar registro
-        </button>
-
-        <p className="text-center text-slate-400 text-sm">
-          ¿Ya tenés una cuenta?
-          <Link
-            href="/login"
-            className="text-[#8b5cf6] hover:text-[#a78bfa] ml-1 font-medium"
-          >
-            Iniciá sesión
-          </Link>
-        </p>
-
-        <div className="mt-4 pt-5 border-t border-[#1e293b]">
-          <p className="text-center text-sm text-slate-500 leading-relaxed">
-            Tu solicitud quedará pendiente hasta que un administrador la apruebe.
-            Una vez habilitada, podrás iniciar sesión en el sistema.
+          <p>
+            Completá tus datos para solicitar acceso al sistema.
           </p>
-        </div>
-      </form>
+        </header>
 
-    </main>
-  </div>
-);
+        {/* FORM */}
+        <form onSubmit={MandarDatos} className={forms.form}>
+
+          <div>
+            <label>Nombre</label>
+
+            <input
+              type="text"
+              name="nombre"
+              placeholder=" Ej: Juana"
+              required
+              className={forms.input}
+            />
+          </div>
+
+          <div>
+            <label>Apellido</label>
+
+            <input
+              type="text"
+              name="apellido"
+              placeholder=" Ej: Pérez"
+              required
+              className={forms.input}
+            />
+          </div>
+
+          <div>
+            <label>DNI</label>
+
+            <input
+              type="number"
+              name="dni"
+              placeholder=" Ej: 45649587"
+              required
+              className={forms.input}
+            />
+          </div>
+
+          <div>
+            <label>Correo electrónico</label>
+
+            <input
+              type="email"
+              name="mail"
+              placeholder=" Ej: alumno@universidad.edu"
+              required
+              className={forms.input}
+            />
+          </div>
+
+          <div>
+            <label>Contraseña</label>
+
+            <input
+              type="password"
+              name="contrasena"
+              placeholder=" *********** "
+              required
+              className={forms.input}
+            />
+          </div>
+
+          {/* BOTÓN */}
+          <button type="submit" className={buttons.primary}>
+            Solicitar registro
+          </button>
+
+          {/* FOOTER */}
+          <p className={forms.formFooter}>
+            ¿Ya tenés una cuenta?{" "}
+            <Link href="/login">Creá una cuenta</Link>
+          </p>
+
+        </form>
+
+      </main>
+
+    </div>
+  );
 }
