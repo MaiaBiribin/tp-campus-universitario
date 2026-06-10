@@ -20,8 +20,8 @@ export default function CreacionEventos(){
         async function cargarDatosIniciales() {
             try {
                 const [resCarreras, resAulas] = await Promise.all([
-                    fetch(""),
-                    fetch("")
+                    fetch("http://localhost:4000/carreras"),
+                    fetch("http://localhost:4000/aulas")
                 ]);
                 setCarreras(await resCarreras.json());
                 setAulas(await resAulas.json());
@@ -42,7 +42,7 @@ export default function CreacionEventos(){
      }
 
      try{
-        const respuesta= await fetch("")
+        const respuesta= await fetch("http://localhost:4000/materias")
         const datos:materia[]=await respuesta.json()
         setMaterias(datos)
      }catch(error){

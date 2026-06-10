@@ -3,36 +3,6 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 
-<<<<<<< HEAD
-export default function EstudianteHome(){
- 
-  return(
-   <div>
-    <main>
-      
-        <div>
-          
-          <header>
-             
-             <h1>Bienvenido:</h1>
-          </header>
-          
-        </div>
-
-       <section>
-          <div>
-            <h2>Lista de eventos del dia</h2>
-            <ol>
-              <li></li>
-            </ol>
-          </div>
-        
-        </section>      
-       
-            
-       
-     </main>
-=======
 export default function DashboardEstudiante() {
   return (
     <div className={styles.layout}>
@@ -179,7 +149,6 @@ export default function DashboardEstudiante() {
 
       </main>
 
->>>>>>> master
     </div>
   );
 }
