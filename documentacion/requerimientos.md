@@ -12,9 +12,7 @@
 ---
 
 ## 🏫 Gestión de aulas
-- El sistema debe permitir crear aulas.
-- El sistema debe permitir editar aulas.
-- El sistema debe permitir eliminar aulas.
+- El sistema debe permitir editar y eliminar aulas.
 - El sistema debe permitir visualizar la ubicación de las aulas.
 
 ---
@@ -39,7 +37,6 @@
 - El estudiante debe poder visualizar el mapa de aulas.
 - El estudiante debe recibir notificaciones ante cambios o avisos importantes.
 El estudiante debe visualizar:
-  - próximos eventos ordenados por fecha y hora
   - eventos del día actual destacados
   - información resumida del evento: materia, tipo de evento (Clase / Parcial / Final), horario, aula
 - El estudiante debe poder consultar:

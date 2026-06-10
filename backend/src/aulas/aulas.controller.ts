@@ -1,8 +1,13 @@
-import { Controller, Get, Post, Put, Patch, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Patch, Delete, Body, UseGuards, Param } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBody, ApiParam } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+
 import { AulasService } from './aulas.service';
 
 @ApiTags('Gestión de Aulas') 
+@Controller('aulas')
 @Controller('aulas')
 export class AulasController {
   constructor(private readonly aulasService: AulasService) {}
@@ -116,5 +121,6 @@ export class AulasController {
   @ApiParam({ name: 'id', description: 'ID numérico del aula a eliminar', example: '1' })
   eliminarAulaDefinitivamente(@Param('id') id: string) {
     return this.aulasService.delete(+id);
+
   }
 }

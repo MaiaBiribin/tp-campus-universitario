@@ -1,0 +1,252 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+}
+
+.logo {
+  font-size: 2rem;
+
+  font-weight: 800;
+
+  margin-bottom: 48px;
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.nav {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.link {
+  padding: 16px 18px;
+
+  border-radius: 16px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.96rem;
+
+  transition: 0.25s;
+}
+
+.link:hover {
+  background: var(--card-hover);
+
+  color: white;
+}
+
+.active {
+  background: var(--primary);
+
+  color: white;
+}
+
+.logoutContainer {
+  margin-top: auto;
+}
+
+.logout {
+  width: 100%;
+
+  margin-top: 28px;
+
+  height: 54px;
+
+  background: var(--card-hover);
+}
+
+.main {
+  flex: 1;
+
+  padding: 42px 54px;
+
+  overflow-y: auto;
+}
+
+.content {
+  max-width: 1200px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 42px;
+}
+
+.header {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.header h1 {
+  font-size: 2rem;
+
+  font-weight: 800;
+}
+
+.header p {
+  max-width: 760px;
+
+  color: var(--text-muted);
+
+  line-height: 1.8;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+
+  margin-bottom: 18px;
+
+  font-weight: 700;
+}
+
+.summaryGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(230px, 1fr)
+    );
+
+  gap: 18px;
+}
+
+.metric {
+  background: var(--card);
+
+  border:
+    1px solid
+    var(--border);
+
+  padding: 28px;
+
+  border-radius: 22px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.metric p {
+  color: var(--text-muted);
+
+  font-size: .92rem;
+}
+
+.metric h3 {
+  font-size: 2.3rem;
+
+  font-weight: 700;
+}
+
+.quickGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(260px, 1fr)
+    );
+
+  gap: 18px;
+}
+
+.quickCard {
+  background: var(--card);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 22px;
+
+  padding: 28px;
+
+  min-height: 170px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 14px;
+}
+
+.quickCard:hover {
+  border-color: var(--primary);
+
+  transform:
+    translateY(-2px);
+}
+
+.quickCard h3 {
+  font-size: 1.05rem;
+
+  color: white;
+}
+
+.quickCard p {
+  color: var(--text-muted);
+
+  line-height: 1.8;
+}
+
+.card {
+  background: var(--card);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 22px;
+
+  padding: 26px;
+}
+
+.notice {
+  padding: 18px 0;
+}
+
+.notice:not(:last-child) {
+  border-bottom:
+    1px solid
+    var(--border);
+}
+
+.notice h3 {
+  font-size: 1rem;
+
+  margin-bottom: 8px;
+}
+
+.notice p {
+  color: var(--text-muted);
+}
+
+@media(max-width:900px){
+
+.main{
+
+padding:
+24px;
+}
+
+.content{
+
+gap:36px;
+}
+
+}
