@@ -2,11 +2,12 @@ import { Controller, Get, Post, Put, Patch, Delete, Body, Param } from '@nestjs/
 import { ApiOperation, ApiTags, ApiBody, ApiParam } from '@nestjs/swagger';
 import { AulasService } from './aulas.service';
 
-@ApiTags('Gestión de Aulas') // Nombre más claro para la sección en Swagger
+@ApiTags('Gestión de Aulas') 
 @Controller('aulas')
 export class AulasController {
   constructor(private readonly aulasService: AulasService) {}
   
+  //http://localhost:4000/aulas
   @Get()
   @ApiOperation({ 
     summary: 'Obtener todas las aulas',
@@ -16,6 +17,7 @@ export class AulasController {
     return this.aulasService.findAll();
   }
 
+  // http://localhost:4000/aulas/(aca va el numero del aula)
   @Get(':id')
   @ApiOperation({ 
     summary: 'Obtener detalles de un aula específica',
@@ -26,6 +28,7 @@ export class AulasController {
     return this.aulasService.findOne(+id);
   }
 
+  //http://localhost:4000/aulas
   @Post()
   @ApiOperation({ 
     summary: 'Registrar una nueva aula',
@@ -50,6 +53,7 @@ export class AulasController {
     return await this.aulasService.create(body);
   }
 
+  //http://localhost:4000/aulas/(aca va el numero del aula)
   @Patch(':id')
   @ApiOperation({ 
     summary: 'Actualizar parcialmente un aula',
@@ -79,6 +83,7 @@ export class AulasController {
     return await this.aulasService.update(+id, updateData);
   }
 
+  //http://localhost:4000/aulas/(aca va el numero del aula)
   @Put(':id')
   @ApiOperation({ 
     summary: 'Reemplazar por completo un aula',
@@ -102,6 +107,7 @@ export class AulasController {
     return this.aulasService.replace(+id, aulaData);
   }
 
+  //http://localhost:4000/aulas/(aca va el numero del aula)
   @Delete(':id')
   @ApiOperation({ 
     summary: 'Eliminar un aula',
