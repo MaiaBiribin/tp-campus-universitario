@@ -1,9 +1,43 @@
+"use client";
+
 import NavLinks from "./navLinks";
 
 export default function SideBar() {
 
-  const role =
-    "admin";
+  const token =
+    localStorage.getItem("token");
+
+  let role:
+    "admin"
+    | "docente"
+    | "estudiante"
+    = "estudiante";
+
+  if (token) {
+
+  const payload =
+    JSON.parse(
+      atob(
+        token.split(".")[1]
+      )
+    );
+
+  console.log(payload);
+
+  if (payload.rol === "Admin") {
+    role = "admin";
+  }
+
+  else if (payload.rol === "Profesor") {
+    role = "docente";
+  }
+
+  else if (payload.rol === "Alumno") {
+    role = "estudiante";
+  }
+}
+
+console.log("ROL SIDEBAR:", role);
 
   return (
 

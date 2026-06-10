@@ -29,7 +29,7 @@ export class AuthService {
     }
 
     // 3. Verifica que el usuario esté habilitado
-    if (usuario.estado === EstadoUsuario.HABILITADO) {
+    if (usuario.estado !== EstadoUsuario.HABILITADO) {
       throw new UnauthorizedException('Usuario no habilitado');
     }
 

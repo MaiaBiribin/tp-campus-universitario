@@ -34,7 +34,11 @@ export class Usuario {
   @Column({ unique: true })
   dni!: string;
 
-  @Column({ type: 'enum', enum: EstadoUsuario})
+  @Column({
+    type: 'enum',
+    enum: EstadoUsuario,
+    default: EstadoUsuario.PENDIENTE,
+  })
   estado!: EstadoUsuario;
 
   // Relación con Rol
