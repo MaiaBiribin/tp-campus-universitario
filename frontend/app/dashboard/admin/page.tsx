@@ -1,53 +1,16 @@
 "use client";
 
 import Link from "next/link";
+
 import styles from "./page.module.css";
+import SideBar from "../components/sideBar";
 
 export default function DashboardAdmin() {
   return (
+
     <div className={styles.layout}>
 
-      <aside className={styles.sidebar}>
-
-        <h1 className={styles.logo}>
-          Aula
-          <span>Sync</span>
-        </h1>
-
-        <nav className={styles.nav}>
-
-          {[
-            ["Inicio", "/dashboard/admin"],
-            ["Solicitudes", "/dashboard/admin/solicitudes"],
-            ["Gestión de eventos", "/dashboard/admin/eventos"],
-            ["Mapa y aulas", "/dashboard/admin/aulas"],
-            ["Académico", "/dashboard/admin/academico"],
-            ["Usuarios", "/dashboard/admin/usuarios"],
-          ].map(([texto, ruta], index) => (
-
-            <Link
-              key={ruta}
-              href={ruta}
-              className={`${styles.link} ${
-                index === 0 ? styles.active : ""
-              }`}
-            >
-              {texto}
-            </Link>
-
-          ))}
-
-        </nav>
-
-        <div className={styles.logoutContainer}>
-          <Link href="/">
-            <button className={styles.logout}>
-              Cerrar sesión
-            </button>
-          </Link>
-        </div>
-
-      </aside>
+      <SideBar />
 
       <main className={styles.main}>
 
@@ -60,8 +23,8 @@ export default function DashboardAdmin() {
             </h1>
 
             <p>
-              Gestioná eventos, aulas, usuarios y la organización
-              académica desde un único lugar.
+              Gestioná eventos, aulas, usuarios y la
+              organización académica desde un único lugar.
             </p>
 
           </header>
@@ -109,17 +72,16 @@ export default function DashboardAdmin() {
                 ],
 
                 [
-                  "Asignar aula",
-                  "Buscar disponibilidad automáticamente",
-                  "/dashboard/admin/eventos/asignar",
-                ],
-
-                [
                   "Solicitudes",
                   "Revisar registros pendientes",
                   "/dashboard/admin/solicitudes",
                 ],
 
+                [
+                  "Mapa de aulas",
+                  "Visualizar distribución del edificio",
+                  "/dashboard/admin/aulas",
+                ],
 
               ].map(([titulo, desc, ruta]) => (
 
@@ -129,9 +91,13 @@ export default function DashboardAdmin() {
                   className={styles.quickCard}
                 >
 
-                  <h3>{titulo}</h3>
+                  <h3>
+                    {titulo}
+                  </h3>
 
-                  <p>{desc}</p>
+                  <p>
+                    {desc}
+                  </p>
 
                 </Link>
 
@@ -150,18 +116,39 @@ export default function DashboardAdmin() {
             <div className={styles.card}>
 
               <div className={styles.notice}>
-                <h3>Evento creado</h3>
-                <p>Programación 3 — Aula 205</p>
+
+                <h3>
+                  Evento creado
+                </h3>
+
+                <p>
+                  Programación 3 — Aula 205
+                </p>
+
               </div>
 
               <div className={styles.notice}>
-                <h3>Nuevo registro</h3>
-                <p>Hay usuarios esperando aprobación</p>
+
+                <h3>
+                  Nuevo registro
+                </h3>
+
+                <p>
+                  Hay usuarios esperando aprobación
+                </p>
+
               </div>
 
               <div className={styles.notice}>
-                <h3>Actualización académica</h3>
-                <p>Se modificó una asignación docente</p>
+
+                <h3>
+                  Actualización académica
+                </h3>
+
+                <p>
+                  Se modificó una asignación docente
+                </p>
+
               </div>
 
             </div>
@@ -173,5 +160,6 @@ export default function DashboardAdmin() {
       </main>
 
     </div>
+
   );
 }

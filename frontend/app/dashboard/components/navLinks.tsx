@@ -1,54 +1,138 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import styles from "./navLinks.module.css";
+
+type Role =
+  | "admin"
+  | "docente"
+  | "estudiante";
+
+type Props = {
+  role: Role;
+};
 
 const linksByRole = {
+
   admin: [
-    { name: 'Usuarios', href: '/dashboard/admin/usuarios' },
-    { name: 'Eventos', href: '/dashboard/admin/eventos' },
-    { name: 'Aulas', href: '/dashboard/admin/aulas' },
+
+    {
+      name: "Inicio",
+      href: "/dashboard/admin",
+    },
+
+    {
+      name: "Solicitudes",
+      href: "/dashboard/admin/solicitudes",
+    },
+
+    {
+      name: "Eventos",
+      href: "/dashboard/admin/eventos",
+    },
+
+    {
+      name: "Mapa y aulas",
+      href: "/dashboard/admin/aulas",
+    },
+
+    {
+      name: "Académico",
+      href: "/dashboard/admin/academico",
+    },
+
+    {
+      name: "Usuarios",
+      href: "/dashboard/admin/usuarios",
+    },
+
   ],
 
   docente: [
-    { name: 'Agenda', href: '/dashboard/docente/agenda' },
-    { name: 'Eventos', href: '/dashboard/docente/eventos' },
-    { name: 'Avisos', href: '/dashboard/docente/avisos' },
+
+    {
+      name: "Inicio",
+      href: "/dashboard/docente",
+    },
+
+    {
+      name: "Agenda",
+      href: "/dashboard/docente/agenda",
+    },
+
+    {
+      name: "Eventos",
+      href: "/dashboard/docente/eventos",
+    },
+
+    {
+      name: "Mapa aulas",
+      href: "/dashboard/docente/mapa",
+    },
+
   ],
 
   estudiante: [
-    { name: 'Mis eventos', href: '/dashboard/estudiante/eventos' },
-    { name: 'Notificaciones', href: '/dashboard/estudiante/notificaciones' },
-    { name: 'Aulas', href: '/dashboard/estudiante/aulas' },
+
+    {
+      name: "Inicio",
+      href: "/dashboard/estudiante",
+    },
+
+    {
+      name: "Mis eventos",
+      href: "/dashboard/estudiante/eventos",
+    },
+
+    {
+      name: "Mapa aulas",
+      href: "/dashboard/estudiante/mapa",
+    },
+
+    {
+      name: "Notificaciones",
+      href: "/dashboard/estudiante/notificaciones",
+    },
+
   ],
+
 };
 
-export default function NavLinks() {
-  const pathname = usePathname();
+export default function NavLinks({
+  role,
+}: Props) {
 
-  // por ahra queda asi
-  const role: 'admin' | 'docente' | 'estudiante' = 'estudiante';
+  const pathname =
+    usePathname();
 
-  const links = linksByRole[role];
+  const links =
+    linksByRole[role];
 
   return (
-    <>
+
+    <nav className={styles.nav}>
+
       {links.map((link) => (
+
         <Link
-          key={link.name}
+          key={link.href}
           href={link.href}
-          className={clsx(
-            'flex h-[48px] items-center rounded-md px-3 text-sm font-medium transition-colors',
-            'hover:bg-sky-100 hover:text-blue-600',
-            {
-              'bg-sky-100 text-blue-600': pathname === link.href,
-            }
-          )}
+          className={`${styles.link}
+          ${
+            pathname === link.href
+              ? styles.active
+              : ""
+          }`}
         >
-          <p className="md:block">{link.name}</p>
+
+          {link.name}
+
         </Link>
+
       ))}
-    </>
+
+    </nav>
+
   );
 }

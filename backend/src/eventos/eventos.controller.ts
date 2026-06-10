@@ -1,53 +1,70 @@
-import { Controller, Get, Post, Put, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Patch,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
+
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { EventosService } from './eventos.service';
 
-@Controller('/')
+@Controller('eventos')
 export class EventosController {
+  constructor(private readonly eventosService: EventosService) {}
+
+  // listar
   @ApiTags('Eventos')
-  @Get('/eventos/:id')
+  @Get()
   @ApiOperation({
-    summary: 'Devuelve el evento, ya sea de tipo clase, parcial, o informativo',
+    summary: 'Devuelve todos los eventos',
   })
-  getEventos() {
-    return '';
+  getAllEventos() {
+    return this.eventosService.findAll();
   }
 
+  // traer por id
   @ApiTags('Eventos')
-  @Post('/eventos')
+  @Get(':id')
   @ApiOperation({
-    summary:
-      'Crea un nuevo evento, ya sea de tipo clase, parcial, o informativo',
+    summary: 'Devuelve un evento por id',
   })
-  postEventos() {
-    return '';
+  getEventoById(@Param('id') id: number) {
+    return this.eventosService.findOne(id);
   }
 
+  // crea
   @ApiTags('Eventos')
-  @Patch('/eventos/:id')
+  @Post()
   @ApiOperation({
-    summary:
-      'Modifica parcialmente un evento, ya sea de tipo clase, parcial, o informativo',
+    summary: 'Crea un nuevo evento',
   })
-  patchEventos() {
-    return '';
+  createEvento(@Body() body: any) {
+  console.log("EVENTO BODY:", body);
+  return this.eventosService.create(body);
+}
+
+  // edita parcial
+  @ApiTags('Eventos')
+  @Patch(':id')
+  patchEvento(@Param('id') id: number, @Body() body: any) {
+    return this.eventosService.updatePartial(id, body);
   }
 
+  // reemplaza
   @ApiTags('Eventos')
-  @Put('/eventos/:id')
-  @ApiOperation({
-    summary:
-      'Reemplaza completamente un evento, ya sea de tipo clase, parcial, o informativo',
-  })
-  putEventos() {
-    return '';
+  @Put(':id')
+  putEvento(@Param('id') id: number, @Body() body: any) {
+    return this.eventosService.replace(id, body);
   }
 
+  // borra
   @ApiTags('Eventos')
-  @Delete('/eventos/:id')
-  @ApiOperation({
-    summary: 'Elimina un evento, ya sea de tipo clase, parcial, o informativo',
-  })
-  deleteEventos() {
-    return '';
+  @Delete(':id')
+  deleteEvento(@Param('id') id: number) {
+    return this.eventosService.remove(id);
   }
 }
