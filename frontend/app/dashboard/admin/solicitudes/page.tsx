@@ -1,6 +1,14 @@
 "use client";
-import { api } from "../../../lib/api";
+
 import { useEffect, useState } from "react";
+
+import { api } from "../../../lib/api";
+
+import layout from "@/app/styles/layout.module.css";
+import dashboard from "@/app/styles/dashboard.module.css";
+import cards from "@/app/styles/cards.module.css";
+import buttons from "@/app/styles/buttons.module.css";
+
 import styles from "./page.module.css";
 
 type Solicitud = {
@@ -20,18 +28,32 @@ export default function SolicitudesAdmin() {
     useState(true);
 
   useEffect(() => {
-  async function cargarSolicitudes() {
-    try {
-      const res = await fetch("http://localhost:4000/XXXX"); // me falta endpoint
-      const data = await res.json();
-      setSolicitudes(data);
-    } finally {
-      setCargando(false);
-    }
-  }
 
-  cargarSolicitudes();
-}, []);
+    async function cargarSolicitudes() {
+
+      try {
+
+        const res =
+          await fetch(
+            "http://localhost:4000/XXXX"
+          );
+
+        const data =
+          await res.json();
+
+        setSolicitudes(data);
+
+      } finally {
+
+        setCargando(false);
+
+      }
+
+    }
+
+    cargarSolicitudes();
+
+  }, []);
 
   function aprobar(id: number) {
 
@@ -61,9 +83,9 @@ export default function SolicitudesAdmin() {
 
     return (
 
-      <main className={styles.page}>
+      <main className={layout.main}>
 
-        <div className={styles.content}>
+        <div className={layout.content}>
 
           <h1>
             Cargando solicitudes...
@@ -78,11 +100,12 @@ export default function SolicitudesAdmin() {
   }
 
   return (
-    <main className={styles.page}>
 
-      <div className={styles.content}>
+    <main className={layout.main}>
 
-        <header className={styles.header}>
+      <div className={layout.content}>
+
+        <header className={dashboard.header}>
 
           <div>
 
@@ -128,7 +151,7 @@ export default function SolicitudesAdmin() {
 
                 <article
                   key={usuario.id}
-                  className={styles.card}
+                  className={cards.card}
                 >
 
                   <div className={styles.user}>
@@ -156,13 +179,29 @@ export default function SolicitudesAdmin() {
                   <div className={styles.data}>
 
                     <div>
-                      <span>DNI</span>
-                      <strong>{usuario.dni}</strong>
+
+                      <span>
+                        DNI
+                      </span>
+
+                      <strong>
+                        {usuario.dni}
+                      </strong>
+
                     </div>
 
                     <div>
-                      <span>Estado</span>
-                      <strong>Pendiente</strong>
+
+                      <span>
+                        Estado
+                      </span>
+
+                      <strong
+                        className={styles.pending}
+                      >
+                        Pendiente
+                      </strong>
+
                     </div>
 
                   </div>
@@ -170,7 +209,7 @@ export default function SolicitudesAdmin() {
                   <div className={styles.actions}>
 
                     <button
-                      className={styles.approve}
+                      className={buttons.primary}
                       onClick={() =>
                         aprobar(usuario.id)
                       }
@@ -179,7 +218,7 @@ export default function SolicitudesAdmin() {
                     </button>
 
                     <button
-                      className={styles.reject}
+                      className={buttons.danger}
                       onClick={() =>
                         rechazar(usuario.id)
                       }
@@ -202,5 +241,7 @@ export default function SolicitudesAdmin() {
       </div>
 
     </main>
+
   );
+
 }

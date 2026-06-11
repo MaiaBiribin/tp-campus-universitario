@@ -5,8 +5,6 @@ import {
   useState,
 } from "react";
 
-import styles from "./page.module.css";
-
 import {
   Carrera,
   Materia,
@@ -16,6 +14,12 @@ import {
   getCarreras,
   getMateriasPorCarrera,
 } from "../../../lib/services";
+
+import layout from "@/app/styles/layout.module.css";
+import dashboard from "@/app/styles/dashboard.module.css";
+import cards from "@/app/styles/cards.module.css";
+
+import styles from "./page.module.css";
 
 export default function AcademicoAdmin() {
 
@@ -52,18 +56,20 @@ export default function AcademicoAdmin() {
         const data =
           await getCarreras();
 
-        console.log("CARRERAS:", data);
-
         setCarreras(data);
 
         if (
           data.length > 0
         ) {
 
-          setCarreraSeleccionada(data[0].id_carrera);
+          setCarreraSeleccionada(
+            data[0].id_carrera
+          );
 
           const materiasData =
-            await getMateriasPorCarrera(data[0].id_carrera);
+            await getMateriasPorCarrera(
+              data[0].id_carrera
+            );
 
           setMaterias(
             materiasData
@@ -118,7 +124,9 @@ export default function AcademicoAdmin() {
       error
     ) {
 
-      console.error(error);
+      console.error(
+        error
+      );
 
     }
 
@@ -129,14 +137,17 @@ export default function AcademicoAdmin() {
   ) {
 
     return (
-
       <main
-        className={
-          styles.main
-        }
+        className={layout.main}
       >
+        <div
+          className={layout.content}
+        >
+          <h1>
+            Cargando...
+          </h1>
 
-        Cargando...
+        </div>
 
       </main>
 
@@ -147,49 +158,27 @@ export default function AcademicoAdmin() {
   return (
 
     <main
-      className={
-        styles.main
-      }
+      className={layout.main}
     >
 
       <div
-        className={
-          styles.content
-        }
+        className={layout.content}
       >
 
         <header
-          className={
-            styles.header
-          }
+          className={dashboard.header}
         >
 
           <div>
 
             <h1>
-              Gestión académica
+              Información académica
             </h1>
 
             <p>
-              Administrá carreras
+              Visualizá carreras
               y materias.
             </p>
-
-          </div>
-
-          <div
-            className={
-              styles.buttons
-            }
-          >
-
-            <button>
-              Nueva carrera
-            </button>
-
-            <button>
-              Nueva materia
-            </button>
 
           </div>
 
@@ -197,13 +186,13 @@ export default function AcademicoAdmin() {
 
         <section
           className={
-            styles.summary
+            dashboard.summaryGrid
           }
         >
 
           <div
             className={
-              styles.metric
+              cards.metric
             }
           >
 
@@ -221,7 +210,7 @@ export default function AcademicoAdmin() {
 
           <div
             className={
-              styles.metric
+              cards.metric
             }
           >
 
@@ -247,7 +236,7 @@ export default function AcademicoAdmin() {
 
           <div
             className={
-              styles.card
+              cards.card
             }
           >
 
@@ -268,13 +257,20 @@ export default function AcademicoAdmin() {
                   ) => (
 
                     <button
-                      key={carrera.id_carrera}
+                      key={
+                        carrera.id_carrera
+                      }
 
-                      onClick={() =>cambiarCarrera(carrera.id_carrera)}
+                      onClick={() =>
+                        cambiarCarrera(
+                          carrera.id_carrera
+                        )
+                      }
 
                       className={`${styles.item}
                       ${
-                        carreraSeleccionada ===carrera.id_carrera
+                        carreraSeleccionada ===
+                        carrera.id_carrera
                           ? styles.active
                           : ""
                       }`}
@@ -296,7 +292,7 @@ export default function AcademicoAdmin() {
 
           <div
             className={
-              styles.card
+              cards.card
             }
           >
 
@@ -327,11 +323,9 @@ export default function AcademicoAdmin() {
                     >
 
                       <h3>
-
                         {
                           materia.nombre
                         }
-
                       </h3>
 
                       <p>
