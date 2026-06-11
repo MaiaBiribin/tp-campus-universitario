@@ -2,12 +2,21 @@
 
 import NavLinks from "./navLinks";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import styles from "@/app/styles/dashboard.module.css";
 
 export default function SideBar() {
 
   const pathname =
     usePathname();
+  
+  const router = useRouter();
+  function cerrarSesion() {
+    localStorage.removeItem("token");
+    document.cookie =
+      "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    router.replace("/login");
+  }
 
   let role:
     "admin"
@@ -36,14 +45,18 @@ export default function SideBar() {
 
   return (
     <aside className={styles.sidebar}>
-
       <h1 className={styles.logo}>
-        Aula
-        <span>Sync</span>
-      </h1>
-
+        Aula<span>Sync</span>
+        </h1>
       <NavLinks role={role} />
-
+      <div className={styles.logoutContainer}>
+        <button
+        onClick={cerrarSesion}
+        className={styles.logout}
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </aside>
   );
 }

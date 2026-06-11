@@ -18,7 +18,6 @@ import {
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import cards from "@/app/styles/cards.module.css";
-
 import styles from "./page.module.css";
 
 export default function AcademicoAdmin() {
@@ -328,15 +327,6 @@ export default function AcademicoAdmin() {
                         }
                       </h3>
 
-                      <p>
-
-                        Cuatrimestre{" "}
-
-                        {
-                          materia.cuatrimestre
-                        }
-
-                      </p>
 
                     </div>
 

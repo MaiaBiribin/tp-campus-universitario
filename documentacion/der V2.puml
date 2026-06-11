@@ -33,7 +33,6 @@ entity Materia {
   * id_materia : int (PK)
   --
   nombre : varchar
-  cuatrimestre : int
   id_carrera : int (FK)
 }
 

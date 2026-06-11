@@ -1,21 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { api } from "../../../lib/api";
-
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import cards from "@/app/styles/cards.module.css";
 import buttons from "@/app/styles/buttons.module.css";
-
+import { Solicitud } from "../../../lib/entidades";
 import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
 
-export default function DashboardAdmin() {
-  return (
-
-    <div className={styles.layout}>
+export default function SolicitudesAdmin() {
 
       <SideBar />
 
@@ -28,10 +23,7 @@ export default function DashboardAdmin() {
 
       try {
 
-        const res =
-          await fetch(
-            "http://localhost:4000/XXXX"
-          );
+        const res = await api("/usuarios/pendientes");
 
         const data =
           await res.json();
@@ -50,44 +42,43 @@ export default function DashboardAdmin() {
 
   }, []);
 
-  function aprobar(id: number) {
-
-    alert("Solicitud aprobada");
-
-    setSolicitudes(
-      solicitudes.filter(
-        (u) => u.id !== id
+  async function aprobar(id: number) {
+  try {
+    await api(`/usuarios/${id}/habilitar`, {
+      method: "PATCH",});
+    setSolicitudes((prev) =>
+      prev.filter(
+        (u) => u.id_usuario !== id
       )
     );
+  } catch (error) {
+    console.error(error);}
+}
 
-  }
-
-  function rechazar(id: number) {
-
-    alert("Solicitud rechazada");
-
-    setSolicitudes(
-      solicitudes.filter(
-        (u) => u.id !== id
+  async function rechazar(id: number) {
+  try {
+    await api(`/usuarios/${id}/rechazar`, {
+      method: "PATCH",
+    });
+    setSolicitudes((prev) =>
+      prev.filter(
+        (u) => u.id_usuario !== id
       )
     );
-
-  }
+  } catch (error) {
+    console.error(error);}
+}
 
   if (cargando) {
 
     return (
 
       <main className={layout.main}>
-
         <div className={layout.content}>
-
           <h1>
             Cargando solicitudes...
           </h1>
-
         </div>
-
       </main>
 
     );
@@ -95,13 +86,9 @@ export default function DashboardAdmin() {
   }
 
   return (
-
     <main className={layout.main}>
-
       <div className={layout.content}>
-
         <header className={dashboard.header}>
-
           <div>
 
             <h1>
@@ -149,7 +136,7 @@ export default function DashboardAdmin() {
             </h2>
 
                 <article
-                  key={usuario.id}
+                  key={usuario.id_usuario}
                   className={cards.card}
                 >
 
@@ -212,7 +199,7 @@ export default function DashboardAdmin() {
                     <button
                       className={buttons.primary}
                       onClick={() =>
-                        aprobar(usuario.id)
+                        aprobar(usuario.id_usuario)
                       }
                     >
                       Aprobar
@@ -221,7 +208,7 @@ export default function DashboardAdmin() {
                     <button
                       className={buttons.danger}
                       onClick={() =>
-                        rechazar(usuario.id)
+                        rechazar(usuario.id_usuario)
                       }
                     >
                       Rechazar

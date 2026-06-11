@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Evento } from './evento.entity';
@@ -19,24 +19,49 @@ export class EventosService {
   }
 
   async create(data: any) {
-  const evento = this.repo.create({
-    titulo: data.titulo,
-    fecha: data.fecha,
-    horaInicio: data.horaInicio,
-    horaFin: data.horaFin,
-    estado: 'aceptado',
+    if (data.horaInicio >= data.horaFin) {
+      throw new BadRequestException('La hora de inicio debe ser menor que la hora de fin');
+    }
+    const idAula = Number(data.aula?.id_aula);
+    // busca eventos del mismo dia y aula
+    const eventosExistentes = await this.repo.find({
+      where: {
+        fecha: data.fecha,
+        aula: {
+          id_aula: idAula,
+        },
+      },
+    });
+    // verifica superp de hs
+    for (const evento of eventosExistentes) {
+      const inicioNuevo = data.horaInicio;
+      const finNuevo = data.horaFin;
+      const inicioExistente = evento.horaInicio;
+      const finExistente = evento.horaFin;
+      const hayConflicto = inicioNuevo < finExistente && finNuevo > inicioExistente;
+      if (hayConflicto) {
+        throw new BadRequestException(`El aula ${evento.aula.nombre} ya está ocupada entre ${inicioExistente} y ${finExistente}`);
+      }
+    }
 
-    aula: {id_aula: Number(data.aula?.id_aula)},
-    tipoEvento: {id_tipo_evento: Number(data.tipoEvento?.id_tipo_evento)},
-    materia: {id_materia: Number(data.materia?.id_materia)},});
-
-  const guardado = await this.repo.save(evento);
-
-  console.log("EVENTO GUARDADO:");
-  console.log(guardado);
-
-  return guardado;
-}
+    const nuevoEvento = this.repo.create({
+      titulo: data.titulo,
+      fecha: data.fecha,
+      horaInicio: data.horaInicio,
+      horaFin: data.horaFin,
+      estado: 'aceptado',
+      aula: {
+        id_aula: idAula,
+      },
+      tipoEvento: {
+        id_tipo_evento: Number(data.tipoEvento?.id_tipo_evento),
+      },
+      materia: {
+        id_materia: Number(data.materia?.id_materia),
+      },
+    });
+    return await this.repo.save(nuevoEvento);
+  }
 
   async updatePartial(id: number, data: any) {
     await this.repo.update(id, data);

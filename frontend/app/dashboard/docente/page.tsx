@@ -1,18 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
 
+import layout from "@/app/styles/layout.module.css";
+import dashboard from "@/app/styles/dashboard.module.css";
+import cards from "@/app/styles/cards.module.css";
+
 export default function DashboardDocente() {
+
   return (
-    <div className={styles.layout}>
+
+    <div className={layout.layout}>
+
       <SideBar />
-      <main className={styles.main}>
 
-        <div className={styles.content}>
+      <main className={layout.main}>
 
-          <header className={styles.header}>
+        <div className={layout.content}>
+
+          <header className={dashboard.header}>
 
             <h1>
               Panel docente
@@ -24,46 +31,72 @@ export default function DashboardDocente() {
             </p>
 
           </header>
+<<<<<<< HEAD
  
          {/* le dejo comentado por aca para no romper el codigo pero se tendria que usar el <eventodia> para usar la funcion*/}
+=======
+
+          {/* RESUMEN */}
+
+>>>>>>> d6ae4c08225d350bd34887e14db44ab2637b5738
           <section>
 
-            <h2 className={styles.sectionTitle}>
+            <h2 className={dashboard.sectionTitle}>
               Resumen del día
             </h2>
+<<<<<<< HEAD
        
             <div className={styles.summaryGrid}>
           
               <div className={styles.metric}>
                 <p>Clases hoy</p>
                 <h3>3</h3>
+=======
+
+            <div className={dashboard.summaryGrid}>
+
+              <div className={cards.metric}>
+
+                <p>
+                  Clases hoy
+                </p>
+
+                <h3>
+                  3
+                </h3>
+
+>>>>>>> d6ae4c08225d350bd34887e14db44ab2637b5738
               </div>
 
-              <div className={styles.metric}>
-                <p>Avisos activos</p>
-                <h3>1</h3>
-              </div>
+              <div className={cards.metric}>
 
-              <div className={styles.metric}>
-                <p>Eventos esta semana</p>
-                <h3>12</h3>
+                <p>
+                  Avisos activos
+                </p>
+
+                <h3>
+                  1
+                </h3>
+
               </div>
 
             </div>
 
           </section>
 
+          {/* PRÓXIMO EVENTO */}
+
           <section>
 
-            <h2 className={styles.sectionTitle}>
+            <h2 className={dashboard.sectionTitle}>
               Próximo evento
             </h2>
 
-            <div className={styles.mainEvent}>
+            <div className={dashboard.mainEvent}>
 
               <div>
 
-                <p className={styles.label}>
+                <p className={dashboard.label}>
                   Clase asignada
                 </p>
 
@@ -71,14 +104,14 @@ export default function DashboardDocente() {
                   Programación 3
                 </h3>
 
-                <div className={styles.info}>
+                <div className={dashboard.info}>
 
                   <p>
                     📅 Hoy
                   </p>
 
                   <p>
-                    🕒 18:00 — 22:00
+                    🕒 18:00 - 22:00
                   </p>
 
                   <p>
@@ -89,11 +122,12 @@ export default function DashboardDocente() {
 
               </div>
 
-              <Link href="/dashboard/docente/eventos/1">
+              <Link
+                href="/dashboard/docente/eventos/1"
+                className={dashboard.whiteButton}
+              >
 
-                <button className={styles.whiteButton}>
-                  Ver evento
-                </button>
+                Ver evento
 
               </Link>
 
@@ -106,5 +140,7 @@ export default function DashboardDocente() {
       </main>
 
     </div>
+
   );
+
 }

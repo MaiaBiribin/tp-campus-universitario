@@ -1,26 +1,20 @@
 "use client";
-
+import {
+  getCarreras,
+  getMateriasPorCarrera,
+  getAulas
+} from "../../../../lib/services";
+import {
+  Carrera,
+  Materia,
+  Aula,
+} from "../../../../lib/entidades";
 import { useEffect, useState } from "react";
 import layout from "@/app/styles/layout.module.css";
 import forms from "@/app/styles/forms.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { api } from "../../../../lib/api";
-
-type Carrera = {
-  id_carrera: number;
-  nombre: string;
-};
-
-type Materia = {
-  id_materia: number;
-  nombre: string;
-};
-
-type Aula = {
-  id_aula: number;
-  nombre: string;
-};
 
 export default function CrearEvento() {
   const [fecha, setFecha] = useState("");
@@ -42,124 +36,75 @@ export default function CrearEvento() {
     useState("");
 
   useEffect(() => {
-  async function cargar() {
-    try {
-      const carrerasRes =
-        await api("/carreras");
-      const carrerasData =
-        await carrerasRes.json();
-      setCarreras(carrerasData);
-      const aulasRes =
-        await api("/aulas");
-      const aulasData =
-        await aulasRes.json();
-      setAulas(aulasData);
-    }
-    catch (error) {
-      console.error(error);
-    }
-  }
-  cargar();
-}, []);
+    async function cargar() {
+      try {
+        setCarreras(
+          await getCarreras());
+        setAulas(
+          await getAulas());
+        }
+        catch (error) {console.error(error);}
+      }
+      cargar();}, []);
 
   async function cambiarCarrera(
-    carreraId: string
-  ) {
+  carreraId: string) {
     setIdCarrera(carreraId);
-
     setIdMateria("");
-
     if (!carreraId) {
       setMaterias([]);
       return;
     }
-
     try {
-      const res =
-        await api(
-          `/materias/carrera/${carreraId}`
-        );
-
-      const data =
-        await res.json();
-
+      const data = await getMateriasPorCarrera(Number(carreraId));
       setMaterias(data);
     }
-
-    catch (error) {
-      console.error(error);
-    }
+    catch (error) {console.error(error);}
   }
 
   async function handleSubmit(
-    e: React.FormEvent
-  ) {
-    e.preventDefault();
-
-    const materiaSeleccionada =
-      materias.find(
-        (m) =>
-          m.id_materia ===
-          Number(idMateria)
-      );
-
-    try {
-      const res =
+    e: React.FormEvent) {
+      e.preventDefault();
+      if (horaInicio >= horaFin) {
+        alert(
+          "La hora de inicio debe ser menor que la hora de fin");
+          return;
+        }
+      const materiaSeleccionada = materias.find((m) => m.id_materia === Number(idMateria));
+      try {
+        const res =
         await api("/eventos", {
           method: "POST",
-
           body: JSON.stringify({
-            titulo:
-              materiaSeleccionada?.nombre,
-
+            titulo: materiaSeleccionada?.nombre,
             fecha,
-
             horaInicio,
-
             horaFin,
-
             aula: {
-              id_aula:
-                Number(idAula),
-            },
-
+              id_aula: Number(idAula),},
             tipoEvento: {
-              id_tipo_evento:
-                Number(idTipoEvento),
-            },
-
+              id_tipo_evento: Number(idTipoEvento),},
             materia: {
-              id_materia:
-                Number(idMateria),
-            },
-          }),
-        });
-
-      if (res.ok) {
-        alert("Evento creado");
-
-        window.location.href =
-          "/dashboard/admin/eventos";
-      }
-
-      else {
-        alert(
-          "Error al crear evento"
-        );
+              id_materia: Number(idMateria),},
+            }),
+          });
+        if (res.ok) {
+          alert("Evento creado");
+          window.location.href = "/dashboard/admin/eventos";
+        } else {
+          const error = await res.json().catch(() => null);
+          alert(error?.message || "Error al crear evento");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error de conexión con el servidor");
       }
     }
-
-    catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
 
     <main className={layout.main}>
-
       <div className={layout.content}>
-
         <header className={dashboard.header}>
 
           <h1>
