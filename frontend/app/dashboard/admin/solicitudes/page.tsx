@@ -12,7 +12,7 @@ import buttons from "@/app/styles/buttons.module.css";
 import styles from "./page.module.css";
 
 type Solicitud = {
-  id: number;
+  id_usuario: number;
   nombre: string;
   apellido: string;
   mail: string;
@@ -33,10 +33,7 @@ export default function SolicitudesAdmin() {
 
       try {
 
-        const res =
-          await fetch(
-            "http://localhost:4000/XXXX"
-          );
+        const res = await api("/usuarios/pendientes");
 
         const data =
           await res.json();
@@ -55,44 +52,43 @@ export default function SolicitudesAdmin() {
 
   }, []);
 
-  function aprobar(id: number) {
-
-    alert("Solicitud aprobada");
-
-    setSolicitudes(
-      solicitudes.filter(
-        (u) => u.id !== id
+  async function aprobar(id: number) {
+  try {
+    await api(`/usuarios/${id}/habilitar`, {
+      method: "PATCH",});
+    setSolicitudes((prev) =>
+      prev.filter(
+        (u) => u.id_usuario !== id
       )
     );
+  } catch (error) {
+    console.error(error);}
+}
 
-  }
-
-  function rechazar(id: number) {
-
-    alert("Solicitud rechazada");
-
-    setSolicitudes(
-      solicitudes.filter(
-        (u) => u.id !== id
+  async function rechazar(id: number) {
+  try {
+    await api(`/usuarios/${id}/rechazar`, {
+      method: "PATCH",
+    });
+    setSolicitudes((prev) =>
+      prev.filter(
+        (u) => u.id_usuario !== id
       )
     );
-
-  }
+  } catch (error) {
+    console.error(error);}
+}
 
   if (cargando) {
 
     return (
 
       <main className={layout.main}>
-
         <div className={layout.content}>
-
           <h1>
             Cargando solicitudes...
           </h1>
-
         </div>
-
       </main>
 
     );
@@ -100,13 +96,9 @@ export default function SolicitudesAdmin() {
   }
 
   return (
-
     <main className={layout.main}>
-
       <div className={layout.content}>
-
         <header className={dashboard.header}>
-
           <div>
 
             <h1>
@@ -150,7 +142,7 @@ export default function SolicitudesAdmin() {
               {solicitudes.map((usuario) => (
 
                 <article
-                  key={usuario.id}
+                  key={usuario.id_usuario}
                   className={cards.card}
                 >
 
@@ -211,7 +203,7 @@ export default function SolicitudesAdmin() {
                     <button
                       className={buttons.primary}
                       onClick={() =>
-                        aprobar(usuario.id)
+                        aprobar(usuario.id_usuario)
                       }
                     >
                       Aprobar
@@ -220,7 +212,7 @@ export default function SolicitudesAdmin() {
                     <button
                       className={buttons.danger}
                       onClick={() =>
-                        rechazar(usuario.id)
+                        rechazar(usuario.id_usuario)
                       }
                     >
                       Rechazar

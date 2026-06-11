@@ -46,7 +46,26 @@ export class UsuariosService {
       nombre: true,
       apellido: true,
       dni: true,
+      mail: true,
     },
+    });
+  }
+
+  async findHabilitados() {
+    return this.usuariosRepository.find({
+      where: { estado: EstadoUsuario.HABILITADO,},
+      relations: {rol: true,},
+      select: {
+        id_usuario: true,
+        nombre: true,
+        apellido: true,
+        mail: true,
+        dni: true,
+        rol: {
+          id_rol: true,
+          nombre: true,
+        },
+      },
     });
   }
 
