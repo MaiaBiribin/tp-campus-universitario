@@ -37,4 +37,16 @@ export class UsuariosService {
     });
     return this.usuariosRepository.save(usuario);
   }
+
+  async findPendientes(): Promise<Pick<Usuario, 'nombre' | 'apellido' | 'dni'>[]> {
+  return this.usuariosRepository.find({
+    where: { estado: EstadoUsuario.PENDIENTE },
+    select: {
+      nombre: true,
+      apellido: true,
+      dni: true,
+    },
+    
+  });
+}
 }

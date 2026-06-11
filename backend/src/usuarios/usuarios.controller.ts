@@ -7,7 +7,8 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { UsuariosService } from './usuarios.service';
 
 //Guards para proteger roles
 import { AuthGuard } from '../auth/guards/auth.guard';
@@ -16,33 +17,16 @@ import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('usuarios')
 export class UsuariosController {
-  // Lista todos los usuarios - solo Admin
+
+  constructor(private readonly usuariosService: UsuariosService) {}
+
+  //USUARIOS
+
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(['Admin'])
   @Get()
   getUsuarios() {
     return { mensaje: 'Lista de usuarios - solo Admin puede ver esto' };
-  }
-
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Profesor'])
-  @Get('mis-eventos')
-  getMisEventos() {
-    return { mensaje: 'Solo Profesor puede ver esto' };
-  }
-
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin', 'Profesor'])
-  @Get('aulas')
-  getAulas() {
-    return { mensaje: 'Admin y Profesor pueden ver esto' };
-  }
-
-  @ApiTags('Usuarios')
-  @Get('/usuarios/:id')
-  @ApiOperation({ summary: 'Devuelve los datos de un usuario' })
-  getEventos() {
-    return '';
   }
 
   @ApiTags('Usuarios')
@@ -52,13 +36,29 @@ export class UsuariosController {
     return '';
   }
 
+  @ApiBearerAuth()
+  @ApiTags('usuarios')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(['Admin'])
+  @Get('/pendientes')
+  @ApiOperation({ summary: 'Devuelve usuarios con estado pendiente' })
+  getUsuariosPendientes() {
+    return this.usuariosService.findPendientes();
+  }
+  
+  @ApiTags('Usuarios')
+  @Get('/usuarios/:id')
+  @ApiOperation({ summary: 'Devuelve los datos de un usuario' })
+  getEventos() {
+    return '';
+  }
+  
   @ApiTags('Usuarios')
   @Patch('/usuarios/:id')
   @ApiOperation({ summary: 'Modifica parcialmente un usuario' })
   patchUsuarios() {
     return '';
   }
-
   @ApiTags('Usuarios')
   @Put('/usuarios/:id')
   @ApiOperation({ summary: 'Reemplaza completamente un usuario' })
@@ -72,4 +72,29 @@ export class UsuariosController {
   deleteUsuarios() {
     return '';
   }
+
+
+  // EVENTOS
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(['Profesor'])
+  @Get('mis-eventos')
+  getMisEventos() {
+    return { mensaje: 'Solo Profesor puede ver esto' };
+  }
+
+  //AULAS 
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(['Admin', 'Profesor'])
+  @Get('aulas')
+  getAulas() {
+    return { mensaje: 'Admin y Profesor pueden ver esto' };
+
+  }
+
+
+
+
+
 }
