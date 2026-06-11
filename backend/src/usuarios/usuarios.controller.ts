@@ -47,6 +47,16 @@ export class UsuariosController {
     return this.usuariosService.findPendientes();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(['Admin'])
+  @Get('/habilitados')
+  @ApiOperation({
+  summary: 'Devuelve todos los usuarios habilitados',
+})
+getUsuariosHabilitados() {
+  return this.usuariosService.findHabilitados();}
+
 
   //HABILITAR USUARIO
   @ApiBearerAuth()
