@@ -4,6 +4,7 @@ import Link from "next/link";
 import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
 import Image from "next/image";
+import RenderizarMapas from "../../components/renderizarMaps";
 
 export default function zonaMapa(){
  return(
@@ -12,31 +13,7 @@ export default function zonaMapa(){
      <main className={styles.main}>
         <div className={styles.content}>
             
-            <header className={styles.header}>
-             <h1>
-                Mapa general del lugar:
-             </h1>
-            </header>
-       
-
-      
-             <div>
-               <p>Mapa de Planta Baja:</p>
-               <Image src={".public/mapaPB"} alt="imagen" useMap="#map" width="400"/>
-                <map name="mapaPlantaBaja">
-               
-      
-                </map>
-             </div>
-      
-             <div>
-               <p>Mapa del primer Piso:</p>
-               <Image src={".public/mapaP1"} alt="imagen" useMap="#map" width="400"/>
-                 <map name="mapPrimerPiso">
-      
-                 </map>
-             </div>
-      
+      <RenderizarMapas/>  
          
       <div>
          <Link href={"/docente"}><button>Volver a pagina principal de la cuenta</button></Link>

@@ -44,7 +44,6 @@ export async function getMateriasPorCarrera(
   }
 
   return res.json();
-<<<<<<< HEAD
 }
 
 
@@ -56,7 +55,4 @@ export async function getUsuarioId(id:number){
   }
 
   return res.json()
-=======
-
->>>>>>> 19be06787cb75d4dcb589bfe16482ccd6610eab8
 }
