@@ -6,6 +6,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Param
 } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UsuariosService } from './usuarios.service';
@@ -45,6 +46,29 @@ export class UsuariosController {
   getUsuariosPendientes() {
     return this.usuariosService.findPendientes();
   }
+
+
+  //HABILITAR USUARIO
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(['Admin'])
+  @Patch(':id/habilitar') //Patch es un decorador de NestJS que extrae un valor de la URL.
+  @ApiOperation({ summary: 'Habilita un usuario pendiente' })
+  habilitarUsuario(@Param('id') id: string) {
+  return this.usuariosService.habilitarUsuario(+id);
+  }
+
+  //RECHAZAR USUARIO ejemplo de Endpoint 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(['Admin'])
+  @Patch(':id/rechazar')
+  @ApiOperation({ summary: 'Rechaza un usuario pendiente' })
+  rechazarUsuario(@Param('id') id: string) {
+  return this.usuariosService.rechazarUsuario(+id);
+  }
+
+
   
   @ApiTags('Usuarios')
   @Get('/usuarios/:id')

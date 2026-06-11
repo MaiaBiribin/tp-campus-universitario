@@ -38,15 +38,25 @@ export class UsuariosService {
     return this.usuariosRepository.save(usuario);
   }
 
-  async findPendientes(): Promise<Pick<Usuario, 'nombre' | 'apellido' | 'dni'>[]> {
+  async findPendientes(): Promise<Pick<Usuario, 'id_usuario' |'nombre' | 'apellido' | 'dni'>[]> {
   return this.usuariosRepository.find({
     where: { estado: EstadoUsuario.PENDIENTE },
     select: {
+      id_usuario: true,
       nombre: true,
       apellido: true,
       dni: true,
     },
-    
-  });
-}
+    });
+  }
+
+  async habilitarUsuario(id: number): Promise<{ mensaje: string }> {
+  await this.usuariosRepository.update(id, { estado: EstadoUsuario.HABILITADO });
+  return { mensaje: 'Usuario habilitado correctamente' };
+  }
+
+  async rechazarUsuario(id: number): Promise<{ mensaje: string }> {
+  await this.usuariosRepository.update(id, { estado: EstadoUsuario.RECHAZADO });
+  return { mensaje: 'Usuario rechazado correctamente' };
+  }
 }
