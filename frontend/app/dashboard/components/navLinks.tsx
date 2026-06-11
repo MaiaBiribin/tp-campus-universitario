@@ -15,85 +15,69 @@ type Props = {
 const linksByRole = {
 
   admin: [
-
     {
       name: "Inicio",
       href: "/dashboard/admin",
     },
-
     {
       name: "Solicitudes",
       href: "/dashboard/admin/solicitudes",
     },
-
     {
       name: "Eventos",
       href: "/dashboard/admin/eventos",
     },
-
     {
       name: "Mapa y aulas",
       href: "/dashboard/admin/aulas",
     },
-
     {
       name: "Académico",
       href: "/dashboard/admin/academico",
     },
-
     {
       name: "Usuarios",
       href: "/dashboard/admin/usuarios",
     },
-
   ],
 
   docente: [
-
     {
       name: "Inicio",
       href: "/dashboard/docente",
     },
-
     {
-      name: "Agenda",
-      href: "/dashboard/docente/agenda",
-    },
-
-    {
-      name: "Eventos",
+      name: "Mis eventos",
       href: "/dashboard/docente/eventos",
     },
-
     {
       name: "Mapa aulas",
       href: "/dashboard/docente/mapa",
+    },
+    {
+      name: "Notificaciones",
+      href: "/dashboard/docente/notificaciones",
     },
 
   ],
 
   estudiante: [
-
     {
       name: "Inicio",
       href: "/dashboard/estudiante",
     },
-
     {
       name: "Mis eventos",
       href: "/dashboard/estudiante/eventos",
     },
-
     {
       name: "Mapa aulas",
       href: "/dashboard/estudiante/mapa",
     },
-
     {
       name: "Notificaciones",
       href: "/dashboard/estudiante/notificaciones",
     },
-
   ],
 
 };

@@ -63,74 +63,48 @@ export default function CrearEvento() {
   }
 
   async function handleSubmit(
-    e: React.FormEvent
-  ) {
-    e.preventDefault();
-
-    const materiaSeleccionada =
-      materias.find(
-        (m) =>
-          m.id_materia ===
-          Number(idMateria)
-      );
-
-    try {
-      const res =
+    e: React.FormEvent) {
+      e.preventDefault();
+      if (horaInicio >= horaFin) {
+        alert(
+          "La hora de inicio debe ser menor que la hora de fin");
+          return;
+        }
+      const materiaSeleccionada = materias.find((m) => m.id_materia === Number(idMateria));
+      try {
+        const res =
         await api("/eventos", {
           method: "POST",
-
           body: JSON.stringify({
-            titulo:
-              materiaSeleccionada?.nombre,
-
+            titulo: materiaSeleccionada?.nombre,
             fecha,
-
             horaInicio,
-
             horaFin,
-
             aula: {
-              id_aula:
-                Number(idAula),
-            },
-
+              id_aula: Number(idAula),},
             tipoEvento: {
-              id_tipo_evento:
-                Number(idTipoEvento),
-            },
-
+              id_tipo_evento: Number(idTipoEvento),},
             materia: {
-              id_materia:
-                Number(idMateria),
-            },
-          }),
-        });
-
-      if (res.ok) {
-        alert("Evento creado");
-
-        window.location.href =
-          "/dashboard/admin/eventos";
-      }
-
-      else {
-        alert(
-          "Error al crear evento"
-        );
+              id_materia: Number(idMateria),},
+            }),
+          });
+        if (res.ok) {
+          alert("Evento creado");
+          window.location.href = "/dashboard/admin/eventos";
+        } else {
+          const error = await res.json().catch(() => null);
+          alert(error?.message || "Error al crear evento");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error de conexión con el servidor");
       }
     }
-
-    catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
 
     <main className={layout.main}>
-
       <div className={layout.content}>
-
         <header className={dashboard.header}>
 
           <h1>

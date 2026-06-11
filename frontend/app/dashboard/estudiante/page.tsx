@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
+import dashboard from "@/app/styles/dashboard.module.css";
+import layout from "@/app/styles/layout.module.css";
+import cards from "@/app/styles/cards.module.css";
 
 export default function DashboardEstudiante() {
   return (
-    <div className={styles.layout}>
+    <div className={layout.layout}>
       <SideBar />
-      <main className={styles.main}>
+      <main className={layout.main}>
 
-        <div className={styles.content}>
+        <div className={layout.content}>
 
-          <header className={styles.header}>
+          <header className={dashboard.header}>
             <h1>
               Hola 👋
             </h1>
@@ -26,17 +28,17 @@ export default function DashboardEstudiante() {
 
           <section>
 
-            <h2 className={styles.sectionTitle}>
-              Eventos de hoy
+            <h2 className={dashboard.sectionTitle}>
+              Próximo evento
             </h2>
 
-            <div className={styles.eventGrid}>
+            <div className={dashboard.eventGrid}>
 
-              <div className={styles.mainEvent}>
+              <div className={dashboard.mainEvent}>
 
                 <div>
 
-                  <p className={styles.label}>
+                  <p className={dashboard.label}>
                     Clase de hoy
                   </p>
 
@@ -44,7 +46,7 @@ export default function DashboardEstudiante() {
                     Programación 3
                   </h3>
 
-                  <div className={styles.info}>
+                  <div className={dashboard.info}>
                     <p>🕒 18:00 — 22:00</p>
                     <p>🏫 Aula 1</p>
                     <p>👨‍🏫 Ale</p>
@@ -53,31 +55,13 @@ export default function DashboardEstudiante() {
                 </div>
 
                 <Link href="/dashboard/estudiante/eventos/1">
-                  <button className={styles.whiteButton}>
+                  <button className={cards.whiteButton}>
                     Ver detalles
                   </button>
                 </Link>
 
               </div>
 
-              <div className={styles.card}>
-
-                <p className={styles.label}>
-                  Próximo evento
-                </p>
-
-                <h3>
-                  Base de Datos 2
-                </h3>
-
-                <div className={styles.info}>
-                  <p>📅 Mañana</p>
-                  <p>🕒 19:00</p>
-                  <p>🏫 Aula 301</p>
-                  <p>👨‍🏫 María González</p>
-                </div>
-
-              </div>
 
             </div>
 
@@ -85,23 +69,23 @@ export default function DashboardEstudiante() {
 
           <section>
 
-            <h2 className={styles.sectionTitle}>
+            <h2 className={dashboard.sectionTitle}>
               Avisos recientes
             </h2>
 
-            <div className={styles.card}>
+            <div className={dashboard.card}>
 
-              <div className={styles.notice}>
+              <div className={dashboard.notice}>
                 <h3>Cambio de aula</h3>
                 <p>Programación pasó al aula 2</p>
               </div>
 
-              <div className={styles.notice}>
+              <div className={dashboard.notice}>
                 <h3>Recordatorio</h3>
                 <p>Parcial el viernes 19</p>
               </div>
 
-              <div className={styles.notice}>
+              <div className={dashboard.notice}>
                 <h3>Nuevo aviso docente</h3>
                 <p>Llego tarde</p>
               </div>

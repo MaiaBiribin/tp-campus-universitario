@@ -103,11 +103,11 @@ return (
                 <tr>
 
                   <th>
-                    Materia
+                    Evento
                   </th>
 
                   <th>
-                    Evento
+                    Carrera
                   </th>
 
                   <th>
@@ -147,7 +147,7 @@ return (
                     </td>
 
                     <td>
-                      {evento.titulo}
+                      {evento.materia?.carrera?.nombre}
                     </td>
 
                     <td>

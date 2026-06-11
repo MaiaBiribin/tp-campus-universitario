@@ -15,7 +15,7 @@ export default function SideBar() {
     localStorage.removeItem("token");
     document.cookie =
       "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    router.push("/login");
+    router.replace("/login");
   }
 
   let role:
@@ -45,19 +45,18 @@ export default function SideBar() {
 
   return (
     <aside className={styles.sidebar}>
-
       <h1 className={styles.logo}>
-        Aula
-        <span>Sync</span>
-      </h1>
+        Aula<span>Sync</span>
+        </h1>
       <NavLinks role={role} />
-      <button
+      <div className={styles.logoutContainer}>
+        <button
         onClick={cerrarSesion}
         className={styles.logout}
-      >
-        Cerrar sesión
-      </button>
-
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </aside>
   );
 }
