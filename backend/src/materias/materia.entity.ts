@@ -10,9 +10,6 @@ export class Materia {
   @Column()
   nombre!: string;
 
-  @Column()
-  cuatrimestre!: number;
-
   @ManyToOne(() => Carrera, { eager: true })
   @JoinColumn({ name: 'id_carrera' })
   carrera!: Carrera;

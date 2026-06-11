@@ -6,30 +6,7 @@ import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import table from "@/app/styles/table.module.css";
-
-type Evento = {
-  id_evento: number;
-  titulo: string;
-  fecha: string;
-  horaInicio: string;
-  horaFin: string;
-  estado: string;
-
-  aula: {
-    id_aula: number;
-    nombre: string;
-  };
-
-  tipoEvento: {
-    id_tipo_evento: number;
-    nombre: string;
-  };
-
-  materia: {
-    id_materia: number;
-    nombre: string;
-  };
-};
+import { Evento } from "../../../lib/entidades";
 
 export default function EventosAdmin() {
   const [eventos, setEventos] = useState<Evento[]>([]);

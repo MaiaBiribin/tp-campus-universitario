@@ -1,26 +1,20 @@
 "use client";
-
+import {
+  getCarreras,
+  getMateriasPorCarrera,
+  getAulas
+} from "../../../../lib/services";
+import {
+  Carrera,
+  Materia,
+  Aula,
+} from "../../../../lib/entidades";
 import { useEffect, useState } from "react";
 import layout from "@/app/styles/layout.module.css";
 import forms from "@/app/styles/forms.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { api } from "../../../../lib/api";
-
-type Carrera = {
-  id_carrera: number;
-  nombre: string;
-};
-
-type Materia = {
-  id_materia: number;
-  nombre: string;
-};
-
-type Aula = {
-  id_aula: number;
-  nombre: string;
-};
 
 export default function CrearEvento() {
   const [fecha, setFecha] = useState("");
@@ -42,53 +36,30 @@ export default function CrearEvento() {
     useState("");
 
   useEffect(() => {
-  async function cargar() {
-    try {
-      const carrerasRes =
-        await api("/carreras");
-      const carrerasData =
-        await carrerasRes.json();
-      setCarreras(carrerasData);
-      const aulasRes =
-        await api("/aulas");
-      const aulasData =
-        await aulasRes.json();
-      setAulas(aulasData);
-    }
-    catch (error) {
-      console.error(error);
-    }
-  }
-  cargar();
-}, []);
+    async function cargar() {
+      try {
+        setCarreras(
+          await getCarreras());
+        setAulas(
+          await getAulas());
+        }
+        catch (error) {console.error(error);}
+      }
+      cargar();}, []);
 
   async function cambiarCarrera(
-    carreraId: string
-  ) {
+  carreraId: string) {
     setIdCarrera(carreraId);
-
     setIdMateria("");
-
     if (!carreraId) {
       setMaterias([]);
       return;
     }
-
     try {
-      const res =
-        await api(
-          `/materias/carrera/${carreraId}`
-        );
-
-      const data =
-        await res.json();
-
+      const data = await getMateriasPorCarrera(Number(carreraId));
       setMaterias(data);
     }
-
-    catch (error) {
-      console.error(error);
-    }
+    catch (error) {console.error(error);}
   }
 
   async function handleSubmit(
