@@ -2,21 +2,23 @@
 
 import Link from "next/link";
 
-import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
+
+import dashboard from "@/app/styles/dashboard.module.css";
+import layout from "@/app/styles/layout.module.css";
+import cards from "@/app/styles/cards.module.css";
 
 export default function DashboardAdmin() {
   return (
-
-    <div className={styles.layout}>
+    <div className={layout.layout}>
 
       <SideBar />
 
-      <main className={styles.main}>
+      <main className={layout.main}>
 
-        <div className={styles.content}>
+        <div className={layout.content}>
 
-          <header className={styles.header}>
+          <header className={dashboard.header}>
 
             <h1>
               Panel de administración
@@ -29,25 +31,27 @@ export default function DashboardAdmin() {
 
           </header>
 
+          {/* RESUMEN */}
+
           <section>
 
-            <h2 className={styles.sectionTitle}>
+            <h2 className={dashboard.sectionTitle}>
               Resumen rápido
             </h2>
 
-            <div className={styles.summaryGrid}>
+            <div className={dashboard.summaryGrid}>
 
-              <div className={styles.metric}>
+              <div className={cards.metric}>
                 <p>Eventos hoy</p>
                 <h3>12</h3>
               </div>
 
-              <div className={styles.metric}>
+              <div className={cards.metric}>
                 <p>Solicitudes pendientes</p>
                 <h3>8</h3>
               </div>
 
-              <div className={styles.metric}>
+              <div className={cards.metric}>
                 <p>Aulas ocupadas</p>
                 <h3>19</h3>
               </div>
@@ -56,13 +60,15 @@ export default function DashboardAdmin() {
 
           </section>
 
+          {/* ACCESOS RÁPIDOS */}
+
           <section>
 
-            <h2 className={styles.sectionTitle}>
+            <h2 className={dashboard.sectionTitle}>
               Accesos rápidos
             </h2>
 
-            <div className={styles.quickGrid}>
+            <div className={dashboard.quickGrid}>
 
               {[
                 [
@@ -88,7 +94,7 @@ export default function DashboardAdmin() {
                 <Link
                   key={ruta}
                   href={ruta}
-                  className={styles.quickCard}
+                  className={cards.quickCard}
                 >
 
                   <h3>
@@ -102,64 +108,10 @@ export default function DashboardAdmin() {
                 </Link>
 
               ))}
-
             </div>
-
           </section>
-
-          <section>
-
-            <h2 className={styles.sectionTitle}>
-              Actividad reciente
-            </h2>
-
-            <div className={styles.card}>
-
-              <div className={styles.notice}>
-
-                <h3>
-                  Evento creado
-                </h3>
-
-                <p>
-                  Programación 3 — Aula 205
-                </p>
-
-              </div>
-
-              <div className={styles.notice}>
-
-                <h3>
-                  Nuevo registro
-                </h3>
-
-                <p>
-                  Hay usuarios esperando aprobación
-                </p>
-
-              </div>
-
-              <div className={styles.notice}>
-
-                <h3>
-                  Actualización académica
-                </h3>
-
-                <p>
-                  Se modificó una asignación docente
-                </p>
-
-              </div>
-
-            </div>
-
-          </section>
-
         </div>
-
       </main>
-
     </div>
-
   );
 }
