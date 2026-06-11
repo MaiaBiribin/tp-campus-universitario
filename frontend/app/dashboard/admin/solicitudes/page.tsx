@@ -1,6 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { api } from "../../../lib/api";
+
+import layout from "@/app/styles/layout.module.css";
+import dashboard from "@/app/styles/dashboard.module.css";
+import cards from "@/app/styles/cards.module.css";
+import buttons from "@/app/styles/buttons.module.css";
 
 import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
@@ -12,11 +19,90 @@ export default function DashboardAdmin() {
 
       <SideBar />
 
-      <main className={styles.main}>
+  const [cargando, setCargando] =
+    useState(true);
 
-        <div className={styles.content}>
+  useEffect(() => {
 
-          <header className={styles.header}>
+    async function cargarSolicitudes() {
+
+      try {
+
+        const res =
+          await fetch(
+            "http://localhost:4000/XXXX"
+          );
+
+        const data =
+          await res.json();
+
+        setSolicitudes(data);
+
+      } finally {
+
+        setCargando(false);
+
+      }
+
+    }
+
+    cargarSolicitudes();
+
+  }, []);
+
+  function aprobar(id: number) {
+
+    alert("Solicitud aprobada");
+
+    setSolicitudes(
+      solicitudes.filter(
+        (u) => u.id !== id
+      )
+    );
+
+  }
+
+  function rechazar(id: number) {
+
+    alert("Solicitud rechazada");
+
+    setSolicitudes(
+      solicitudes.filter(
+        (u) => u.id !== id
+      )
+    );
+
+  }
+
+  if (cargando) {
+
+    return (
+
+      <main className={layout.main}>
+
+        <div className={layout.content}>
+
+          <h1>
+            Cargando solicitudes...
+          </h1>
+
+        </div>
+
+      </main>
+
+    );
+
+  }
+
+  return (
+
+    <main className={layout.main}>
+
+      <div className={layout.content}>
+
+        <header className={dashboard.header}>
+
+          <div>
 
             <h1>
               Panel de administración
@@ -62,33 +148,9 @@ export default function DashboardAdmin() {
               Accesos rápidos
             </h2>
 
-            <div className={styles.quickGrid}>
-
-              {[
-                [
-                  "Crear evento",
-                  "Crear clases, parciales o finales",
-                  "/dashboard/admin/eventos/nuevo",
-                ],
-
-                [
-                  "Solicitudes",
-                  "Revisar registros pendientes",
-                  "/dashboard/admin/solicitudes",
-                ],
-
-                [
-                  "Mapa de aulas",
-                  "Visualizar distribución del edificio",
-                  "/dashboard/admin/aulas",
-                ],
-
-              ].map(([titulo, desc, ruta]) => (
-
-                <Link
-                  key={ruta}
-                  href={ruta}
-                  className={styles.quickCard}
+                <article
+                  key={usuario.id}
+                  className={cards.card}
                 >
 
                   <h3>
@@ -99,7 +161,75 @@ export default function DashboardAdmin() {
                     {desc}
                   </p>
 
-                </Link>
+                    <div>
+
+                      <h2>
+                        {usuario.nombre}
+                        {" "}
+                        {usuario.apellido}
+                      </h2>
+
+                      <p>
+                        {usuario.mail}
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div className={styles.data}>
+
+                    <div>
+
+                      <span>
+                        DNI
+                      </span>
+
+                      <strong>
+                        {usuario.dni}
+                      </strong>
+
+                    </div>
+
+                    <div>
+
+                      <span>
+                        Estado
+                      </span>
+
+                      <strong
+                        className={styles.pending}
+                      >
+                        Pendiente
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                  <div className={styles.actions}>
+
+                    <button
+                      className={buttons.primary}
+                      onClick={() =>
+                        aprobar(usuario.id)
+                      }
+                    >
+                      Aprobar
+                    </button>
+
+                    <button
+                      className={buttons.danger}
+                      onClick={() =>
+                        rechazar(usuario.id)
+                      }
+                    >
+                      Rechazar
+                    </button>
+
+                  </div>
+
+                </article>
 
               ))}
 
@@ -161,5 +291,8 @@ export default function DashboardAdmin() {
 
     </div>
 
+    </main>
+
   );
+
 }

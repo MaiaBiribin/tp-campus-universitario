@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger';
 import { AuthGuard } from './guards/auth.guard';
 
 @Controller('auth')
@@ -19,6 +19,14 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @ApiBody({
+    schema: {
+    properties: {
+      mail:       { type: 'string', example: 'admin@mail.com' },
+      contrasena: { type: 'string', example: '123456' },
+    },
+  },
+  })
   signIn(@Body() body: { mail: string; contrasena: string }) {
     return this.authService.signIn(body.mail, body.contrasena);
   }

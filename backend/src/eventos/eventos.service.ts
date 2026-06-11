@@ -26,10 +26,9 @@ export class EventosService {
     horaFin: data.horaFin,
     estado: 'aceptado',
 
-    aula: { id_aula: Number(data.aula?.id) },
-    tipoEvento: { id_tipo_evento: Number(data.tipoEvento?.id) },
-    materia: { id_materia: Number(data.materia?.id) },
-  });
+    aula: {id_aula: Number(data.aula?.id_aula)},
+    tipoEvento: {id_tipo_evento: Number(data.tipoEvento?.id_tipo_evento)},
+    materia: {id_materia: Number(data.materia?.id_materia)},});
 
   const guardado = await this.repo.save(evento);
 
