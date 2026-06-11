@@ -2,106 +2,84 @@
 
 import Link from "next/link";
 
+import home from "./home.module.css"
+import cards from "./styles/cards.module.css";
+import buttons from "./styles/buttons.module.css";
 
-export default function Home(){
-  
-
+export default function Home() {
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden p-8 flex flex-col justify-between font-sans antialiased">
+    <div className={home.page}>
+      <main className={home.main}>
 
-      <div ></div>
+        <header className={home.topBar}>
+          <h1 className={home.title}>
+            Bienvenido a <span>AulaSync</span>
+          </h1>
 
-      <main className="relative flex flex-col grow justify-between">
-          <header className="flex justify-between items-start w-full">
-            <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-extrabold tracking-tight">Bienvenido a Aulasync</h1>
+          <div className={`${cards.card} ${home.infoBox}`}>
+            <p>
+              Los usuarios deben ser aprobados por un administrador
+              antes de ingresar al sistema.
+            </p>
           </div>
-          <div className="bg-slate-900/40 border border-slate-700/50 rounded-xl p-4 text-sm max-w-sm backdrop-blur-md text-slate-300 shadow-xl">
-          <p className="leading-relaxed">
-           Los usuarios deben ser aprobados por un administrador antes de ingresar al sistema.
-           </p>
-         
-          </div>
-          </header>
-       
-         <section className="flex flex-col items-center text-center my-auto py-20">
-         <h2 className="text-7xl font-extrabold mb-3 tracking-tighter leading-tight">
-         <span className="text-violet-400">AulaSync</span> 
-         </h2>
-         <p>Organizando aulas, optimizando tiempos</p>
-         <div className="w-28 h-1 bg-violet-500 mt-6 rounded-full"/>
-           </section>
+        </header>
 
-     <footer className="flex flex-col items-center gap-10 mt-auto">
-       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 w-full">
-        
-        <div className="p-6 bg-slate-900/20 border border-slate-800 rounded-2xl text-center">
-          <h3 className="font-semibold text-lg mb-2">
-                Gestión de eventos
-              </h3>
-          <p className="text-sm text-slate-400">
+        <section className={home.hero}>
+          <h2 className={home.heroTitle}>
+            <span>AulaSync</span>
+          </h2>
+
+          <p className={home.heroText}>
+            Organizando aulas, optimizando tiempos
+          </p>
+
+          <div className={home.divider}></div>
+        </section>
+
+        <footer className={home.footer}>
+          <div className={home.features}>
+
+            <div className={cards.card}>
+              <h3>Gestión de eventos</h3>
+              <p>
                 Organizá y asigná eventos académicos
               </p>
-          </div>
-          
-          <div className="p-6 bg-slate-900/20 border border-slate-800 rounded-2xl text-center">
-              <h3 className="font-semibold text-lg mb-2">
-                Aulas disponibles
-              </h3>
+            </div>
 
-              <p className="text-sm text-slate-400">
+            <div className={cards.card}>
+              <h3>Aulas disponibles</h3>
+              <p>
                 Asignación inteligente sin conflictos horarios
               </p>
             </div>
-           
-          <div className="p-6 bg-slate-900/20 border border-slate-800 rounded-2xl text-center">
-              <h3 className="font-semibold text-lg mb-2">
-                Notificaciones
-              </h3>
 
-              <p className="text-sm text-slate-400">
+            <div className={cards.card}>
+              <h3>Notificaciones</h3>
+              <p>
                 Enterate de cambios y avisos importantes
               </p>
             </div>
-          
-          <div className="p-6 bg-slate-900/20 border border-slate-800 rounded-2xl text-center">
-              <h3 className="font-semibold text-lg mb-2">
-                Para todos
-              </h3>
 
-              <p className="text-sm text-slate-400">
+            <div className={cards.card}>
+              <h3>Para todos</h3>
+              <p>
                 Estudiantes, docentes y administradores
               </p>
             </div>
-        </div>
-    
-         
-          <Link
-            href="/login"
-            className="
-            flex
-            items-center
-            justify-center
-            min-w-[220px]
-            h-14
-            bg-gradient-to-r
-            from-violet-600
-            to-indigo-600
-            rounded-xl
-            font-semibold
-            text-lg
-            text-white
-            shadow-lg
-            hover:scale-105
-            "
-          >
-            Ingresar
-          </Link>
-   
 
-      </footer>
-    
+          </div>
+
+          <div className={home.loginButton}>
+            <Link
+              href="/login"
+              className={buttons.primary}
+            >
+              Ingresar
+            </Link>
+          </div>
+        </footer>
+
       </main>
     </div>
-  )
+  );
 }

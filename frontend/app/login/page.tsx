@@ -1,154 +1,205 @@
 "use client";
 
-import Link from "next/link"
+import {
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+
+import Link from "next/link";
+
 import { api } from "../lib/api";
-import { useRouter } from "next/navigation";
-import { useSearchParams } from 'next/navigation';
 
-export default function Home(){
-  
+import layout from "../styles/layout.module.css";
+import forms from "../styles/forms.module.css";
+import buttons from "../styles/buttons.module.css";
+import cards from "../styles/cards.module.css";
+export default function Login() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const accesoDenegado = searchParams.get('acceso') === 'denegado';
 
- async function handleSubmit(evento: React.FormEvent<HTMLFormElement>){
-    evento.preventDefault()
-    const formData = new FormData(evento.currentTarget)
-    const DatosLogin = Object.fromEntries(formData.entries())
-    
-    try {
-      const response = await api(
-        "/auth/login",
-    {
+  const accesoDenegado =
+    searchParams.get("acceso") === "denegado";
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const datos = Object.fromEntries(formData.entries());
+
+    const response = await api("/auth/login", {
       method: "POST",
-
       body: JSON.stringify({
-        mail:
-          DatosLogin.mail,
-
-        contrasena:
-          DatosLogin.contrasena,
+        mail: datos.mail,
+        contrasena: datos.contrasena,
       }),
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      alert(err.message || "Error login");
+      return;
     }
-  );
 
-      if (response.ok) {
-        const data = await response.json(); 
-        //localStorage.setItem("token", data.access_token)
+    const data = await response.json();
 
-        localStorage.setItem("token", data.access_token);
+    // guardar para el proxy
+    document.cookie =
+   `token=${data.access_token}; path=/`;
 
-        const payload = JSON.parse(atob(data.access_token.split('.')[1]));
+    // guardar para api.ts
+    localStorage.setItem(
+    "token",
+     data.access_token
+    );
 
-        alert(`¡Bienvenido ${payload.nombre}!`);
+    const payload = JSON.parse(
+      atob(
+    data.access_token.split(".")[1]
+    )
+    );
+    console.log("PAYLOAD COMPLETO:", payload);
+    console.log("TOKEN PAYLOAD:", payload);
 
-        if (payload.rol === "Admin") {
-          //ruta.push("/dashboard/admin");
-          window.location.href = "/dashboard/admin";
-        } else if (payload.rol === "Profesor") {
-          //ruta.push("/dashboard/docente");
-          window.location.href = "/dashboard/docente";
-        } else if (payload.rol === "Alumno") {
-          //ruta.push("/dashboard/estudiante");
-          window.location.href = "/dashboard/estudiante";
-        }
+    alert(`Bienvenido ${payload.nombre}`);
 
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        alert(errorData.message || "Credenciales incorrectas.");
-      }
-    } catch (error) {
-      console.error("Error al conectar con el servidor:", error);
-      alert("Hubo un problema al conectar con el servidor.");
+    if (payload.rol === "Admin") {
+      router.push("/dashboard/admin");
+    } else if (payload.rol === "Profesor") {
+      router.push("/dashboard/docente");
+    } else if (payload.rol === "Alumno") {
+      router.push("/dashboard/estudiante");
+    } else {
+      alert("Rol desconocido: " + payload.rol);
     }
   }
- 
-  
-return (
-  <div className="relative min-h-screen bg-[#070b19] text-white p-4 flex items-center justify-center font-sans antialiased">
-    <main className="bg-[#0d1527] border border-[#1e293b] rounded-2xl p-8 md:p-12 max-w-lg w-full shadow-2xl flex flex-col items-center">
 
-      <header className="flex flex-col items-center text-center w-full mb-10">
-        <h1 className="text-2xl font-bold text-white mb-3">
-          Iniciar sesión
-        </h1>
+  return (
 
-        <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-          Ingresá tu mail y contraseña para acceder al sistema.
-        </p>
-      </header>
+    <div
+      className={
+        layout.centeredPage
+      }
+    >
 
-      {/* Mensaje de acceso denegado */}
-      {accesoDenegado && (
-        <p className="text-red-400 text-sm mb-4 text-center">
-          Debés iniciar sesión para acceder a esa página.
-        </p>
-      )}
-
-      <form
-        className="w-full flex flex-col gap-8"
-        onSubmit={handleSubmit}
+      <main
+        className={
+          forms.formCard
+        }
       >
-        <div>
-          <label
-            htmlFor="mail"
-            className="block text-sm font-medium text-slate-300 mb-2"
-          >
-            Correo electrónico
-          </label>
 
-          <input
-            type="email"
-            name="mail"
-            id="mail"
-            placeholder="Ej: aula@gmail.com"
-            required
-            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="contrasena"
-            className="block text-sm font-medium text-slate-300 mb-2"
-          >
-            Contraseña
-          </label>
-
-          <input
-            type="password"
-            name="contrasena"
-            id="contrasena"
-            placeholder="••••••••"
-            required
-            className="w-full bg-[#090f1c] border border-[#1e293b] rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#6366f1] transition-colors"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-[#5842e3] hover:bg-[#4732c8] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center transition-colors mt-2 shadow-lg shadow-[#5842e3]/20"
+        <header
+          className={
+            layout.header
+          }
         >
-          Ingresar
-        </button>
 
-        <p className="text-center text-slate-400 text-sm">
-          ¿No tenés usuario?
-          <Link
-            href="/registro"
-            className="text-[#8b5cf6] hover:text-[#a78bfa] ml-1 font-medium"
-          >
-            Creá una cuenta
-          </Link>
-        </p>
+          <h1>
+            Iniciar sesión
+          </h1>
 
-        <div className="mt-4 pt-5 border-t border-[#1e293b]">
-          <p className="text-center text-sm text-slate-500 leading-relaxed">
-            Los usuarios deben ser aprobados por un administrador antes de poder iniciar sesión.
+          <p>
+            Ingresá tu mail y contraseña
+            para acceder al sistema.
           </p>
-        </div>
-      </form>
 
-    </main>
-  </div>
-)
+        </header>
+
+        {accesoDenegado && (
+
+          <div
+            className={
+              cards.errorCard
+            }
+          >
+
+            Debés iniciar sesión para
+            acceder a esa página.
+
+          </div>
+
+        )}
+
+        <form
+          onSubmit={
+            handleSubmit
+          }
+
+          className={
+            forms.form
+          }
+        >
+
+          <div>
+
+            <label>
+
+              Correo electrónico
+
+            </label>
+
+            <input
+              type="email"
+              name="mail"
+              required
+              placeholder=" Ej: aula@gmail.com "
+              className={forms.input}
+            />
+
+          </div>
+
+          <div>
+
+            <label>
+
+              Contraseña
+
+            </label>
+
+            <input
+              type="password"
+              name="contrasena"
+              required
+              placeholder=" ******** "
+              className={forms.input}
+            />
+
+          </div>
+
+          <button
+            type="submit"
+            className={
+              buttons.primary
+            }
+          >
+
+            Ingresar
+
+          </button>
+
+          <p
+className={
+forms.formFooter
+}
+>
+
+¿No tenés usuario?
+
+<Link
+href="/registro"
+>
+
+Creá una cuenta
+
+</Link>
+
+</p>
+
+        </form>
+
+      </main>
+
+    </div>
+
+  );
+
 }

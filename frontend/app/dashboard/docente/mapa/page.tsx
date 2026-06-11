@@ -19,13 +19,24 @@ export default function zonaMapa(){
             </header>
        
 
-       <div>
-         <Image src={""} alt="imagen" useMap="#map" width="400"/>
-          <map name="map">
-         
-
-          </map>
-       </div>
+      
+             <div>
+               <p>Mapa de Planta Baja:</p>
+               <Image src={".public/mapaPB"} alt="imagen" useMap="#map" width="400"/>
+                <map name="mapaPlantaBaja">
+               
+      
+                </map>
+             </div>
+      
+             <div>
+               <p>Mapa del primer Piso:</p>
+               <Image src={".public/mapaP1"} alt="imagen" useMap="#map" width="400"/>
+                 <map name="mapPrimerPiso">
+      
+                 </map>
+             </div>
+      
          
       <div>
          <Link href={"/docente"}><button>Volver a pagina principal de la cuenta</button></Link>

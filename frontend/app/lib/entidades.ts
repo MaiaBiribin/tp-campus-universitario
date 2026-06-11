@@ -33,13 +33,17 @@ export interface Rol {
 }
 
 export interface Materia {
-  id: number;
+  id_materia: number;
   nombre: string;
   cuatrimestre: number;
-  id_carrera: number;
+
+  carrera: {
+    id_carrera: number;
+    nombre: string;
+  };
 }
 
 export interface Carrera {
-  id: number;
+  id_carrera: number;
   nombre: string;
 }

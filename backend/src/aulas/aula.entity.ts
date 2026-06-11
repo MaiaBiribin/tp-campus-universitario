@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('aulas')
 export class Aula {
-
   @PrimaryGeneratedColumn()
   id_aula!: number;
 
@@ -17,4 +16,7 @@ export class Aula {
 
   @Column()
   ubicacion!: string;
+
+  //@Column({ default: true })
+  //disponible!: boolean;
 }

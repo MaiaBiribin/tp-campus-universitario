@@ -1,41 +1,49 @@
+"use client";
+
 import NavLinks from "./navLinks";
+import { usePathname } from "next/navigation";
+import styles from "@/app/styles/dashboard.module.css";
 
 export default function SideBar() {
 
-  const role =
-    "admin";
+  const pathname =
+    usePathname();
+
+  let role:
+    "admin"
+    | "docente"
+    | "estudiante";
+
+  if (
+    pathname.startsWith(
+      "/dashboard/admin"
+    )
+  ) {
+    role = "admin";
+  }
+
+  else if (
+    pathname.startsWith(
+      "/dashboard/docente"
+    )
+  ) {
+    role = "docente";
+  }
+
+  else {
+    role = "estudiante";
+  }
 
   return (
+    <aside className={styles.sidebar}>
 
-    <aside
-      className="
-      w-[260px]
-      bg-[#0d1527]
-      border-r
-      border-[#27324d]
-      p-8"
-    >
-
-      <h1
-        className="
-        text-3xl
-        font-black
-        mb-10"
-      >
+      <h1 className={styles.logo}>
         Aula
-        <span
-          className="
-          text-[#8b5cf6]"
-        >
-          Sync
-        </span>
+        <span>Sync</span>
       </h1>
 
-      <NavLinks
-        role={role}
-      />
+      <NavLinks role={role} />
 
     </aside>
-
   );
 }
