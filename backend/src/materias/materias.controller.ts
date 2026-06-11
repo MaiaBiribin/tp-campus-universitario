@@ -30,7 +30,7 @@ export class MateriasController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(['Admin'])
   @Post()
-  createMateria(@Body() body: { nombre: string; cuatrimestre: number; id_carrera: number }) {
-    return this.materiasService.create(body.nombre, body.cuatrimestre, body.id_carrera);
+  createMateria(@Body() body: { nombre: string; id_carrera: number }) {
+    return this.materiasService.create(body.nombre, body.id_carrera);
   }
 }

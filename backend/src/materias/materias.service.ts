@@ -21,10 +21,9 @@ export class MateriasService {
     });
   }
 
-  async create(nombre: string, cuatrimestre: number, id_carrera: number): Promise<Materia> {
+  async create(nombre: string, id_carrera: number): Promise<Materia> {
     const materia = this.materiasRepository.create({
       nombre,
-      cuatrimestre,
       carrera: { id_carrera },
     });
     return this.materiasRepository.save(materia);

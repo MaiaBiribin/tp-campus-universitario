@@ -5,19 +5,7 @@ import { api } from "../../../lib/api";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import table from "@/app/styles/table.module.css";
-
-type Usuario = {
-  id_usuario: number;
-  nombre: string;
-  apellido: string;
-  mail: string;
-  dni: string;
-
-  rol: {
-    id_rol: number;
-    nombre: string;
-  };
-};
+import { Usuario } from "../../../lib/entidades";
 
 export default function UsuariosAdmin() {
 

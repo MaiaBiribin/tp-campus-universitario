@@ -1,23 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { api } from "../../../lib/api";
-
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import cards from "@/app/styles/cards.module.css";
 import buttons from "@/app/styles/buttons.module.css";
-
+import { Solicitud } from "../../../lib/entidades";
 import styles from "./page.module.css";
-
-type Solicitud = {
-  id_usuario: number;
-  nombre: string;
-  apellido: string;
-  mail: string;
-  dni: string;
-};
 
 export default function SolicitudesAdmin() {
 
