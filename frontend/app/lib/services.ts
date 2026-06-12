@@ -28,17 +28,6 @@ export async function getMateriasPorCarrera(
   return res.json();
 }
 
-<<<<<<< HEAD
-
-export async function getUsuarioId(id:number){
-  const res= await api(`/usuarios/${id}`);
-
-  if(!res.ok){
-    throw new Error("Error al buscar el usario")
-  }
-
-  return res.json()
-=======
 // aulas
 export async function getAulas() {
   const res =
@@ -47,5 +36,4 @@ export async function getAulas() {
     throw new Error("Error cargando aulas");
   }
   return res.json();
->>>>>>> d6ae4c08225d350bd34887e14db44ab2637b5738
 }

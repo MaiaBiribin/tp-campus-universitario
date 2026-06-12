@@ -1,21 +1,19 @@
 "use client"
  import Image from "next/image"
+import { useState } from "react"
+
+ enum mapas {
+   PB,
+   p1,
+   p2
+}
+
 
 export default function RenderizarMapas(){
-    
- async function MostrarPlantaBaja(){
-
- }
+    const [mapa,setMapa]=useState<mapas>(mapas.PB)
 
     
- async function MostrarPrimerPiso(){
-    
- }
-
-    
- async function MostrarSegundoPiso(){
-    
- }
+ 
 
 
     return( 
@@ -27,13 +25,16 @@ export default function RenderizarMapas(){
              </h1>
 
              <div>
-                <button>PB</button>
-                <button>P1</button>
-                <button>P2</button>
+                <button onClick={()=>setMapa(mapas.PB)}>PB</button>
+                <button onClick={()=>setMapa(mapas.p1)}>P1</button>
+                <button onClick={()=>setMapa(mapas.p2)}>P2</button>
              </div>
 
             </header>
         </div>
+
+    {
+      mapa === mapas.PB &&
 
        <div>
          <p>Mapa de Planta Baja:</p>
@@ -43,7 +44,9 @@ export default function RenderizarMapas(){
 
           </map>
        </div>
+    }
 
+    { mapa ===mapas.p1 &&
        <div>
          <p>Mapa del primer Piso:</p>
          <Image src={"/primerPiso.png"} alt="imagen" useMap="#map" width="400"/>
@@ -51,12 +54,13 @@ export default function RenderizarMapas(){
 
            </map>
        </div>
-
+     }
+     { mapa ===mapas.p2 &&
       <div>
         <p>Mapa del segundo Piso;</p>
          <Image src={"/segundoPiso.png"} alt="imagen" useMap="#map" width="400"></Image>
       </div>
-  
+    }
 
      </div>
     )

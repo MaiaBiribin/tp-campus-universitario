@@ -8,12 +8,11 @@ import cards from "@/app/styles/cards.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import { Solicitud } from "../../../lib/entidades";
 import styles from "./page.module.css";
-import SideBar from "../components/sideBar";
 
+/* 
 export default function SolicitudesAdmin() {
 
-      <SideBar />
-
+      
   const [cargando, setCargando] =
     useState(true);
 
@@ -282,4 +281,4 @@ export default function SolicitudesAdmin() {
 
   );
 
-}
+}*/
