@@ -1,4 +1,4 @@
-import {Controller,Post,Body,Get} from "@nestjs/common";
+import { Controller, Post, Body, Get, Param } from "@nestjs/common";
 import { InscripcionesService } from "./inscripciones.service";
 import { CrearInscripcionDto } from "./crear-inscripcion.dto";
 
@@ -32,5 +32,11 @@ listar(){
 
 }
 
+@Get("materia/:id")
+obtenerPorMateria(
+  @Param("id") id:string
+){
+  return this.service.obtenerPorMateria(Number(id));
+}
 
 }
