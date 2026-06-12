@@ -8,12 +8,12 @@ import {
 import {
   Carrera,
   Materia,
-} from "../../../lib/entidades";
+} from "../../../types/entidades";
 
 import {
   getCarreras,
   getMateriasPorCarrera,
-} from "../../../lib/services";
+} from "../../../types/services";
 
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";

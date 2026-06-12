@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import SideBar from "../components/sideBar";
 import dashboard from "@/app/styles/dashboard.module.css";
 import layout from "@/app/styles/layout.module.css";
 import cards from "@/app/styles/cards.module.css";
+import SideBar from "@/app/components/sideBar";
 
 export default function DashboardAdmin() {
   return (

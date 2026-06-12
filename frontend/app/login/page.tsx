@@ -7,7 +7,7 @@ import {
 
 import Link from "next/link";
 
-import { api } from "../lib/api";
+import { api } from "../api";
 
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";

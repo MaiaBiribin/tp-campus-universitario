@@ -3,18 +3,18 @@ import {
   getCarreras,
   getMateriasPorCarrera,
   getAulas
-} from "../../../../lib/services";
+} from "../../../../types/services";
 import {
   Carrera,
   Materia,
   Aula,
-} from "../../../../lib/entidades";
+} from "../../../../types/entidades";
 import { useEffect, useState } from "react";
 import layout from "@/app/styles/layout.module.css";
 import forms from "@/app/styles/forms.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
-import { api } from "../../../../lib/api";
+import { api } from "../../../../api";
 
 export default function CrearEvento() {
   const [fecha, setFecha] = useState("");

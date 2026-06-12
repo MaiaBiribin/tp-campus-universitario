@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../../lib/api";
+import { api } from "../../../api";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import cards from "@/app/styles/cards.module.css";
 import buttons from "@/app/styles/buttons.module.css";
-import { Solicitud } from "../../../lib/entidades";
+import { Solicitud } from "../../../types/entidades";
 import styles from "./page.module.css";
 
 export default function SolicitudesAdmin() {
