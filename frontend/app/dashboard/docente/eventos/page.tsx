@@ -1,11 +1,27 @@
-export default function EventosPage(){
+"use client"
+import Link from "next/link";
+import styles from "./page.module.css";
+import SideBar from "../components/sideBar";
+import RenderizarEventos from "../../components/renderizarEventosSemana";
+
+export default function Eventos(){
     return(
-        <div>
-            <main>
-                <header>
-                    <h1>Lista de eventos de la semana</h1>
-                </header>
-            </main>
-        </div>
+       <div className={styles.layout}>
+       <SideBar />
+         <main className={styles.main}>
+            <div>
+              <header>
+                <h1>Eventos de la semana:</h1>
+              </header>
+
+              <div>
+                <RenderizarEventos/>
+              </div>
+
+            </div>
+         </main>
+       </div>
     )
+        
+    
 }

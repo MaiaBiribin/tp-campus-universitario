@@ -31,14 +31,27 @@ export default function DashboardDocente() {
             </p>
 
           </header>
+<<<<<<< HEAD
+ 
+         {/* le dejo comentado por aca para no romper el codigo pero se tendria que usar el <eventodia> para usar la funcion*/}
+=======
 
           {/* RESUMEN */}
 
+>>>>>>> d6ae4c08225d350bd34887e14db44ab2637b5738
           <section>
 
             <h2 className={dashboard.sectionTitle}>
               Resumen del día
             </h2>
+<<<<<<< HEAD
+       
+            <div className={styles.summaryGrid}>
+          
+              <div className={styles.metric}>
+                <p>Clases hoy</p>
+                <h3>3</h3>
+=======
 
             <div className={dashboard.summaryGrid}>
 
@@ -52,6 +65,7 @@ export default function DashboardDocente() {
                   3
                 </h3>
 
+>>>>>>> d6ae4c08225d350bd34887e14db44ab2637b5738
               </div>
 
               <div className={cards.metric}>

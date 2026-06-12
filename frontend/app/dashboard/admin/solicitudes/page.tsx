@@ -93,55 +93,61 @@ export default function SolicitudesAdmin() {
           <div>
 
             <h1>
-              Solicitudes de registro
+              Panel de administración
             </h1>
 
             <p>
-              Revisá solicitudes pendientes y aprobá
-              únicamente usuarios autorizados.
+              Gestioná eventos, aulas, usuarios y la
+              organización académica desde un único lugar.
             </p>
 
-          </div>
+          </header>
 
-          <div className={styles.counter}>
-            {solicitudes.length}
-          </div>
+          <section>
 
-        </header>
+            <h2 className={styles.sectionTitle}>
+              Resumen rápido
+            </h2>
 
-        <section>
+            <div className={styles.summaryGrid}>
 
-          {solicitudes.length === 0 ? (
+              <div className={styles.metric}>
+                <p>Eventos hoy</p>
+                <h3>12</h3>
+              </div>
 
-            <div className={styles.empty}>
+              <div className={styles.metric}>
+                <p>Solicitudes pendientes</p>
+                <h3>8</h3>
+              </div>
 
-              <h2>
-                No hay solicitudes pendientes
-              </h2>
-
-              <p>
-                Cuando un usuario se registre
-                aparecerá acá.
-              </p>
+              <div className={styles.metric}>
+                <p>Aulas ocupadas</p>
+                <h3>19</h3>
+              </div>
 
             </div>
 
-          ) : (
+          </section>
 
-            <div className={styles.grid}>
+          <section>
 
-              {solicitudes.map((usuario) => (
+            <h2 className={styles.sectionTitle}>
+              Accesos rápidos
+            </h2>
 
                 <article
                   key={usuario.id_usuario}
                   className={cards.card}
                 >
 
-                  <div className={styles.user}>
+                  <h3>
+                    {titulo}
+                  </h3>
 
-                    <div className={styles.avatar}>
-                      {usuario.nombre[0]}
-                    </div>
+                  <p>
+                    {desc}
+                  </p>
 
                     <div>
 
@@ -217,14 +223,64 @@ export default function SolicitudesAdmin() {
 
             </div>
 
-          )}
+          </section>
 
-        </section>
+          <section>
 
-      </div>
+            <h2 className={styles.sectionTitle}>
+              Actividad reciente
+            </h2>
+
+            <div className={styles.card}>
+
+              <div className={styles.notice}>
+
+                <h3>
+                  Evento creado
+                </h3>
+
+                <p>
+                  Programación 3 — Aula 205
+                </p>
+
+              </div>
+
+              <div className={styles.notice}>
+
+                <h3>
+                  Nuevo registro
+                </h3>
+
+                <p>
+                  Hay usuarios esperando aprobación
+                </p>
+
+              </div>
+
+              <div className={styles.notice}>
+
+                <h3>
+                  Actualización académica
+                </h3>
+
+                <p>
+                  Se modificó una asignación docente
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </main>
+
+    </div>
 
     </main>
 
   );
 
-}
+}*/
