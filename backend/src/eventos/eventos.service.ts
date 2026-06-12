@@ -63,6 +63,33 @@ export class EventosService {
     return await this.repo.save(nuevoEvento);
   }
 
+  async eventosUsuario(idUsuario:number){
+
+  return this.repo.find({
+    where:{
+      materia:{
+        inscripciones:{
+          usuario:{
+            id_usuario:idUsuario
+          }
+        }
+      }
+    },
+    relations:{
+      materia:{
+        carrera:true,
+        inscripciones:{
+          usuario:true
+        }
+      }
+    },
+    order:{
+      fecha:"ASC"
+    }
+  });
+
+}
+
   async updatePartial(id: number, data: any) {
     await this.repo.update(id, data);
     return this.findOne(id);
