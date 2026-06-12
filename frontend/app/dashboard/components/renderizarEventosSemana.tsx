@@ -6,12 +6,39 @@ import { api } from "@/app/lib/api";
 
 
 
-
 export default function RenderizarEventos(){
        const [eventos,seteventos]=useState<Evento []| null>(null)
-        const [usuario,setusuario]=useState<Usuario | null>(null)
+    
         const [cargando, setCargando] = useState<boolean>(true);
-        
+   
+        useEffect(()=>{
+           async function cargarEventos(){
+               try{
+               setCargando(true)
+               //aca iria el endpoint de todos los eventos del usario.
+               const res= await api("/eventos")
+
+               if(!res.ok){
+                throw new Error("hubo un error al cargar los datos")
+               }
+
+               const eventos:Evento[] = await res.json()
+                 seteventos(eventos)
+               }catch (error){
+                console.error("error la buscar los eventos",error)
+               } finally{
+                 setCargando(false)
+               }
+             
+          
+
+           }
+           cargarEventos()
+        },[])
+
+
+
+        /*
         async function buscarUsario():Promise<Usuario | null>{
           try{  
             //tambien este
@@ -69,15 +96,14 @@ export default function RenderizarEventos(){
 
     inicializarDatos();
   }, []);
-
+ */
   if (cargando) return <p>Cargando eventos de la semana...</p>;
-  if (!usuario) return <p>Error: Usuario no autenticado.</p>;
-
+ 
     return(
         <div>
             <main>
                 <header>
-                    <h1>Lista de eventos de:{usuario.nombre}</h1>
+                    <h1>Lista de eventos en la semana</h1>
                 </header>
 
                 <section>
@@ -89,12 +115,12 @@ export default function RenderizarEventos(){
                             <div
                               key={ev.id_evento}>
                               <h3>Titulo:{ev.titulo}</h3>
+                               <p>fecha:{ev.fecha} </p>
                                <p>De:{ev.horaFin}-:{ev.horaFin}</p>
-                               <p>Aula:{ev.id_aula}</p>
-                               <p>Materia:{ev.id_materia}</p>
+                                <p>aula:{ev.aula.nombre}</p>
+                                <p>materia:{ev.materia.nombre}</p> 
                             </div>
                         ))
-
                         }
                     </div>
                  )}

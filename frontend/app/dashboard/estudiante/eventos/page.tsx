@@ -18,6 +18,7 @@ export default function Eventos(){
                 <RenderizarEventos/>
               </div>
 
+              <Link href={"/estudiante"} /> <button> Volver al inico</button>
             </div>
          </main>
        </div>
