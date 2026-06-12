@@ -1,18 +1,11 @@
 "use client";
-import {
-  getCarreras,
-  getMateriasPorCarrera,
-  getAulas
-} from "../../../../services/services";
-import {
-  Carrera,
-  Materia,
-  Aula,
-} from "../../../../types/entidades";
+import {getCarreras,getMateriasPorCarrera,getAulas} from "../../../../services/services";
+import {Carrera,Materia,Aula,} from "../../../../types/entidades";
 import { useEffect, useState } from "react";
 import layout from "@/app/styles/layout.module.css";
 import forms from "@/app/styles/forms.module.css";
-import buttons from "@/app/styles/buttons.module.css";
+import Card from "@/app/components/card";
+import Button from "@/app/components/button";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { api } from "../../../../api";
 
@@ -102,273 +95,280 @@ export default function CrearEvento() {
     }
 
   return (
+  <main className={layout.main}>
+    <div className={layout.content}>
+      <header className={dashboard.header}>
+        <h1>
+          Crear evento
+        </h1>
+        <p>
+          Registrá una clase,
+          parcial o final.
+        </p>
+      </header>
+      <Card>
+        <form
+          onSubmit={handleSubmit}
+          className={forms.form}
+        >
 
-    <main className={layout.main}>
-      <div className={layout.content}>
-        <header className={dashboard.header}>
+          <div className={forms.row}>
 
-          <h1>
-            Crear evento
-          </h1>
+            <div className={forms.field}>
 
-          <p>
-            Registrá una clase,
-            parcial o final.
-          </p>
+              <label className={forms.label}>
+                Carrera
+              </label>
 
-        </header>
-
-        <div className={forms.formCard}>
-
-          <form
-            onSubmit={handleSubmit}
-            className={forms.form}
-          >
-
-            <div className={forms.row}>
-
-              <div className={forms.field}>
-
-                <label className={forms.label}>
-                  Carrera
-                </label>
-
-                <select
-                  className={forms.select}
-                  value={idCarrera}
-                  onChange={(e) =>
-                    cambiarCarrera(
-                      e.target.value
-                    )
-                  }
-                >
-
-                  <option value="">
-                    Seleccionar carrera
-                  </option>
-
-                  {carreras.map(
-                    (carrera) => (
-                      <option
-                        key={
-                          carrera.id_carrera
-                        }
-                        value={
-                          carrera.id_carrera
-                        }
-                      >
-                        {carrera.nombre}
-                      </option>
-                    )
-                  )}
-
-                </select>
-
-              </div>
-
-              <div className={forms.field}>
-
-                <label className={forms.label}>
-                  Materia
-                </label>
-
-                <select
-                  className={forms.select}
-                  value={idMateria}
-                  onChange={(e) =>
-                    setIdMateria(
-                      e.target.value
-                    )
-                  }
-                >
-
-                  <option value="">
-                    Seleccionar materia
-                  </option>
-
-                  {materias.map(
-                    (materia) => (
-                      <option
-                        key={
-                          materia.id_materia
-                        }
-                        value={
-                          materia.id_materia
-                        }
-                      >
-                        {materia.nombre}
-                      </option>
-                    )
-                  )}
-
-                </select>
-
-              </div>
-
-            </div>
-
-            <div className={forms.row}>
-
-              <div className={forms.field}>
-
-                <label className={forms.label}>
-                  Tipo de evento
-                </label>
-
-                <select
-                  className={forms.select}
-                  value={idTipoEvento}
-                  onChange={(e) =>
-                    setIdTipoEvento(
-                      e.target.value
-                    )
-                  }
-                >
-
-                  <option value="">
-                    Seleccionar tipo
-                  </option>
-
-                  <option value="1">
-                    Clase
-                  </option>
-
-                  <option value="2">
-                    Parcial
-                  </option>
-
-                  <option value="3">
-                    Final
-                  </option>
-
-                </select>
-
-              </div>
-
-              <div className={forms.field}>
-
-                <label className={forms.label}>
-                  Aula
-                </label>
-
-                <select
-                  className={forms.select}
-                  value={idAula}
-                  onChange={(e) =>
-                    setIdAula(
-                      e.target.value
-                    )
-                  }
-                >
-
-                  <option value="">
-                    Seleccionar aula
-                  </option>
-
-                  {aulas.map(
-                    (aula) => (
-                      <option
-                        key={
-                          aula.id_aula
-                        }
-                        value={
-                          aula.id_aula
-                        }
-                      >
-                        {aula.nombre}
-                      </option>
-                    )
-                  )}
-
-                </select>
-
-              </div>
-
-            </div>
-
-            <div className={forms.row}>
-
-              <div className={forms.field}>
-
-                <label className={forms.label}>
-                  Fecha
-                </label>
-
-                <input
-                  type="date"
-                  className={forms.input}
-                  value={fecha}
-                  onChange={(e) =>
-                    setFecha(
-                      e.target.value
-                    )
-                  }
-                />
-
-              </div>
-
-            </div>
-
-            <div className={forms.row}>
-
-              <div className={forms.field}>
-
-                <label className={forms.label}>
-                  Hora inicio
-                </label>
-
-                <input
-                  type="time"
-                  className={forms.input}
-                  value={horaInicio}
-                  onChange={(e) =>
-                    setHoraInicio(
-                      e.target.value
-                    )
-                  }
-                />
-
-              </div>
-
-              <div className={forms.field}>
-
-                <label className={forms.label}>
-                  Hora fin
-                </label>
-
-                <input
-                  type="time"
-                  className={forms.input}
-                  value={horaFin}
-                  onChange={(e) =>
-                    setHoraFin(
-                      e.target.value
-                    )
-                  }
-                />
-
-              </div>
-
-            </div>
-
-            <div className={forms.actions}>
-
-              <button
-                type="submit"
-                className={buttons.primary}
+              <select
+                className={forms.select}
+                value={idCarrera}
+                onChange={(e) =>
+                  cambiarCarrera(
+                    e.target.value
+                  )
+                }
               >
-                Crear evento
-              </button>
+
+                <option value="">
+                  Seleccionar carrera
+                </option>
+
+                {carreras.map(
+                  (carrera) => (
+
+                    <option
+                      key={
+                        carrera.id_carrera
+                      }
+                      value={
+                        carrera.id_carrera
+                      }
+                    >
+
+                      {carrera.nombre}
+
+                    </option>
+
+                  )
+                )}
+
+              </select>
 
             </div>
 
-          </form>
+            <div className={forms.field}>
 
-        </div>
+              <label className={forms.label}>
+                Materia
+              </label>
 
-      </div>
+              <select
+                className={forms.select}
+                value={idMateria}
+                onChange={(e) =>
+                  setIdMateria(
+                    e.target.value
+                  )
+                }
+              >
 
-    </main>
+                <option value="">
+                  Seleccionar materia
+                </option>
 
-  );
+                {materias.map(
+                  (materia) => (
+
+                    <option
+                      key={
+                        materia.id_materia
+                      }
+                      value={
+                        materia.id_materia
+                      }
+                    >
+
+                      {materia.nombre}
+
+                    </option>
+
+                  )
+                )}
+
+              </select>
+
+            </div>
+
+          </div>
+
+          <div className={forms.row}>
+
+            <div className={forms.field}>
+
+              <label className={forms.label}>
+                Tipo de evento
+              </label>
+
+              <select
+                className={forms.select}
+                value={idTipoEvento}
+                onChange={(e) =>
+                  setIdTipoEvento(
+                    e.target.value
+                  )
+                }
+              >
+
+                <option value="">
+                  Seleccionar tipo
+                </option>
+
+                <option value="1">
+                  Clase
+                </option>
+
+                <option value="2">
+                  Parcial
+                </option>
+
+                <option value="3">
+                  Final
+                </option>
+
+              </select>
+
+            </div>
+
+            <div className={forms.field}>
+
+              <label className={forms.label}>
+                Aula
+              </label>
+
+              <select
+                className={forms.select}
+                value={idAula}
+                onChange={(e) =>
+                  setIdAula(
+                    e.target.value
+                  )
+                }
+              >
+
+                <option value="">
+                  Seleccionar aula
+                </option>
+
+                {aulas.map(
+                  (aula) => (
+
+                    <option
+                      key={
+                        aula.id_aula
+                      }
+                      value={
+                        aula.id_aula
+                      }
+                    >
+
+                      {aula.nombre}
+
+                    </option>
+
+                  )
+                )}
+
+              </select>
+
+            </div>
+
+          </div>
+
+          <div className={forms.row}>
+
+            <div className={forms.field}>
+
+              <label className={forms.label}>
+                Fecha
+              </label>
+
+              <input
+                type="date"
+                className={forms.input}
+                value={fecha}
+                onChange={(e) =>
+                  setFecha(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+          </div>
+
+          <div className={forms.row}>
+
+            <div className={forms.field}>
+
+              <label className={forms.label}>
+                Hora inicio
+              </label>
+
+              <input
+                type="time"
+                className={forms.input}
+                value={horaInicio}
+                onChange={(e) =>
+                  setHoraInicio(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+            <div className={forms.field}>
+
+              <label className={forms.label}>
+                Hora fin
+              </label>
+
+              <input
+                type="time"
+                className={forms.input}
+                value={horaFin}
+                onChange={(e) =>
+                  setHoraFin(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+          </div>
+
+          <div className={forms.actions}>
+
+            <Button
+              type="submit"
+            >
+
+              Crear evento
+
+            </Button>
+
+          </div>
+
+        </form>
+
+      </Card>
+
+    </div>
+
+  </main>
+
+);
 }
