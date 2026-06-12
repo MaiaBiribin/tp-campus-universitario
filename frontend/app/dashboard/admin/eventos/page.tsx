@@ -2,16 +2,36 @@
 
 import { useEffect, useState } from "react";
 import { api } from "../../../lib/api";
-import layout from "@/app/styles/layout.module.css";
-import dashboard from "@/app/styles/dashboard.module.css";
-import buttons from "@/app/styles/buttons.module.css";
-import table from "@/app/styles/table.module.css";
-import { Evento } from "../../../lib/entidades";
+import styles from "./page.module.css";
+
+type Evento = {
+  id_evento: number;
+  titulo: string;
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+  estado: string;
+
+  aula: {
+    id_aula: number;
+    nombre: string;
+  };
+
+  tipoEvento: {
+    id_tipo_evento: number;
+    nombre: string;
+  };
+
+  materia: {
+    id_materia: number;
+    nombre: string;
+  };
+};
 
 export default function EventosAdmin() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [cargando, setCargando] = useState(true);
-
+ 
   useEffect(() => {
     async function cargarEventos() {
       try {
@@ -47,171 +67,72 @@ export default function EventosAdmin() {
     }
   }
 
+  if (cargando) {
+    return (
+      <main className={styles.main}>
+        Cargando eventos...
+      </main>
+    );
+  }
 
-return (
-  <main className={layout.main}>
-
-    <div className={layout.content}>
-
-      <header className={dashboard.header}>
-
-        <div>
-
-          <h1>
-            Eventos académicos
-          </h1>
-
-          <p>
-            Gestioná clases, parciales y finales.
-          </p>
-
-        </div>
-
-        <button
-          className={buttons.primary}
-          onClick={crearEvento}
-        >
-          Crear evento
-        </button>
-
-      </header>
-
-      {eventos.length === 0 ? (
-
-        <div className={table.empty}>
-
-          <h2>
-            No hay eventos creados
-          </h2>
-
-          <p>
-            Creá tu primer evento académico.
-          </p>
-
-        </div>
-
-      ) : (
-
-        <div className={table.tableContainer}>
-
-          <div className={table.tableWrapper}>
-
-            <table className={table.table}>
-
-              <thead>
-
-                <tr>
-
-                  <th>
-                    Evento
-                  </th>
-
-                  <th>
-                    Carrera
-                  </th>
-
-                  <th>
-                    Fecha
-                  </th>
-
-                  <th>
-                    Horario
-                  </th>
-
-                  <th>
-                    Aula
-                  </th>
-
-                  <th>
-                    Tipo
-                  </th>
-
-                  <th>
-                    Acciones
-                  </th>
-
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {eventos.map((evento) => (
-
-                  <tr
-                    key={evento.id_evento}
-                  >
-
-                    <td>
-                      {evento.materia?.nombre}
-                    </td>
-
-                    <td>
-                      {evento.materia?.carrera?.nombre}
-                    </td>
-
-                    <td>
-                      {evento.fecha}
-                    </td>
-
-                    <td>
-
-                      {evento.horaInicio}
-                      {" - "}
-                      {evento.horaFin}
-
-                    </td>
-
-                    <td>
-                      {evento.aula?.nombre}
-                    </td>
-
-                    <td>
-
-                      <span
-                        className={`${table.badge} ${table.info}`}
-                      >
-                        {evento.tipoEvento?.nombre}
-                      </span>
-
-                    </td>
-
-                    <td>
-
-                      <div
-                        className={table.actions}
-                      >
-
-                        <button
-                          className={buttons.danger}
-                          onClick={() =>
-                            eliminarEvento(
-                              evento.id_evento
-                            )
-                          }
-                        >
-                          Eliminar
-                        </button>
-
-                      </div>
-
-                    </td>
-
-                  </tr>
-
-                ))}
-
-              </tbody>
-
-            </table>
-
+  return (
+    <main className={styles.main}>
+      <div className={styles.content}>
+        <header className={styles.header}>
+          <div>
+            <h1>Eventos</h1>
+            <p>Gestioná clases, parciales e informativos</p>
           </div>
 
-        </div>
+          <button
+            className={styles.createButton}
+            onClick={crearEvento}
+          >
+            Crear evento
+          </button>
+        </header>
 
-      )}
+        <section className={styles.list}>
+          {eventos.length === 0 ? (
+            <p>No hay eventos creados</p>
+          ) : (
+            eventos.map((evento) => (
+  <div
+    key={evento.id_evento}
+    className={styles.card}
+  >
+    <h3>{evento.titulo}</h3>
 
-    </div>
+    <p>Fecha: {evento.fecha}</p>
 
-  </main>
-)}
+    <p>
+      Horario: {evento.horaInicio} - {evento.horaFin}
+    </p>
+
+    <p>
+      Aula: {evento.aula?.nombre}
+    </p>
+
+    <p>
+      Materia: {evento.materia?.nombre}
+    </p>
+
+    <p>
+      Tipo de evento: {evento.tipoEvento?.nombre}
+    </p>
+
+    <button
+      onClick={() =>
+        eliminarEvento(evento.id_evento)
+      }
+    >
+      Eliminar
+    </button>
+  </div>
+))
+          )}
+        </section>
+      </div>
+    </main>
+  );
+}

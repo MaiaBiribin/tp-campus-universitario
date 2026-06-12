@@ -9,11 +9,12 @@ import buttons from "@/app/styles/buttons.module.css";
 import { Solicitud } from "../../../lib/entidades";
 import styles from "./page.module.css";
 
-export default function SolicitudesAdmin() {
 
+export default function SolicitudesAdmin() {
+ 
   const [solicitudes, setSolicitudes] =
     useState<Solicitud[]>([]);
-
+      
   const [cargando, setCargando] =
     useState(true);
 
@@ -85,7 +86,7 @@ export default function SolicitudesAdmin() {
 
   }
 
-  return (
+   return (
     <main className={layout.main}>
       <div className={layout.content}>
         <header className={dashboard.header}>
