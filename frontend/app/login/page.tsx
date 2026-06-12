@@ -1,18 +1,14 @@
 "use client";
 
-import {
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-
+import {useRouter,useSearchParams} from "next/navigation";
 import Link from "next/link";
-
-import { api } from "../lib/api";
-
+import { api } from "../api";
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
-import buttons from "../styles/buttons.module.css";
-import cards from "../styles/cards.module.css";
+import Button from "../components/button";
+import Card from "../components/card";
+import Form from "../components/form";
+
 export default function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -73,133 +69,52 @@ export default function Login() {
     }
   }
 
-  return (
-
-    <div
-      className={
-        layout.centeredPage
-      }
-    >
-
-      <main
-        className={
-          forms.formCard
-        }
-      >
-
-        <header
-          className={
-            layout.header
-          }
-        >
-
-          <h1>
-            Iniciar sesión
-          </h1>
-
-          <p>
-            Ingresá tu mail y contraseña
-            para acceder al sistema.
-          </p>
-
-        </header>
-
-        {accesoDenegado && (
-
-          <div
-            className={
-              cards.errorCard
-            }
-          >
-
-            Debés iniciar sesión para
-            acceder a esa página.
-
-          </div>
-
-        )}
-
-        <form
-          onSubmit={
-            handleSubmit
-          }
-
-          className={
-            forms.form
-          }
-        >
-
-          <div>
-
-            <label>
-
-              Correo electrónico
-
-            </label>
-
-            <input
-              type="email"
-              name="mail"
-              required
-              placeholder=" Ej: aula@gmail.com "
-              className={forms.input}
-            />
-
-          </div>
-
-          <div>
-
-            <label>
-
-              Contraseña
-
-            </label>
-
-            <input
-              type="password"
-              name="contrasena"
-              required
-              placeholder=" ******** "
-              className={forms.input}
-            />
-
-          </div>
-
-          <button
-            type="submit"
-            className={
-              buttons.primary
-            }
-          >
-
-            Ingresar
-
-          </button>
-
-          <p
-className={
-forms.formFooter
-}
->
-
-¿No tenés usuario?
-
-<Link
-href="/registro"
->
-
-Creá una cuenta
-
-</Link>
-
-</p>
-
-        </form>
-
-      </main>
-
+return(
+<div className={layout.centeredPage}>
+  <Form
+  title="Iniciar sesión"
+  description="Ingresá tu mail y contraseña para acceder al sistema."
+  onSubmit={handleSubmit}
+  >
+    {accesoDenegado&&(
+      <Card>
+        Debés iniciar sesión.
+      </Card>
+    )}
+  <div>
+    <label>
+      Correo electrónico
+    </label>
+    <input
+    type="email"
+    name="mail"
+    required
+    placeholder="Ej: aula@gmail.com"
+    className={forms.input}
+    />
     </div>
-
-  );
-
-}
+    <div>
+      <label>
+        Contraseña
+        </label>
+        <input
+        type="password"
+        name="contrasena"
+        required
+        placeholder="********"
+        className={forms.input}
+        />
+    </div>
+    <Button>
+      Ingresar
+      </Button>
+      <p className={forms.formFooter}>
+        ¿No tenés usuario?
+        <Link href="/registro">
+        Creá una cuenta
+        </Link>
+      </p>
+      </Form>
+    </div>
+    );
+  }

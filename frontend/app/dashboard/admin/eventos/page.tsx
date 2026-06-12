@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../../lib/api";
+import { api } from "../../../api";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import table from "@/app/styles/table.module.css";
-import { Evento } from "../../../lib/entidades";
+import { Evento } from "../../../types/entidades";
 
 export default function EventosAdmin() {
   const [eventos, setEventos] = useState<Evento[]>([]);

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
-import RenderizarMapas from "../../components/renderizarMaps";
+import RenderizarMapas from "@/app/components/renderizarMaps";
 
 export default function zonaMapa(){
  return(

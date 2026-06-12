@@ -1,13 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
-
+import {Entity,PrimaryGeneratedColumn,Column,ManyToOne,JoinColumn,} from 'typeorm';
 import { Rol } from '../roles/rol.entity';
-
+import { Inscripcion } from "../inscripciones/inscripcion.entity";
+import { OneToMany } from "typeorm";
 export enum EstadoUsuario {
   PENDIENTE = 'pendiente',
   HABILITADO = 'habilitado',
@@ -45,4 +39,11 @@ export class Usuario {
   @ManyToOne(() => Rol, { eager: true })
   @JoinColumn({ name: 'id_rol' })
   rol!: Rol; //genera "id_rol" como FK
+
+  @OneToMany(
+    () => Inscripcion,
+    inscripcion => inscripcion.usuario
+  )
+  inscripciones!: Inscripcion[];
+
 }

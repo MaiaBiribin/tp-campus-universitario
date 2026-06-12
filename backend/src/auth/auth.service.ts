@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsuariosService } from '../usuarios/usuarios.service';
 import { EstadoUsuario } from '../usuarios/usuario.entity';
-
+import * as bcrypt from 'bcrypt'; 
 
 @Injectable()
 export class AuthService {
@@ -23,8 +23,13 @@ export class AuthService {
     // 1. Busca el usuario por mail en la DB
     const usuario = await this.usuariosService.findByMail(mail);
 
-    // 2. Si no existe o la contraseña no coincide → error
-    if (!usuario || usuario.contrasena !== contrasena) {
+    // 2. Si el usuario no existe en la base de datos → error
+    if (!usuario) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
+
+    const contrasenaCorrecta = await bcrypt.compare(contrasena, usuario.contrasena);
+    if (!contrasenaCorrecta) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
@@ -33,7 +38,7 @@ export class AuthService {
       throw new UnauthorizedException('Usuario no habilitado');
     }
 
-    // 4. Genera el JWT con los datos del usuar¿io
+    // 4. Genera el JWT con los datos del usuario
     const payload = {
       sub: usuario.id_usuario,
       mail: usuario.mail,
@@ -55,7 +60,7 @@ export class AuthService {
       throw new BadRequestException('El mail ya está registrado');
     }
 
-    // 2. Crea el usuario con habilitado=false y rol=Alumno
+    // 2. Crea el usuario con habilitado=false (PENDIENTE) y rol=Alumno
     await this.usuariosService.create(nombre, apellido, mail, dni, contrasena);
 
     return {

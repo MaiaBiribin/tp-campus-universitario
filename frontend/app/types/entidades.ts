@@ -58,3 +58,9 @@ export interface Solicitud {
   mail: string;
   dni: string;
 }
+
+export interface Inscripcion {
+  id_inscripcion:number;
+  usuario:Usuario;
+  materia:Materia;
+}

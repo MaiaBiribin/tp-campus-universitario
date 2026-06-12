@@ -1,8 +1,8 @@
 "use client";
 
 import { useState,useEffect } from "react";
-import { Evento } from "@/app/lib/entidades";
-import { api } from "@/app/lib/api";
+import { Evento } from "../types/entidades";
+import { api } from "../api";
 
 
 
