@@ -5,15 +5,9 @@ import {
   useState,
 } from "react";
 
-import {
-  Carrera,
-  Materia,
-} from "../../../types/entidades";
+import {Carrera, Materia, } from "../../../types/entidades";
 
-import {
-  getCarreras,
-  getMateriasPorCarrera,
-} from "../../../types/services";
+import { getCarreras, getMateriasPorCarrera, } from "../../../services/services";
 
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";

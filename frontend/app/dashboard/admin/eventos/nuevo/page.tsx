@@ -3,7 +3,7 @@ import {
   getCarreras,
   getMateriasPorCarrera,
   getAulas
-} from "../../../../types/services";
+} from "../../../../services/services";
 import {
   Carrera,
   Materia,

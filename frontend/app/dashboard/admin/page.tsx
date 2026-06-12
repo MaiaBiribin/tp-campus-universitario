@@ -2,114 +2,150 @@
 
 import Link from "next/link";
 import dashboard from "@/app/styles/dashboard.module.css";
-import layout from "@/app/styles/layout.module.css";
 import cards from "@/app/styles/cards.module.css";
-import SideBar from "@/app/components/sideBar";
 
 export default function DashboardAdmin() {
+
   return (
-    <div className={layout.layout}>
 
-      <SideBar />
+    <>
 
-      <main className={layout.main}>
+      <header className={dashboard.header}>
 
-        <div className={layout.content}>
+        <h1>
+          Panel de administración
+        </h1>
 
-          <header className={dashboard.header}>
+        <p>
+          Gestioná eventos, aulas, usuarios y la
+          organización académica desde un único lugar.
+        </p>
 
-            <h1>
-              Panel de administración
-            </h1>
+      </header>
+
+
+      {/* RESUMEN */}
+
+      <section>
+
+        <h2 className={dashboard.sectionTitle}>
+          Resumen rápido
+        </h2>
+
+
+        <div className={dashboard.summaryGrid}>
+
+
+          <div className={cards.metric}>
 
             <p>
-              Gestioná eventos, aulas, usuarios y la
-              organización académica desde un único lugar.
+              Eventos hoy
             </p>
 
-          </header>
+            <h3>
+              12
+            </h3>
 
-          {/* RESUMEN */}
+          </div>
 
-          <section>
 
-            <h2 className={dashboard.sectionTitle}>
-              Resumen rápido
-            </h2>
+          <div className={cards.metric}>
 
-            <div className={dashboard.summaryGrid}>
+            <p>
+              Solicitudes pendientes
+            </p>
 
-              <div className={cards.metric}>
-                <p>Eventos hoy</p>
-                <h3>12</h3>
-              </div>
+            <h3>
+              8
+            </h3>
 
-              <div className={cards.metric}>
-                <p>Solicitudes pendientes</p>
-                <h3>8</h3>
-              </div>
+          </div>
 
-              <div className={cards.metric}>
-                <p>Aulas ocupadas</p>
-                <h3>19</h3>
-              </div>
 
-            </div>
+          <div className={cards.metric}>
 
-          </section>
+            <p>
+              Aulas ocupadas
+            </p>
 
-          {/* ACCESOS RÁPIDOS */}
+            <h3>
+              19
+            </h3>
 
-          <section>
+          </div>
 
-            <h2 className={dashboard.sectionTitle}>
-              Accesos rápidos
-            </h2>
 
-            <div className={dashboard.quickGrid}>
-
-              {[
-                [
-                  "Crear evento",
-                  "Crear clases, parciales o finales",
-                  "/dashboard/admin/eventos/nuevo",
-                ],
-
-                [
-                  "Solicitudes",
-                  "Revisar registros pendientes",
-                  "/dashboard/admin/solicitudes",
-                ],
-
-                [
-                  "Mapa de aulas",
-                  "Visualizar distribución del edificio",
-                  "/dashboard/admin/aulas",
-                ],
-
-              ].map(([titulo, desc, ruta]) => (
-
-                <Link
-                  key={ruta}
-                  href={ruta}
-                  className={cards.quickCard}
-                >
-
-                  <h3>
-                    {titulo}
-                  </h3>
-
-                  <p>
-                    {desc}
-                  </p>
-
-                </Link>
-
-              ))}
-            </div>
-          </section>
         </div>
-      </main>
-    </div>
+
+      </section>
+
+
+
+      {/* ACCESOS RÁPIDOS */}
+
+
+      <section>
+
+        <h2 className={dashboard.sectionTitle}>
+          Accesos rápidos
+        </h2>
+
+
+        <div className={dashboard.quickGrid}>
+
+
+          {[
+            [
+              "Crear evento",
+              "Crear clases, parciales o finales",
+              "/dashboard/admin/eventos/nuevo",
+            ],
+
+            [
+              "Solicitudes",
+              "Revisar registros pendientes",
+              "/dashboard/admin/solicitudes",
+            ],
+
+            [
+              "Mapa de aulas",
+              "Visualizar distribución del edificio",
+              "/dashboard/admin/aulas",
+            ],
+
+          ].map(([titulo, desc, ruta]) => (
+
+
+            <Link
+              key={ruta}
+              href={ruta}
+              className={cards.quickCard}
+            >
+
+              <h3>
+                {titulo}
+              </h3>
+
+
+              <p>
+                {desc}
+              </p>
+
+
+            </Link>
+
+
+          ))}
+
+
+        </div>
+
+
+      </section>
+
+
+    </>
+
   );
+
 }

@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api } from "../api";
 //carreras y materias
 export async function getCarreras() {
   const res =
