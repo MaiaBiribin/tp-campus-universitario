@@ -1,10 +1,9 @@
 "use client";
 
 import { useState,useEffect } from "react";
-import { Evento } from "@/app/lib/entidades";
-import { Usuario } from "@/app/lib/entidades";
-import { api } from "@/app/lib/api";
-
+import { Evento } from "../types/entidades";
+import { Usuario } from "../types/entidades";
+import { api } from "../api";
 
 
 export default function EventosDia(){
@@ -22,7 +21,7 @@ export default function EventosDia(){
          const data:Usuario= await res.json()
          setusuario(data)
 
-        await buscarEventoDia(data.idUsario)
+        await buscarEventoDia(data.id_usuario)
       }catch(error){
          console.error("error al buscar el usario.",error)
       }finally{

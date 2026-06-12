@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../../lib/api";
+import { api } from "../../../api";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import table from "@/app/styles/table.module.css";
-import { Usuario } from "../../../lib/entidades";
+import { Usuario } from "../../../types/entidades";
 
 export default function UsuariosAdmin() {
 

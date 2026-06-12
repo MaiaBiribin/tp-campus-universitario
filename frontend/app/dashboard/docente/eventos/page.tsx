@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import SideBar from "../components/sideBar";
-import RenderizarEventos from "../../components/renderizarEventosSemana";
+import RenderizarEventos from "@/app/components/renderizarEventosSemana";
 
 export default function Eventos(){
     return(

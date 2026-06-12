@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../../lib/api";
+import { api } from "../../../api";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
-import cards from "@/app/styles/cards.module.css";
-import buttons from "@/app/styles/buttons.module.css";
-import { Solicitud } from "../../../lib/entidades";
+import { Solicitud } from "../../../types/entidades";
 import styles from "./page.module.css";
+import Card from "@/app/components/card";
+import Button from "@/app/components/button";
 
 
 export default function SolicitudesAdmin() {
@@ -86,6 +86,7 @@ export default function SolicitudesAdmin() {
 
   }
 
+<<<<<<< HEAD
    return (
     <main className={layout.main}>
       <div className={layout.content}>
@@ -187,42 +188,191 @@ export default function SolicitudesAdmin() {
 
                       <strong
                         className={styles.pending}
+=======
+return (
+  <main
+    className={
+      layout.main
+    }
+  >
+    <div
+      className={
+        layout.content
+      }
+    >
+      <header
+        className={
+          dashboard.header
+        }
+      >
+        <div>
+          <h1>
+            Solicitudes de registro
+          </h1>
+          <p>
+            Revisá solicitudes pendientes
+            y aprobá únicamente usuarios
+            autorizados.
+          </p>
+        </div>
+        <div
+          className={
+            styles.counter
+          }
+        >
+          {solicitudes.length}
+        </div>
+      </header>
+      <section>
+        {
+          solicitudes.length === 0 ? (
+            <Card>
+
+              <div
+                className={
+                  styles.empty
+                }
+              >
+                <h2>
+                  No hay solicitudes pendientes
+                </h2>
+                <p>
+                  Cuando un usuario se registre
+                  aparecerá acá.
+                </p>
+              </div>
+            </Card>
+          ) : (
+            <div
+              className={
+                styles.grid
+              }
+            >
+              {
+                solicitudes.map(
+                  (usuario) => (
+                    <Card
+                      key={
+                        usuario.id_usuario
+                      }
+                    >
+                      <div
+                        className={
+                          styles.user
+                        }
+>>>>>>> 18b1ac00f4e2f4978c853895bad1e2de3edff256
                       >
-                        Pendiente
-                      </strong>
+                        <div
+                          className={
+                            styles.avatar
+                          }
+                        >
+                          {
+                            usuario.nombre[0]
+                          }
+                        </div>
+                        <div>
+                          <h2>
+                            {
+                              usuario.nombre
+                            }{" "}
+                            {
+                              usuario.apellido
+                            }
+                          </h2>
+                          <p>
+                            {
+                              usuario.mail
+                            }
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          styles.data
+                        }
+                      >
+                        <div>
+                          <span>
+                            DNI
+                          </span>
 
-                    </div>
+                          <strong>
+                            {
+                              usuario.dni
+                            }
 
-                  </div>
+                          </strong>
 
-                  <div className={styles.actions}>
+                        </div>
 
-                    <button
-                      className={buttons.primary}
-                      onClick={() =>
-                        aprobar(usuario.id_usuario)
-                      }
-                    >
-                      Aprobar
-                    </button>
+                        <div>
 
-                    <button
-                      className={buttons.danger}
-                      onClick={() =>
-                        rechazar(usuario.id_usuario)
-                      }
-                    >
-                      Rechazar
-                    </button>
+                          <span>
 
-                  </div>
+                            Estado
 
-                </article>
+                          </span>
 
-              ))}
+                          <strong
+                            className={
+                              styles.pending
+                            }
+                          >
+
+                            Pendiente
+
+                          </strong>
+
+                        </div>
+
+                      </div>
+
+                      <div
+                        className={
+                          styles.actions
+                        }
+                      >
+
+                        <Button
+                          onClick={
+                            () =>
+                              aprobar(
+                                usuario.id_usuario
+                              )
+                          }
+                        >
+
+                          Aprobar
+
+                        </Button>
+
+                        <Button
+                          variant="danger"
+
+                          onClick={
+                            () =>
+                              rechazar(
+                                usuario.id_usuario
+                              )
+                          }
+                        >
+
+                          Rechazar
+
+                        </Button>
+
+                      </div>
+
+                    </Card>
+
+                  )
+                )
+              }
 
             </div>
 
+<<<<<<< HEAD
           </section>
 
           <section>
@@ -284,3 +434,12 @@ export default function SolicitudesAdmin() {
   );
 
 }*/
+=======
+          )
+        }
+      </section>
+    </div>
+  </main>
+);
+}
+>>>>>>> 18b1ac00f4e2f4978c853895bad1e2de3edff256
