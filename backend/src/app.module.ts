@@ -11,6 +11,7 @@ import { CarrerasModule } from './carreras/carreras.module';
 import { MateriasModule } from './materias/materias.module';
 import { InscripcionesModule } from './inscripciones/inscripciones.module';
 import { NotificacionesModule } from './notificaciones/notificaciones.module';
+import { AvisosModule } from './avisos/avisos.module';
 
 
 @Module({
@@ -46,6 +47,7 @@ import { NotificacionesModule } from './notificaciones/notificaciones.module';
     MateriasModule,
     InscripcionesModule,
     NotificacionesModule,
+    AvisosModule,
   ],
   controllers: [],
   providers: [],

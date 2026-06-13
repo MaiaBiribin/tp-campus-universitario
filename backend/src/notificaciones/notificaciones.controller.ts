@@ -36,4 +36,12 @@ export class NotificacionesController {
   ) {
     return this.notificacionesService.marcarLeida(id);
   }
+
+  //marcar todas como leídas
+  @UseGuards(AuthGuard)
+  @Patch('marcar-todas-leidas')
+  marcarTodasLeidas(@Request() req) {
+    const idUsuario = req.user.sub;
+    return this.notificacionesService.marcarTodasLeidas(idUsuario);
+  }
 }
