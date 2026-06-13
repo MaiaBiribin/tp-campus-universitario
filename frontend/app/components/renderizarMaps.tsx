@@ -24,7 +24,7 @@ interface DatosMapa{
 const ConfigurarMapas:Record<Mapas,DatosMapa>={
   [Mapas.PB]:{
      titulo:"Mapa de planta Baja",
-     src:"/plantaBaja.png",
+     src:"/mapaPB.png",
      NombreMapa:"plantaBaja",
      areas:[
       { cordenadas: "78,80,217,315", alt: "Aula 101", href: "/aulas/101" },
@@ -45,7 +45,7 @@ const ConfigurarMapas:Record<Mapas,DatosMapa>={
   },
   [Mapas.P1]:{
     titulo:"Mapa del primer piso",
-    src:"/primerPiso.png",
+    src:"/mapaP1.png",
     NombreMapa:"primerPiso",
     areas:[
      { cordenadas: "31,35,87,130", alt: "Aula 201", href: "/aulas/201" },
@@ -64,7 +64,7 @@ const ConfigurarMapas:Record<Mapas,DatosMapa>={
   },
   [Mapas.P2]:{
     titulo:"Mapa del segundo piso",
-    src:"/segundoPiso.png",
+    src:"/mapaP2.png",
     NombreMapa:"segundoPiso",
     areas:[
       { cordenadas: "53,35,157,137", alt: "Aula 301", href: "/aulas/301" },

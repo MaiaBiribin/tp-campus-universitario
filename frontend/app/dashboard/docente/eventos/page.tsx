@@ -1,27 +1,17 @@
 "use client"
-import Link from "next/link";
-import styles from "./page.module.css";
-import SideBar from "../components/sideBar";
-import RenderizarEventos from "@/app/components/renderizarEventosSemana";
 
-export default function Eventos(){
-    return(
-       <div className={styles.layout}>
-       <SideBar />
-         <main className={styles.main}>
-            <div>
-              <header>
-                <h1>Eventos de la semana:</h1>
-              </header>
+import layout from "@/app/styles/layout.module.css";
+import EventosSemanaView from "@/app/components/eventoSemanaView";
 
-              <div>
-                <RenderizarEventos/>
-              </div>
+export default function Eventos() {
+  return (
+    <div className={layout.main}>
 
-            </div>
-         </main>
-       </div>
-    )
-        
-    
+      <EventosSemanaView
+        titulo="Eventos de la semana"
+      />
+
+    </div>
+  );
+
 }
