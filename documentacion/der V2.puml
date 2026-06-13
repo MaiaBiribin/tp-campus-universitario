@@ -75,14 +75,19 @@ entity Inscripcion {
 entity Notificacion {
   * id_notificacion : int (PK)
   --
-  mensaje : varchar
-  fecha : datetime
-  leida : boolean
+  id_usuario (FK)
+  id_evento (nullable)
+  id_aviso (nullable)
+  mensaje
+  leida
+  fecha_creacion
 }
 
 entity Aviso {
   * id_aviso : int (PK)
   --
+  id_evento (FK)
+  id_usuario (profesor que lo crea)
   mensaje : varchar
   fecha : datetime
 }

@@ -1,49 +1,52 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { ROLE_PERMISSIONS, Role } from "@/app/lib/roles";
+
+function decodeJWT(token: string) {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
 
 export function proxy(request: NextRequest) {
+  const token = request.cookies.get("token")?.value;
+  const { pathname } = request.nextUrl;
 
-  const token =request.cookies.get('token')?.value
-  const {pathname} =request.nextUrl
   if (!token) {
     return NextResponse.redirect(
-      new URL(
-        '/login?acceso=denegado',
-        request.url
-      )
-    )
+      new URL("/login?acceso=denegado", request.url)
+    );
   }
 
-  let rol
-  try {
-    const payload =JSON.parse(atob(token.split(".")[1]))
-    rol =payload.rol
+  const payload = decodeJWT(token);
+
+  if (!payload) {
+    return NextResponse.redirect(
+      new URL("/login?acceso=denegado", request.url)
+    );
   }
 
-  catch {
-    return NextResponse.redirect(new URL('/login?acceso=denegado',request.url))
+  const rol = payload.rol as Role;
+
+  const rutasPermitidas = ROLE_PERMISSIONS[rol];
+  const rutasCompartidas = [
+    "/dashboard/mapa",
+    "/dashboard/eventos",
+  ];
+  const permitido =rutasCompartidas.some(r => pathname.startsWith(r)) ||
+  ROLE_PERMISSIONS[rol]?.some(r => pathname.startsWith(r));
+
+  if (!permitido) {
+    return NextResponse.redirect(
+      new URL("/login?acceso=denegado", request.url)
+    );
   }
 
-  const permisos = {
-    "/dashboard/admin":
-      "Admin",
-    "/dashboard/docente":
-      "Profesor",
-    "/dashboard/estudiante":
-      "Alumno",
-  }
-
-  for (const [ruta,rolPermitido]of Object.entries(permisos)) {
-    if (pathname.startsWith(ruta) && rol !== rolPermitido) {
-      return NextResponse.redirect(new URL('/login?acceso=denegado',request.url))
-    }
-  }
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/dashboard/:path*'
-  ]
-
-}
+  matcher: ["/dashboard/:path*"],
+};

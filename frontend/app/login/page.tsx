@@ -2,8 +2,9 @@
 
 import {useRouter,useSearchParams} from "next/navigation";
 import Link from "next/link";
-import {login,guardarSesion,obtenerPayload}
-from "../services/auth";
+import {login,guardarSesion,}from "../services/auth";
+import { ROLES } from "@/app/lib/roles";
+import { decodeToken } from "@/app/lib/auth";
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
 import Button from "../components/ui/button";
@@ -39,19 +40,17 @@ export default function Login() {
      data.access_token
     );
 
-    const payload =obtenerPayload(data.access_token);
-
-    alert(`Bienvenido ${payload.nombre}`);
-
-    if (payload.rol === "Admin") {
-      router.push("/dashboard/admin");
-    } else if (payload.rol === "Profesor") {
-      router.push("/dashboard/docente");
-    } else if (payload.rol === "Alumno") {
-      router.push("/dashboard/estudiante");
-    } else {
-      alert("Rol desconocido: " + payload.rol);
-    }
+    const payload = decodeToken(data.access_token);
+    if (!payload) {
+      alert("Token inválido");
+      return;}
+      const rol = payload.rol;
+      const rutas = {
+        [ROLES.ADMIN]: "/dashboard/admin",
+        [ROLES.PROFESOR]: "/dashboard/docente",
+        [ROLES.ALUMNO]: "/dashboard/estudiante",
+      } as const;
+      router.push(rutas[rol as keyof typeof rutas]);
   }
 
 return(
