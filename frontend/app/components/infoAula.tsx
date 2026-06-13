@@ -9,9 +9,10 @@ import dashboard from "../styles/dashboard.module.css";
 
 type Props={
  aulaId:number;
+ nombre:string;
 }
 
-export default function InfoAula({aulaId}:Props){
+export default function InfoAula({aulaId, nombre}:Props){
     const [eventos,setEventos]=useState<Evento[]>([]);
     const [cargando,setCargando]=useState(true);
     
@@ -54,9 +55,7 @@ return (
 
 <Card className={dashboard.card}>
   <div className={cards.cardHeader}>
-    <h3>
-      Aula {aulaId}
-    </h3>
+    <h3>Aula {nombre}</h3>
   </div>
   {
     eventoActual ? (
