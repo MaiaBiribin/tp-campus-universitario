@@ -6,9 +6,9 @@ import {login,guardarSesion,obtenerPayload}
 from "../services/auth";
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
-import Button from "../components/button";
-import Card from "../components/card";
-import Form from "../components/form";
+import Button from "../components/ui/button";
+import Card from "../components/ui/card";
+import Form from "../components/ui/form";
 
 export default function Login() {
   const router = useRouter();

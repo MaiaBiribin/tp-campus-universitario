@@ -6,8 +6,8 @@ import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { Solicitud } from "../../../types/entidades";
 import styles from "./page.module.css";
-import Card from "@/app/components/card";
-import Button from "@/app/components/button";
+import Card from "@/app/components/ui/card";
+import Button from "@/app/components/ui/button";
 
 export default function SolicitudesAdmin() {
 

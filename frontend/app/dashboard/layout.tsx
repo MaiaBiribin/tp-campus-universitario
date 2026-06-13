@@ -1,7 +1,8 @@
 "use client";
 
 import layout from "@/app/styles/layout.module.css";
-import SideBar from "../components/sideBar";
+import SideBar from "../components/ui/sideBar";
+
 
 
 export default function DashboardLayout({

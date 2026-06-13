@@ -3,7 +3,7 @@
 import NavLinks from "./navLinks";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { logout } from "../services/auth";
+import { logout } from "../../services/auth";
 import styles from "@/app/styles/dashboard.module.css";
 
 export default function SideBar() {

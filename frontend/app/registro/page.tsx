@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import {registrarUsuario} from "../services/auth";
 import Link from "next/link";
-import Form from "../components/form";
-import Button from "../components/button";
+import Form from "../components/ui/form";
+import Button from "../components/ui/button";
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
 

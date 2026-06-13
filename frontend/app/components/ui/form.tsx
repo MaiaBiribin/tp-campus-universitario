@@ -1,5 +1,5 @@
-import forms from "../styles/forms.module.css";
-import layout from "../styles/layout.module.css";
+import forms from "../../styles/forms.module.css";
+import layout from "../../styles/layout.module.css";
 
 type FormProps = {
   title: string;

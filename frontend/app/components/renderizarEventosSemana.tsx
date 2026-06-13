@@ -1,7 +1,7 @@
 "use client";
 
 import { Evento } from "../types/entidades";
-import Card from "@/app/components/card";
+import Card from "@/app/components/ui/card";
 
 type Props = {
   eventos: Evento[];

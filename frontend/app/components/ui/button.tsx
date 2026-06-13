@@ -1,4 +1,4 @@
-import buttons from "../styles/buttons.module.css";
+import buttons from "../../styles/buttons.module.css";
 
 type Props={
 children:React.ReactNode;
