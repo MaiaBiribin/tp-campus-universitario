@@ -1,7 +1,7 @@
 "use client";
-
+import {getUsuariosPendientes,aprobarUsuario,rechazarUsuario}
+from "@/app/services/usuarios";
 import { useEffect, useState } from "react";
-import { api } from "../../../api";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { Solicitud } from "../../../types/entidades";
@@ -9,58 +9,39 @@ import styles from "./page.module.css";
 import Card from "@/app/components/card";
 import Button from "@/app/components/button";
 
-
 export default function SolicitudesAdmin() {
- 
-  const [solicitudes, setSolicitudes] =
-    useState<Solicitud[]>([]);
-      
-  const [cargando, setCargando] =
-    useState(true);
+
+  const [solicitudes, setSolicitudes] =useState<Solicitud[]>([]);
+  const [cargando, setCargando] =useState(true);
 
   useEffect(() => {
 
     async function cargarSolicitudes() {
-
       try {
-
-        const res = await api("/usuarios/pendientes");
-
-        const data =
-          await res.json();
-
+        const data =await getUsuariosPendientes();
         setSolicitudes(data);
-
       } finally {
-
         setCargando(false);
-
       }
-
     }
 
     cargarSolicitudes();
-
   }, []);
 
   async function aprobar(id: number) {
   try {
-    await api(`/usuarios/${id}/habilitar`, {
-      method: "PATCH",});
+    await aprobarUsuario(id);
     setSolicitudes((prev) =>
       prev.filter(
-        (u) => u.id_usuario !== id
-      )
+        (u) => u.id_usuario !== id)
     );
   } catch (error) {
     console.error(error);}
-}
+  }
 
   async function rechazar(id: number) {
   try {
-    await api(`/usuarios/${id}/rechazar`, {
-      method: "PATCH",
-    });
+    await rechazarUsuario(id);
     setSolicitudes((prev) =>
       prev.filter(
         (u) => u.id_usuario !== id
@@ -86,109 +67,6 @@ export default function SolicitudesAdmin() {
 
   }
 
-<<<<<<< HEAD
-   return (
-    <main className={layout.main}>
-      <div className={layout.content}>
-        <header className={dashboard.header}>
-          <div>
-
-            <h1>
-              Panel de administración
-            </h1>
-
-            <p>
-              Gestioná eventos, aulas, usuarios y la
-              organización académica desde un único lugar.
-            </p>
-
-          </header>
-
-          <section>
-
-            <h2 className={styles.sectionTitle}>
-              Resumen rápido
-            </h2>
-
-            <div className={styles.summaryGrid}>
-
-              <div className={styles.metric}>
-                <p>Eventos hoy</p>
-                <h3>12</h3>
-              </div>
-
-              <div className={styles.metric}>
-                <p>Solicitudes pendientes</p>
-                <h3>8</h3>
-              </div>
-
-              <div className={styles.metric}>
-                <p>Aulas ocupadas</p>
-                <h3>19</h3>
-              </div>
-
-            </div>
-
-          </section>
-
-          <section>
-
-            <h2 className={styles.sectionTitle}>
-              Accesos rápidos
-            </h2>
-
-                <article
-                  key={usuario.id_usuario}
-                  className={cards.card}
-                >
-
-                  <h3>
-                    {titulo}
-                  </h3>
-
-                  <p>
-                    {desc}
-                  </p>
-
-                    <div>
-
-                      <h2>
-                        {usuario.nombre}
-                        {" "}
-                        {usuario.apellido}
-                      </h2>
-
-                      <p>
-                        {usuario.mail}
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                  <div className={styles.data}>
-
-                    <div>
-
-                      <span>
-                        DNI
-                      </span>
-
-                      <strong>
-                        {usuario.dni}
-                      </strong>
-
-                    </div>
-
-                    <div>
-
-                      <span>
-                        Estado
-                      </span>
-
-                      <strong
-                        className={styles.pending}
-=======
 return (
   <main
     className={
@@ -227,7 +105,6 @@ return (
         {
           solicitudes.length === 0 ? (
             <Card>
-
               <div
                 className={
                   styles.empty
@@ -260,7 +137,6 @@ return (
                         className={
                           styles.user
                         }
->>>>>>> 18b1ac00f4e2f4978c853895bad1e2de3edff256
                       >
                         <div
                           className={
@@ -296,44 +172,30 @@ return (
                           <span>
                             DNI
                           </span>
-
                           <strong>
                             {
                               usuario.dni
                             }
-
                           </strong>
-
                         </div>
-
                         <div>
-
                           <span>
-
                             Estado
-
                           </span>
-
                           <strong
                             className={
                               styles.pending
                             }
                           >
-
                             Pendiente
-
                           </strong>
-
                         </div>
-
                       </div>
-
                       <div
                         className={
                           styles.actions
                         }
                       >
-
                         <Button
                           onClick={
                             () =>
@@ -342,14 +204,10 @@ return (
                               )
                           }
                         >
-
                           Aprobar
-
                         </Button>
-
                         <Button
                           variant="danger"
-
                           onClick={
                             () =>
                               rechazar(
@@ -357,84 +215,14 @@ return (
                               )
                           }
                         >
-
                           Rechazar
-
                         </Button>
-
                       </div>
-
                     </Card>
-
                   )
                 )
               }
-
             </div>
-
-<<<<<<< HEAD
-          </section>
-
-          <section>
-
-            <h2 className={styles.sectionTitle}>
-              Actividad reciente
-            </h2>
-
-            <div className={styles.card}>
-
-              <div className={styles.notice}>
-
-                <h3>
-                  Evento creado
-                </h3>
-
-                <p>
-                  Programación 3 — Aula 205
-                </p>
-
-              </div>
-
-              <div className={styles.notice}>
-
-                <h3>
-                  Nuevo registro
-                </h3>
-
-                <p>
-                  Hay usuarios esperando aprobación
-                </p>
-
-              </div>
-
-              <div className={styles.notice}>
-
-                <h3>
-                  Actualización académica
-                </h3>
-
-                <p>
-                  Se modificó una asignación docente
-                </p>
-
-              </div>
-
-            </div>
-
-          </section>
-
-        </div>
-
-      </main>
-
-    </div>
-
-    </main>
-
-  );
-
-}*/
-=======
           )
         }
       </section>
@@ -442,4 +230,3 @@ return (
   </main>
 );
 }
->>>>>>> 18b1ac00f4e2f4978c853895bad1e2de3edff256

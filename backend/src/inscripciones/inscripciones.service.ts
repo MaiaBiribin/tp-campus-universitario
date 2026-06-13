@@ -78,7 +78,21 @@ async crear(dto:CrearInscripcionDto){
  return creadas;
 }
 
+async obtenerPorMateria(id:number){
 
+ return this.inscripcionesRepo.find({
+   where:{
+     materia:{
+       id_materia:id
+     }
+   },
+   relations:{
+     usuario:true,
+     materia:true
+   }
+ });
+
+}
 
 async listar(){
 

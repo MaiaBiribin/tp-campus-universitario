@@ -26,6 +26,13 @@ export class EventosController {
     return this.eventosService.findAll();
   }
 
+  @Get("usuario/:id")
+  getEventosUsuario(
+    @Param("id") id:string
+  ){
+    return this.eventosService.eventosUsuario(Number(id));
+  }
+
   // traer por id
   @ApiTags('Eventos')
   @Get(':id')
