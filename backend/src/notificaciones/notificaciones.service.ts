@@ -44,4 +44,11 @@ export class NotificacionesService {
       leida: true,
     });
   }
+
+  async marcarTodasLeidas(idUsuario: number): Promise<void> {
+    await this.notificacionesRepository.update(
+      { usuario: { id_usuario: idUsuario }, leida: false },
+      { leida: true }
+    );
+  }
 }
