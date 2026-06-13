@@ -1,4 +1,5 @@
 import { api } from "../api";
+import { Evento } from "../types/entidades";
 
 export async function getEventos() {
   const res =await api("/eventos");
@@ -42,4 +43,42 @@ export async function eliminarEvento(id: number) {
   if (!res.ok) {
     throw new Error("Error eliminando evento");
   }
+}
+
+export async function getEventosSemana() {
+  const res = await api("/eventos");
+  if (!res.ok) {
+    throw new Error("Error cargando eventos");
+  }
+  const data: Evento[] =
+    await res.json();
+  const ahora = new Date();
+  const limite = new Date();
+  limite.setDate(
+    ahora.getDate() + 7
+  );
+  return data
+    .filter((ev) => {
+      const fechaHora =
+        new Date(
+          `${ev.fecha}T${ev.horaInicio}`
+        );
+      return (
+        fechaHora >= ahora &&
+        fechaHora <= limite
+      );
+    })
+    .sort((a,b)=>{
+
+      const fechaA =
+        new Date(
+          `${a.fecha}T${a.horaInicio}`
+        ).getTime();
+
+      const fechaB =
+        new Date(
+          `${b.fecha}T${b.horaInicio}`
+        ).getTime();
+      return fechaA - fechaB;
+    });
 }

@@ -1,28 +1,19 @@
-"use client"
+"use client";
 
-import styles from "./page.module.css";
-import SideBar from "../components/sideBar";
-import RenderizarEventos from "@/app/components/renderizarEventosSemana";
+import layout from "@/app/styles/layout.module.css";
+import EventosSemanaView from "@/app/components/eventoSemanaView";
 
-export default function Eventos(){
-    return(
-       <div className={styles.layout}>
-       <SideBar />
-         <main className={styles.main}>
-            <div>
-              <header>
-                <h1>Eventos de la semana:</h1>
-              </header>
+export default function Eventos() {
 
-              <div>
-                <RenderizarEventos/>
-              </div>
+  return (
+    <div className={layout.main}>
 
-        
-            </div>
-         </main>
-       </div>
-    )
-        
-    
+      <EventosSemanaView
+        titulo="Eventos de la semana"
+        descripcion="Acá podés ver tus próximas clases y actividades."
+      />
+
+    </div>
+  );
+
 }
