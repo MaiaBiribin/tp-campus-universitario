@@ -9,7 +9,7 @@ import {
   Param,
 } from '@nestjs/common';
 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger';
 import { EventosService } from './eventos.service';
 
 @Controller('eventos')
@@ -49,10 +49,23 @@ export class EventosController {
   @ApiOperation({
     summary: 'Crea un nuevo evento',
   })
+  @ApiBody({
+  schema: {
+    properties: {
+      titulo:     { type: 'string', example: 'Parcial de Matemáticas' },
+      fecha:      { type: 'string', example: '2026-06-20' },
+      horaInicio: { type: 'string', example: '09:00:00' },
+      horaFin:    { type: 'string', example: '11:00:00' },
+      aula:       { type: 'object', example: { id_aula: 1 } },
+      tipoEvento: { type: 'object', example: { id_tipo_evento: 1 } },
+      materia:    { type: 'object', example: { id_materia: 16 } },
+    },
+  },
+  })
   createEvento(@Body() body: any) {
   console.log("EVENTO BODY:", body);
   return this.eventosService.create(body);
-}
+  }
 
   // edita parcial
   @ApiTags('Eventos')
