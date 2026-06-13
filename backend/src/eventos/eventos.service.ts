@@ -1,8 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, MoreThanOrEqual } from 'typeorm';
 import { Evento } from './evento.entity';
-import { MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class EventosService {
@@ -64,17 +63,17 @@ export class EventosService {
     return await this.repo.save(nuevoEvento);
   }
 
-  async eventosUsuario(idUsuario: number) {
+async eventosUsuario(idUsuario: number) {
 
-  const hoy = new Date()
-    .toISOString()
-    .split("T")[0];
+  const ahora = new Date();
+
+  const hoy = ahora.toLocaleDateString("sv-SE");
+  const horaActual = ahora.toTimeString().slice(0,5);
 
 
-  return this.repo.find({
+  const eventos = await this.repo.find({
+
     where: {
-      fecha: MoreThanOrEqual(hoy),
-
       materia: {
         inscripciones: {
           usuario: {
@@ -87,15 +86,31 @@ export class EventosService {
     relations: {
       materia: {
         carrera: true,
-        inscripciones: {
-          usuario: true
-        }
       }
     },
 
     order: {
-      fecha: "ASC"
+      fecha: "ASC",
+      horaInicio: "ASC"
     }
+
+  });
+
+
+  return eventos.filter(evento => {
+
+    if (evento.fecha > hoy) {
+      return true;
+    }
+
+
+    if (evento.fecha === hoy) {
+      return evento.horaInicio >= horaActual;
+    }
+
+
+    return false;
+
   });
 
 }
