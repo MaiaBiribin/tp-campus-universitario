@@ -1,7 +1,7 @@
 "use client";
-
+import {getUsuariosPendientes,aprobarUsuario,rechazarUsuario}
+from "@/app/services/usuarios";
 import { useEffect, useState } from "react";
-import { api } from "../../../api";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { Solicitud } from "../../../types/entidades";
@@ -12,53 +12,37 @@ import Button from "@/app/components/button";
 
 export default function SolicitudesAdmin() {
 
-      
-  const [cargando, setCargando] =
-    useState(true);
+  const [solicitudes, setSolicitudes] =useState<Solicitud[]>([]);
+  const [cargando, setCargando] =useState(true);
 
   useEffect(() => {
 
     async function cargarSolicitudes() {
-
       try {
-
-        const res = await api("/usuarios/pendientes");
-
-        const data =
-          await res.json();
-
+        const data =await getUsuariosPendientes();
         setSolicitudes(data);
-
       } finally {
-
         setCargando(false);
-
       }
-
     }
 
     cargarSolicitudes();
-
   }, []);
 
   async function aprobar(id: number) {
   try {
-    await api(`/usuarios/${id}/habilitar`, {
-      method: "PATCH",});
+    await aprobarUsuario(id);
     setSolicitudes((prev) =>
       prev.filter(
-        (u) => u.id_usuario !== id
-      )
+        (u) => u.id_usuario !== id)
     );
   } catch (error) {
     console.error(error);}
-}
+  }
 
   async function rechazar(id: number) {
   try {
-    await api(`/usuarios/${id}/rechazar`, {
-      method: "PATCH",
-    });
+    await rechazarUsuario(id);
     setSolicitudes((prev) =>
       prev.filter(
         (u) => u.id_usuario !== id
@@ -122,7 +106,6 @@ return (
         {
           solicitudes.length === 0 ? (
             <Card>
-
               <div
                 className={
                   styles.empty
@@ -190,44 +173,30 @@ return (
                           <span>
                             DNI
                           </span>
-
                           <strong>
                             {
                               usuario.dni
                             }
-
                           </strong>
-
                         </div>
-
                         <div>
-
                           <span>
-
                             Estado
-
                           </span>
-
                           <strong
                             className={
                               styles.pending
                             }
                           >
-
                             Pendiente
-
                           </strong>
-
                         </div>
-
                       </div>
-
                       <div
                         className={
                           styles.actions
                         }
                       >
-
                         <Button
                           onClick={
                             () =>
@@ -236,14 +205,10 @@ return (
                               )
                           }
                         >
-
                           Aprobar
-
                         </Button>
-
                         <Button
                           variant="danger"
-
                           onClick={
                             () =>
                               rechazar(
@@ -251,21 +216,14 @@ return (
                               )
                           }
                         >
-
                           Rechazar
-
                         </Button>
-
                       </div>
-
                     </Card>
-
                   )
                 )
               }
-
             </div>
-
           )
         }
       </section>

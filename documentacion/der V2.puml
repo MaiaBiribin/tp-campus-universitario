@@ -19,7 +19,6 @@ entity Usuario {
   contrasena : varchar
   id_rol : int (FK)
   habilitado : boolean
-  id_materia : int (FK)
 }
 
 ' ─── CARRERAS Y MATERIAS ───
@@ -34,20 +33,6 @@ entity Materia {
   --
   nombre : varchar
   id_carrera : int (FK)
-}
-
-entity AlumnoMateria {
-  * id : int (PK)
-  --
-  id_usuario : int (FK)
-  id_materia : int (FK)
-}
-
-entity DocenteMateria {
-  * id : int (PK)
-  --
-  id_usuario : int (FK)
-  id_materia : int (FK)
 }
 
 ' ─── AULAS Y EVENTOS ───
@@ -76,6 +61,13 @@ entity Evento {
   estado : varchar
   id_aula : int (FK)
   id_tipo_evento : int (FK)
+  id_materia : int (FK)
+}
+
+entity Inscripcion {
+  * id_inscripcion : int (PK)
+  --
+  id_usuario : int (FK)
   id_materia : int (FK)
 }
 
@@ -122,11 +114,8 @@ end note
 Usuario }o--|| Rol : tiene
 
 Carrera ||--o{ Materia : tiene
-Materia ||--o{ AlumnoMateria : inscripto
-Usuario ||--o{ AlumnoMateria : cursa
-
-Materia ||--o{ DocenteMateria : asignada
-Usuario ||--o{ DocenteMateria : dicta
+Usuario ||--o{ Inscripcion : realiza
+Materia ||--o{ Inscripcion : contiene
 
 Aula ||--o{ Evento : asignada
 TipoEvento ||--o{ Evento : clasifica
