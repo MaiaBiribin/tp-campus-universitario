@@ -3,6 +3,7 @@
 import NavLinks from "./navLinks";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { logout } from "../services/auth";
 import styles from "@/app/styles/dashboard.module.css";
 
 export default function SideBar() {
@@ -12,9 +13,7 @@ export default function SideBar() {
   
   const router = useRouter();
   function cerrarSesion() {
-    localStorage.removeItem("token");
-    document.cookie =
-      "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    logout();
     router.replace("/login");
   }
 

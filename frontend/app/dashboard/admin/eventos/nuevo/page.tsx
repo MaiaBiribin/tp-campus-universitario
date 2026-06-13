@@ -7,10 +7,10 @@ import forms from "@/app/styles/forms.module.css";
 import Card from "@/app/components/card";
 import Button from "@/app/components/button";
 import dashboard from "@/app/styles/dashboard.module.css";
-import { api } from "../../../../api";
 import { getCarreras } from "@/app/services/carreras";
 import { getAulas } from "@/app/services/aulas";
 import { getMateriasPorCarrera } from "@/app/services/materias";
+import { crearEvento } from "@/app/services/eventos";
 
 export default function CrearEvento() {
   const [fecha, setFecha] = useState("");
@@ -60,36 +60,25 @@ export default function CrearEvento() {
           return;
         }
       const materiaSeleccionada = materias.find((m) => m.id_materia === Number(idMateria));
+      if (!materiaSeleccionada) {alert("Seleccioná una materia");
+        return;}
       try {
-        const res =
-        await api("/eventos", {
-          method: "POST",
-          body: JSON.stringify({
-            titulo: materiaSeleccionada?.nombre,
-            fecha,
-            horaInicio,
-            horaFin,
-            aula: {
-              id_aula: Number(idAula),},
-            tipoEvento: {
-              id_tipo_evento: Number(idTipoEvento),},
-            materia: {
-              id_materia: Number(idMateria),},
-            }),
-          });
-        if (res.ok) {
+        await crearEvento({
+          titulo: materiaSeleccionada?.nombre,
+          fecha,
+          horaInicio,
+          horaFin,
+          aula: {id_aula: Number(idAula),},
+          tipoEvento: {id_tipo_evento: Number(idTipoEvento),},
+          materia: {id_materia: Number(idMateria),},});
           alert("Evento creado");
           window.location.href = "/dashboard/admin/eventos";
-        } else {
-          const error = await res.json().catch(() => null);
-          alert(error?.message || "Error al crear evento");
         }
-      } catch (error) {
-        console.error(error);
-        alert("Error de conexión con el servidor");
+        catch (error) {
+          console.error(error);
+          alert("Error al crear evento");
+        }
       }
-    }
-
   return (
   <main className={layout.main}>
     <div className={layout.content}>
@@ -135,7 +124,6 @@ export default function CrearEvento() {
                       }
                     >
                       {carrera.nombre}
-
                     </option>
                   )
                 )}
@@ -253,13 +241,10 @@ export default function CrearEvento() {
             </div>
           </div>
           <div className={forms.row}>
-
             <div className={forms.field}>
-
               <label className={forms.label}>
                 Hora inicio
               </label>
-
               <input
                 type="time"
                 className={forms.input}
@@ -270,15 +255,11 @@ export default function CrearEvento() {
                   )
                 }
               />
-
             </div>
-
             <div className={forms.field}>
-
               <label className={forms.label}>
                 Hora fin
               </label>
-
               <input
                 type="time"
                 className={forms.input}
@@ -289,30 +270,18 @@ export default function CrearEvento() {
                   )
                 }
               />
-
             </div>
-
           </div>
-
           <div className={forms.actions}>
-
             <Button
               type="submit"
             >
-
               Crear evento
-
             </Button>
-
           </div>
-
         </form>
-
       </Card>
-
     </div>
-
   </main>
-
 );
 }

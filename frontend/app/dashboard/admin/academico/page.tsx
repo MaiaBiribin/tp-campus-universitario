@@ -7,9 +7,11 @@ import dashboard from "@/app/styles/dashboard.module.css";
 import styles from "./page.module.css";
 import Card from "@/app/components/card";
 import Button from "@/app/components/button";
-import { api } from "../../../api";
+import { getUsuariosHabilitados } from "@/app/services/usuarios";
+import {getInscripcionesPorMateria,inscribirUsuarios as inscribirUsuariosService} from "@/app/services/inscripciones";
 import { getCarreras } from "@/app/services/carreras";
 import { getMateriasPorCarrera } from "@/app/services/materias";
+
 
 export default function AcademicoAdmin() {
 
@@ -28,8 +30,7 @@ export default function AcademicoAdmin() {
       try {
         const data =await getCarreras();
         setCarreras(data);
-        const usuariosRes =await api("/usuarios/habilitados");
-        const usuariosData =await usuariosRes.json();
+        const usuariosData =await getUsuariosHabilitados();
         setUsuarios(usuariosData);
 
         if (data.length > 0) {
@@ -59,8 +60,7 @@ export default function AcademicoAdmin() {
   async function cargarUsuariosInscriptos(idMateria:number){
 
     try {
-      const res = await api(`/inscripciones/materia/${idMateria}`);
-      const data = await res.json();
+      const data =await getInscripcionesPorMateria(idMateria);
       setUsuariosInscriptos(
         data.map(
           (inscripcion:Inscripcion)=>
@@ -93,19 +93,9 @@ export default function AcademicoAdmin() {
       return;
     }
     try {
-      await api(
-        "/inscripciones",
-        {
-          method:"POST",
-          body:JSON.stringify({
-            id_materia:idMateria,
-            usuarios:usuariosSeleccionados
-          })
-        }
-      );
+      await inscribirUsuariosService(idMateria,usuariosSeleccionados);
       alert("Usuarios inscriptos");
 
-      // los saco de la lista sin recargar
       setUsuariosInscriptos(
         prev => [
           ...prev,

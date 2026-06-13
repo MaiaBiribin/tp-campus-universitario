@@ -2,7 +2,8 @@
 
 import {useRouter,useSearchParams} from "next/navigation";
 import Link from "next/link";
-import { api } from "../api";
+import {login,guardarSesion,obtenerPayload}
+from "../services/auth";
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
 import Button from "../components/button";
@@ -21,14 +22,7 @@ export default function Login() {
 
     const formData = new FormData(e.currentTarget);
     const datos = Object.fromEntries(formData.entries());
-
-    const response = await api("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({
-        mail: datos.mail,
-        contrasena: datos.contrasena,
-      }),
-    });
+    const response =await login(String(datos.mail),String(datos.contrasena));
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
@@ -37,10 +31,7 @@ export default function Login() {
     }
 
     const data = await response.json();
-
-    // guardar para el proxy
-    document.cookie =
-   `token=${data.access_token}; path=/`;
+    guardarSesion(data.access_token);
 
     // guardar para api.ts
     localStorage.setItem(
@@ -48,13 +39,7 @@ export default function Login() {
      data.access_token
     );
 
-    const payload = JSON.parse(
-      atob(
-    data.access_token.split(".")[1]
-    )
-    );
-    console.log("PAYLOAD COMPLETO:", payload);
-    console.log("TOKEN PAYLOAD:", payload);
+    const payload =obtenerPayload(data.access_token);
 
     alert(`Bienvenido ${payload.nombre}`);
 

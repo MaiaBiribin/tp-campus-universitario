@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { api } from "../api";
+import {registrarUsuario} from "../services/auth";
 import Link from "next/link";
 import Form from "../components/form";
 import Button from "../components/button";
@@ -17,18 +17,13 @@ export default function Registrarse() {
     const formData =new FormData(event.currentTarget);
     const datosUsuario =Object.fromEntries(formData.entries());
     try {
-      const response =await api("/auth/register",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            nombre:datosUsuario.nombre,
-            apellido:datosUsuario.apellido,
-            mail:datosUsuario.mail,
-            dni:datosUsuario.dni,
-            contrasena:datosUsuario.contrasena,
-          }),
-        }
-      );
+      const response =await registrarUsuario({
+        nombre: String(datosUsuario.nombre),
+        apellido:String(datosUsuario.apellido),
+        mail:String(datosUsuario.mail),
+        dni:String(datosUsuario.dni),contrasena:
+        String(datosUsuario.contrasena),
+      });
       if (response.ok) {
         alert("Solicitud creada. Esperá a que un administrador apruebe tu registro.");
         ruta.push("/login");
