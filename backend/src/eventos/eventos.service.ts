@@ -81,9 +81,10 @@ export class EventosService {
     if (inscriptos.length > 0) {
       await this.notificacionesService.crearNotificaciones(
         eventoGuardado.id_evento,
-        Number(data.materia?.id_materia),
         `Nuevo evento: ${data.titulo} el ${data.fecha} de ${data.horaInicio} a ${data.horaFin}`,
-        inscriptos.map(i => ({ id_usuario: i.usuario.id_usuario })),
+        inscriptos.map(i => ({
+          id_usuario: i.usuario.id_usuario,
+        })),
       );
     }
 
