@@ -28,8 +28,8 @@ const linksByRole = {
       href: "/dashboard/admin/eventos",
     },
     {
-      name: "Mapa y aulas",
-      href: "/dashboard/admin/aulas",
+      name: "Mapa aulas",
+      href: "/dashboard/mapa",
     },
     {
       name: "Académico",
@@ -52,7 +52,7 @@ const linksByRole = {
     },
     {
       name: "Mapa aulas",
-      href: "/dashboard/docente/mapa",
+      href: "/dashboard/mapa",
     },
     {
       name: "Notificaciones",
@@ -72,7 +72,7 @@ const linksByRole = {
     },
     {
       name: "Mapa aulas",
-      href: "/dashboard/estudiante/mapa",
+      href: "/dashboard/mapa",
     },
     {
       name: "Notificaciones",
