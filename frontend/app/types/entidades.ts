@@ -64,3 +64,9 @@ export interface Inscripcion {
   usuario:Usuario;
   materia:Materia;
 }
+
+export interface Notificacion{
+   
+  Contenido:string
+   leida:boolean
+}
