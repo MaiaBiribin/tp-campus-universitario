@@ -1,5 +1,5 @@
 "use client";
-import {getCarreras,getMateriasPorCarrera,getAulas} from "../../../../services/services";
+
 import {Carrera,Materia,Aula,} from "../../../../types/entidades";
 import { useEffect, useState } from "react";
 import layout from "@/app/styles/layout.module.css";
@@ -8,25 +8,21 @@ import Card from "@/app/components/card";
 import Button from "@/app/components/button";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { api } from "../../../../api";
+import { getCarreras } from "@/app/services/carreras";
+import { getAulas } from "@/app/services/aulas";
+import { getMateriasPorCarrera } from "@/app/services/materias";
 
 export default function CrearEvento() {
   const [fecha, setFecha] = useState("");
   const [horaInicio, setHoraInicio] = useState("");
   const [horaFin, setHoraFin] = useState("");
-  const [carreras, setCarreras] =
-    useState<Carrera[]>([]);
-  const [materias, setMaterias] =
-    useState<Materia[]>([]);
-  const [aulas, setAulas] =
-    useState<Aula[]>([]);
-  const [idCarrera, setIdCarrera] =
-    useState("");
-  const [idMateria, setIdMateria] =
-    useState("");
-  const [idAula, setIdAula] =
-    useState("");
-  const [idTipoEvento, setIdTipoEvento] =
-    useState("");
+  const [carreras, setCarreras] =useState<Carrera[]>([]);
+  const [materias, setMaterias] =useState<Materia[]>([]);
+  const [aulas, setAulas] =useState<Aula[]>([]);
+  const [idCarrera, setIdCarrera] =useState("");
+  const [idMateria, setIdMateria] =useState("");
+  const [idAula, setIdAula] =useState("");
+  const [idTipoEvento, setIdTipoEvento] =useState("");
 
   useEffect(() => {
     async function cargar() {
@@ -111,15 +107,11 @@ export default function CrearEvento() {
           onSubmit={handleSubmit}
           className={forms.form}
         >
-
           <div className={forms.row}>
-
             <div className={forms.field}>
-
               <label className={forms.label}>
                 Carrera
               </label>
-
               <select
                 className={forms.select}
                 value={idCarrera}
@@ -129,14 +121,11 @@ export default function CrearEvento() {
                   )
                 }
               >
-
                 <option value="">
                   Seleccionar carrera
                 </option>
-
                 {carreras.map(
                   (carrera) => (
-
                     <option
                       key={
                         carrera.id_carrera
@@ -145,24 +134,17 @@ export default function CrearEvento() {
                         carrera.id_carrera
                       }
                     >
-
                       {carrera.nombre}
 
                     </option>
-
                   )
                 )}
-
               </select>
-
             </div>
-
             <div className={forms.field}>
-
               <label className={forms.label}>
                 Materia
               </label>
-
               <select
                 className={forms.select}
                 value={idMateria}
@@ -172,14 +154,11 @@ export default function CrearEvento() {
                   )
                 }
               >
-
                 <option value="">
                   Seleccionar materia
                 </option>
-
                 {materias.map(
                   (materia) => (
-
                     <option
                       key={
                         materia.id_materia
@@ -188,28 +167,18 @@ export default function CrearEvento() {
                         materia.id_materia
                       }
                     >
-
                       {materia.nombre}
-
                     </option>
-
                   )
                 )}
-
               </select>
-
             </div>
-
           </div>
-
           <div className={forms.row}>
-
             <div className={forms.field}>
-
               <label className={forms.label}>
                 Tipo de evento
               </label>
-
               <select
                 className={forms.select}
                 value={idTipoEvento}
@@ -219,33 +188,24 @@ export default function CrearEvento() {
                   )
                 }
               >
-
                 <option value="">
                   Seleccionar tipo
                 </option>
-
                 <option value="1">
                   Clase
                 </option>
-
                 <option value="2">
                   Parcial
                 </option>
-
                 <option value="3">
                   Final
                 </option>
-
               </select>
-
             </div>
-
             <div className={forms.field}>
-
               <label className={forms.label}>
                 Aula
               </label>
-
               <select
                 className={forms.select}
                 value={idAula}
@@ -255,14 +215,11 @@ export default function CrearEvento() {
                   )
                 }
               >
-
                 <option value="">
                   Seleccionar aula
                 </option>
-
                 {aulas.map(
                   (aula) => (
-
                     <option
                       key={
                         aula.id_aula
@@ -271,28 +228,18 @@ export default function CrearEvento() {
                         aula.id_aula
                       }
                     >
-
                       {aula.nombre}
-
                     </option>
-
                   )
                 )}
-
               </select>
-
             </div>
-
           </div>
-
           <div className={forms.row}>
-
             <div className={forms.field}>
-
               <label className={forms.label}>
                 Fecha
               </label>
-
               <input
                 type="date"
                 className={forms.input}
@@ -303,11 +250,8 @@ export default function CrearEvento() {
                   )
                 }
               />
-
             </div>
-
           </div>
-
           <div className={forms.row}>
 
             <div className={forms.field}>

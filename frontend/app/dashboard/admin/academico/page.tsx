@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {Carrera,Materia,Usuario,Inscripcion} from "../../../types/entidades";
-import {getCarreras,getMateriasPorCarrera,} from "../../../services/services";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import styles from "./page.module.css";
 import Card from "@/app/components/card";
 import Button from "@/app/components/button";
 import { api } from "../../../api";
+import { getCarreras } from "@/app/services/carreras";
+import { getMateriasPorCarrera } from "@/app/services/materias";
 
 export default function AcademicoAdmin() {
 
@@ -144,10 +145,10 @@ export default function AcademicoAdmin() {
         <header className={dashboard.header}>
           <div>
             <h1>
-              Información académica
+              Asignación académica
             </h1>
             <p>
-              Visualizá carreras y materias.
+              Visualizá carreras y materias. Inscribí a los usuarios.
             </p>
           </div>
         </header>

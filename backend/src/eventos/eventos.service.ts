@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Evento } from './evento.entity';
+import { MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class EventosService {
@@ -63,28 +64,37 @@ export class EventosService {
     return await this.repo.save(nuevoEvento);
   }
 
-  async eventosUsuario(idUsuario:number){
+  async eventosUsuario(idUsuario: number) {
+
+  const hoy = new Date()
+    .toISOString()
+    .split("T")[0];
+
 
   return this.repo.find({
-    where:{
-      materia:{
-        inscripciones:{
-          usuario:{
-            id_usuario:idUsuario
+    where: {
+      fecha: MoreThanOrEqual(hoy),
+
+      materia: {
+        inscripciones: {
+          usuario: {
+            id_usuario: idUsuario
           }
         }
       }
     },
-    relations:{
-      materia:{
-        carrera:true,
-        inscripciones:{
-          usuario:true
+
+    relations: {
+      materia: {
+        carrera: true,
+        inscripciones: {
+          usuario: true
         }
       }
     },
-    order:{
-      fecha:"ASC"
+
+    order: {
+      fecha: "ASC"
     }
   });
 
