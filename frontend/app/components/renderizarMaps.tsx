@@ -29,8 +29,21 @@ const ConfigurarMapas: Record<Mapas, DatosMapa> = {
     src: "/mapaPB.png",
     nombreMapa: "plantaBaja",
     areas: [
-      { coords: "78,80,217,315", alt: "Aula 101", href: "/aulas/101" },
-      { coords: "218,70,371,338", alt: "Aula 102", href: "/aulas/102" },
+      { coords: "31,28,87,126", alt: "Aula 101", href: "/aulas/101" },
+     { coords: "88,27,149,135", alt: "Aula 102", href: "/aulas/102" },
+     { coords: "220,25,291,136", alt: "Aula 103", href: "/aulas/103" },
+     { coords: "292,18,349,139", alt: "Aula 104", href: "/aulas/104" },
+     { coords: "150,35,183,111", alt: "Baños Hombres", href: "/servicios/banos-hombres" },
+     { coords: "184,34,219,111", alt: "Baños Mujeres", href: "/servicios/banos-mujeres" },
+     { coords: "350,45,387,139", alt: "Escaleras", href: "/planta-alta" },
+     { coords: "16,126,67,201", alt: "Patio", href: "/patio" },
+     { coords: "16,202,82,303", alt: "Aula 105", href: "/aulas/105" },
+     { coords: "101,173,141,303", alt: "Recepción", href: "/administracion/recepcion" },
+     { coords: "142,204,191,303", alt: "Información / Administración", href: "/administracion/info" },
+     { coords: "192,205,252,307", alt: "Aula 106", href: "/aulas/106" },
+     { coords: "253,169,324,307", alt: "Aula 107", href: "/aulas/107" },
+     { coords: "325,187,388,307", alt: "Aula 108", href: "/aulas/108" },
+     { coords: "69,283,113,315", alt: "Entrada Principal", href: "/entrada" }
     ],
   },
 
@@ -39,7 +52,18 @@ const ConfigurarMapas: Record<Mapas, DatosMapa> = {
     src: "/mapaP1.png",
     nombreMapa: "primerPiso",
     areas: [
-      { coords: "31,35,87,130", alt: "Aula 201", href: "/aulas/201" },
+        { coords: "31,35,87,130", alt: "Aula 201", href: "/aulas/201" },
+        { coords: "87,31,148,137", alt: "Aula 202", href: "/aulas/202" },
+        { coords: "220,27,291,146", alt: "Aula 203", href: "/aulas/203" },
+        { coords: "292,21,349,151", alt: "Aula 204", href: "/aulas/204" },
+        { coords: "149,38,183,113", alt: "Baños Hombres", href: "/servicios/banos-hombres" },
+        { coords: "184,36,219,113", alt: "Baños Mujeres", href: "/servicios/banos-mujeres" },
+        { coords: "350,47,387,143", alt: "Escaleras", href: "/planta-baja" },
+        { coords: "14,171,96,319", alt: "Aula 208", href: "/aulas/208" },
+        { coords: "116,210,184,316", alt: "Información / Administración", href: "/administracion/info" },
+        { coords: "184,208,249,316", alt: "Aula 207", href: "/aulas/207" },
+        { coords: "249,203,328,316", alt: "Aula 206", href: "/aulas/206" },
+        { coords: "329,186,388,316", alt: "Aula 205", href: "/aulas/205" }
     ],
   },
 
@@ -48,7 +72,16 @@ const ConfigurarMapas: Record<Mapas, DatosMapa> = {
     src: "/mapaP2.png",
     nombreMapa: "segundoPiso",
     areas: [
-      { coords: "53,35,157,137", alt: "Aula 301", href: "/aulas/301" },
+        { coords: "53,35,157,137", alt: "Aula 301", href: "/aulas/301" },
+        { coords: "228,27,338,151", alt: "Aula 302", href: "/aulas/302" },
+        { coords: "158,38,191,113", alt: "Baños Hombres", href: "/servicios/banos-hombres" },
+        {coords: "192,36,226,113", alt: "Baños Mujeres", href: "/servicios/banos-mujeres" },
+        { coords: "339,47,376,143", alt: "Escaleras", href: "/planta-alta" },
+        { coords: "31,171,115,316", alt: "Aula 305", href: "/aulas/305" },
+        { coords: "116,197,177,307", alt: "SUM", href: "/sum" },
+        { coords: "203,191,279,316", alt: "Aula 304", href: "/aulas/304" },
+        { coords: "280,218,376,316", alt: "Aula 303", href: "/aulas/303" },
+        { coords: "116,310,200,344", alt: "Balcón", href: "/balcon" }
     ],
   },
 };
@@ -81,9 +114,10 @@ export default function RenderizarMapas() {
       <Image
         src={edificio.src}
         alt={edificio.titulo}
-        width={800}
-        height={500}
+        width={400}
+        height={240}
         useMap={`#${edificio.nombreMapa}`}
+        style={{width:'400px',height:'240px'}}
       />
 
       <map name={edificio.nombreMapa}>
