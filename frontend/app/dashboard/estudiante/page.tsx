@@ -36,8 +36,8 @@ export default function DashboardEstudiante() {
         <div className={dashboard.eventGrid}>
 
           <ProximoEvento
-            rutaBase="/dashboard/estudiante/eventos"
-            label="Próximo evento"
+          rutaBase="/dashboard/eventos"
+          label="Próximo evento"
           />
 
         </div>

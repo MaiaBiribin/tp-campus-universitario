@@ -49,11 +49,11 @@ export default function DashboardDocente() {
               Próximo evento</h2>
               <div className={dashboard.eventGrid}>
                 <ProximoEvento
-                rutaBase="/dashboard/docente/eventos"
+                rutaBase="/dashboard/eventos"
                 label="Clase asignada"
                 />
                 </div>
           </section>
           </>
         );
-    }
+      }

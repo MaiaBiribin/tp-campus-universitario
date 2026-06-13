@@ -48,7 +48,7 @@ const linksByRole = {
     },
     {
       name: "Mis eventos",
-      href: "/dashboard/docente/eventos",
+      href: "/dashboard/eventos",
     },
     {
       name: "Mapa aulas",
@@ -68,7 +68,7 @@ const linksByRole = {
     },
     {
       name: "Mis eventos",
-      href: "/dashboard/estudiante/eventos",
+      href: "/dashboard/eventos",
     },
     {
       name: "Mapa aulas",
