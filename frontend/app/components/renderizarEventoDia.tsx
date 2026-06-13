@@ -2,14 +2,39 @@
 
 import { useState,useEffect } from "react";
 import { Evento } from "../types/entidades";
-import { Usuario } from "../types/entidades";
 import { api } from "../api";
+
+
 
 
 export default function EventosDia(){
    const [eventoHoy,seteventoHoy]=useState<Evento | null>(null)
-   const [usuario,setusuario]=useState<Usuario | null>(null)
+  
    const [cargando, setCargando] = useState<boolean>(true);
+  
+   useEffect(()=>{
+      async function EventoDeHoy(){
+        try{ 
+        setCargando(true)
+         //la ruta correspondiente de buscar el evento del dia.
+         const res= await api("")
+
+         if(!res.ok){
+          throw new Error("error al buscar tus eventos")
+         }
+
+         const evento:Evento=await res.json()
+         seteventoHoy(evento)
+        }catch(error){
+           console.error("error al cargar el evento de hoy",error)
+        }finally{
+          setCargando(false)
+        }
+      }
+      EventoDeHoy()
+   },[])
+  
+    /* 
    async function buscarUsario(){
      try{  
      const res= await api(`/usuarios`)
@@ -42,21 +67,14 @@ export default function EventosDia(){
      }
     
    }
-   
-useEffect(() => {
-  buscarUsario(); 
-}, [])
+   */
+
 
 
   if (cargando) return <p>Cargando tus datos...</p>;
-  if (!usuario) return <p>No pudimos autenticar tu usuario.</p>;
 
     return(
         <div>
-            <div>
-            <h1>hola,{usuario?.nombre},{usuario?.apellido }</h1>
-            </div>
-
             <div>
                 <h2>tu evento del dia:</h2>
                 {eventoHoy?(
