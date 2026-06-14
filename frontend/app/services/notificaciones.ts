@@ -5,7 +5,7 @@ import { api } from "../api";
 export async function TraerTodasNotificaciones(
  
 ){
-    const res= await api(``)
+    const res= await api(`mis-notificaciones`)
 
     if(!res.ok){
         console.log(await res.text()
@@ -18,32 +18,33 @@ export async function TraerTodasNotificaciones(
 
 
 export async function NotificacionLeida(
- leido:boolean
+  id_notificacion:number,
+    leido:boolean
 ){
-    const res= await api(`/${leido}`,{
-        method:"Patch"
+    const res= await api(`${id_notificacion}/${leido}`,{
+        method:"PATCH"
     });
 
    if(!res.ok){
      throw new Error("Error al cambiar el estado de la notificacion")
    }
 
-  return res
+  return await res.json()
 
 }
 
 
 export async function NotificacionLeidas(
- leido:boolean
+ 
 ){
-    const res= await api(`/${leido}`,{
-        method:"Patch"
+    const res= await api(`marcar-todas-leidas'`,{
+        method:"PATCH",
     });
 
    if(!res.ok){
      throw new Error("Error al cambiar el estado de la notificacion")
    }
 
-  return res
+  return await res.json()
 
 }

@@ -1,5 +1,5 @@
 "use client";
-import renderizarNotifiaciones from "@/app/components/renderizarNotificaciones"
+import RenderizarNotifiaciones from "@/app/components/renderizarNotificaciones";
 
 
 export default function Notificaciones(){
@@ -14,7 +14,7 @@ export default function Notificaciones(){
                 </header>
 
                 <div>
-                    <renderizarNotifiaciones />
+                    <RenderizarNotifiaciones/>
                 </div>
             </main>
 
