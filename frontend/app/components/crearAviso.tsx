@@ -10,7 +10,6 @@ type Props = {
 
 export default function CrearAviso({ idEvento, onCreated }: Props) {
   const [mensaje, setMensaje] = useState("");
-
   async function enviar() {
     if (!mensaje) return;
 
