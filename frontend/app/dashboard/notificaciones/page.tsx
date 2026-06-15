@@ -1,6 +1,6 @@
 "use client";
 import RenderizarNotifiaciones from "@/app/components/renderizarNotificaciones";
-
+import layout from "@/app/styles/layout.module.css";
 
 export default function Notificaciones(){
 
@@ -8,14 +8,8 @@ export default function Notificaciones(){
 
     return(
         <div>
-            <main>
-                <header>
-                    <h1>Pestaña de Notificaciones:</h1>
-                </header>
-
-                <div>
+            <main className={layout.main}>
                     <RenderizarNotifiaciones/>
-                </div>
             </main>
 
         </div>
