@@ -26,7 +26,7 @@ La aplicación frontend se encarga de:
 Clonar el repositorio:
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/MaiaBiribin/tp-campus-universitario.git
 ```
 
 Entrar al frontend:

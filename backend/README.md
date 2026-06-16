@@ -53,7 +53,7 @@ El proyecto utiliza relaciones con TypeORM.
 Clonar el repositorio:
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/MaiaBiribin/tp-campus-universitario.git
 ```
 
 Entrar al backend:

@@ -5,13 +5,12 @@
 - El estudiante debe registrarse ingresando nombre, apellido, mail, DNI y contraseña.
 - El sistema debe generar una solicitud de registro en estado pendiente.
 - El sistema no debe permitir el inicio de sesión hasta que el administrador apruebe el registro.
-- El sistema debe permitir el inicio de sesión.
-- El sistema debe permitir el cierre de sesión.
+- El sistema debe permitir el inicio de sesión y el cierre de sesión.
 
 ---
 
 ## 🏫 Gestión de aulas
-- El sistema debe permitir editar, crear y eliminar aulas.
+- El sistema debe permitir editar, asignar y eliminar aulas.
 - El sistema debe permitir visualizar la ubicación de las aulas.
 
 ---
@@ -31,7 +30,6 @@
 ## 🎓 Funcionalidades para estudiantes
 **Objetivo:** consultar rápidamente dónde tiene que estar, cuándo y recibir cambios.
 - El estudiante debe poder visualizar las aulas asignadas a sus clases o exámenes.
-- El estudiante debe poder consultar horarios y fechas.
 - El estudiante debe poder visualizar el mapa de aulas.
 - El estudiante debe recibir notificaciones ante cambios o avisos importantes.
 El estudiante debe visualizar:
@@ -63,14 +61,12 @@ El estudiante debe visualizar:
 
 ## 🛠️ Funcionalidades para administradores
 - El administrador debe gestionar y habilitar usuarios.
-- El administrador debe gestionar y poder crear aulas.
-- El administrador debe asignar aulas a eventos.
-- El administrador debe crear eventos académicos.
+- El administrador debe gestionar aulas.
+- El administrador debe crear eventos académicos y asignarles un aula.
 - El administrador debe administrar la información general del sistema.
 - El administrador debe visualizar accesos a:
   - solicitudes de registro
   - gestión de eventos, aulas y usuarios
-  - notificaciones del sistema
 - El administrador debe poder:
   - visualizar solicitudes pendientes
   - rechazar y aprobar registros
