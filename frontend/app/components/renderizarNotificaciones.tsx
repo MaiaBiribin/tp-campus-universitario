@@ -2,13 +2,14 @@
 
 import { useState,useEffect } from "react";
 import { Notificacion } from "../types/entidades";
-
 import{
    TraerTodasNotificaciones,
    NotificacionLeida,
    NotificacionLeidas,
 } from  "../services/notificaciones"
-
+import cards from "@/app/styles/cards.module.css";
+import Card from "@/app/components/ui/card";
+import Button from "@/app/components/ui/button";
 
 export default function RenderizarNotifiaciones(){
     const [notificiaciones,setNotificaciones]= useState<Notificacion[]>([])
@@ -31,7 +32,7 @@ export default function RenderizarNotifiaciones(){
    
    const handleMarcarNotificacion=async(Id:number)=>{
       try{  
-     const notificacionLeida= await NotificacionLeida(Id,true)
+     const notificacionLeida =await NotificacionLeida(Id)
       setNotificaciones((prev)=>prev.map((N)=>(N.id_notificacion === Id ? notificacionLeida:N)))
       }catch(error){
         console.error("no se pudo marcar la notificacion",error)
@@ -48,65 +49,93 @@ export default function RenderizarNotifiaciones(){
    }
     const tienePendientes = notificiaciones.some((notif) => !notif.leida);
    if(cargando) return <p>Cargando Notifiaciones</p>
-    return(
+    return (
+
     <div>
-      <main>
-        <div>
-        <header>
-            <h1>Mis Notifiaciones:</h1>
-        </header>
-        </div>
+
       {tienePendientes && (
-          <div style={{ marginBottom: "15px" }}>
-            <button
-              onClick={handleMarcarNotificaciones}
-              style={{
-                padding: "8px 12px",
-                backgroundColor: "#15105a",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-                borderRadius: "4px",
-              }}
-            >
-              Marcar todas como leídas
-            </button>
-          </div>
-        )}
-       <div>
-        <ul>
-         {notificiaciones.map((notif)=>( 
-            <li
-             key={notif.id_notificacion}
-             style={{
-                padding: "15px",
-                margin: "10px 0",
-                border: "1px solid #0f0303",
-                borderRadius: "6px",
-                backgroundColor: notif.leida ? "#f9f9f9" : "#e3f2fd", // Fondo celeste si no está leída
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+
+        <div>
+          <Button
+            onClick={() => handleMarcarNotificaciones()}
+          >
+            Marcar todas como leídas
+          </Button>
+        </div>
+      )}
+
+      <div className={cards.grid}>
+        {notificiaciones.map(notif => (
+
+          <Card
+            key={notif.id_notificacion}
+          >
+
             <div>
-                <p>{notif.mensaje}</p>
+
+
+              <h3>
+
+                {notif.evento?.titulo ?? "Aviso"}
+
+              </h3>
+
+
+
+              <p>
+                {notif.mensaje}
+              </p>
+
+              {notif.evento && (
+
+                <>
+
+                  <p>
+                    📅 {notif.evento.fecha}
+                  </p>
+
+                  <p>
+                    ⏰ {notif.evento.horaInicio}
+                  </p>
+
+                </>
+
+              )}
+
+              <p>
+
+                {new Date(
+                  notif.fecha_creacion
+                ).toLocaleDateString()}
+
+              </p>
+
+              {!notif.leida && (
+
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleMarcarNotificacion(
+                      notif.id_notificacion
+                    )
+                  }
+                >
+
+                  Marcar leída
+
+                </Button>
+
+              )}
 
             </div>
-            
-            {!notif.leida && (
-                    <button
-                      onClick={() => handleMarcarNotificacion(notif.id_notificacion)}
-                      style={{ padding: "6px 12px", cursor: "pointer" }}
-                    >
-                      Leída
-                    </button>
-                  )}
-            </li>
-         ))}
-        </ul>
-       </div>
-      </main>
+
+          </Card>
+
+        ))}
+
+      </div>
+
     </div>
-   )
+
+  );
 }

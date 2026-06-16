@@ -32,56 +32,12 @@ La arquitectura se compone de:
 ```text
 Usuario
    ↓
-Frontend (NextJS)
+Frontend
    ↓ HTTP/API REST
-Backend (NestJS)
+Backend
    ↓
 PostgreSQL
 ```
 
 ---
 
-### 💻 Frontend
-
-- NextJS
-- React
-- TypeScript
-
-El frontend es responsable de:
-
-- Mostrar la interfaz gráfica.
-- Gestionar navegación y vistas.
-- Realizar validaciones básicas de formularios.
-- Consumir la API del backend.
-- Manejar la sesión del usuario.
-- Mostrar información de aulas, eventos, avisos y notificaciones.
-
----
-
-### 🛠️ Backend
-
-- NestJS
-- Node.js
-- TypeScript
-
-El backend es responsable de:
-
-- Implementar la lógica de negocio.
-- Gestionar autenticación y autorización.
-- Validar datos.
-- Manejar roles de usuario.
-- Gestionar aulas, eventos, avisos y notificaciones.
-- Conectarse con la base de datos.
-- Exponer endpoints REST.
-
----
-
-### 🗄️ Base de Datos
-- PostgreSQL
-
-La base de datos es responsable de:
-
-- Almacenar información persistente.
-- Gestionar relaciones entre entidades.
-- Mantener integridad de los datos.
-- Permitir consultas de disponibilidad y horarios.

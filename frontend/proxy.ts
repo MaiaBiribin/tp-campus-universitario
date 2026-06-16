@@ -30,13 +30,10 @@ export function proxy(request: NextRequest) {
 
   const rol = payload.rol as Role;
 
-  const rutasPermitidas = ROLE_PERMISSIONS[rol];
-  const rutasCompartidas = [
-    "/dashboard/mapa",
-    "/dashboard/eventos",
-  ];
-  const permitido =rutasCompartidas.some(r => pathname.startsWith(r)) ||
-  ROLE_PERMISSIONS[rol]?.some(r => pathname.startsWith(r));
+  const permitido =
+  ROLE_PERMISSIONS[rol]?.some(r =>
+    pathname.startsWith(r)
+  );
 
   if (!permitido) {
     return NextResponse.redirect(

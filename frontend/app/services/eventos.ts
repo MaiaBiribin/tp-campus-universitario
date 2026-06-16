@@ -2,11 +2,34 @@ import { api } from "../api";
 import { Evento } from "../types/entidades";
 
 export async function getEventos() {
-  const res =await api("/eventos");
+  const res = await api("/eventos");
+
   if (!res.ok) {
     throw new Error("Error cargando eventos");
   }
-  return res.json();
+
+  const data: Evento[] = await res.json();
+  const ahora = new Date();
+
+  return data
+    .filter((ev) => {
+      const fechaHora = new Date(
+        `${ev.fecha}T${ev.horaInicio}`
+      );
+
+      return fechaHora >= ahora;
+    })
+    .sort((a, b) => {
+
+      const fechaA = new Date(
+        `${a.fecha}T${a.horaInicio}`
+      ).getTime();
+      const fechaB = new Date(
+        `${b.fecha}T${b.horaInicio}`
+      ).getTime();
+
+      return fechaA - fechaB;
+    });
 }
 
 export async function getEventoPorId(id: number) {

@@ -1,42 +1,155 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "@/app/api";
+import { useEffect,useState } from "react";
+import { Evento } from "../types/entidades";
 
-type Props = {
-  idEvento: number;
-  onCreated?: () => void;
-};
+import { getEventos } from "../services/eventos";
+import { crearAviso } from "../services/avisos";
 
-export default function CrearAviso({ idEvento, onCreated }: Props) {
-  const [mensaje, setMensaje] = useState("");
-  async function enviar() {
-    if (!mensaje) return;
+import forms from "@/app/styles/forms.module.css";
+import Button from "@/app/components/ui/button";
+import Card from "@/app/components/ui/card";
 
-    await api("/avisos", {
-      method: "POST",
-      body: JSON.stringify({
-        id_evento: idEvento,
-        mensaje,
-        tipo: "info",
-      }),
-    });
 
-    setMensaje("");
-    onCreated?.();
-  }
+export default function CrearAviso(){
+const [eventos,setEventos] =useState<Evento[]>([]);
+const [idEvento,setIdEvento] =useState("");
+const [mensaje,setMensaje] =useState("");
+const [cargando,setCargando] =useState(true);
 
-  return (
-    <div>
-      <input
-        value={mensaje}
-        onChange={(e) => setMensaje(e.target.value)}
-        placeholder="Ej: Llego tarde / Clase virtual"
-      />
+useEffect(()=>{
 
-      <button onClick={enviar}>
-        Publicar aviso
-      </button>
-    </div>
-  );
+async function cargar(){
+
+try{
+
+const data = await getEventos();
+
+const futuros = data
+.filter((ev:Evento)=>{
+ const fecha =
+ new Date(
+ `${ev.fecha}T${ev.horaInicio}`
+ );
+
+ return fecha >= new Date();
+})
+.sort((a:Evento,b:Evento)=>{
+
+const fechaA =
+new Date(
+`${a.fecha}T${a.horaInicio}`
+).getTime();
+
+const fechaB =
+new Date(
+`${b.fecha}T${b.horaInicio}`
+).getTime();
+
+return fechaA-fechaB;
+
+});
+setEventos(futuros);
+
+}catch(error){
+console.error(error);
+}
+finally{
+setCargando(false);
+}
+}
+cargar();
+},[]);
+async function handleSubmit(
+e:React.FormEvent
+){
+e.preventDefault();
+if(!idEvento){
+alert("Seleccioná un evento");
+return;
+}
+if(!mensaje){
+alert("Escribí un mensaje");
+return;
+}
+
+try{
+await crearAviso(
+mensaje,
+Number(idEvento)
+);
+alert("Aviso creado");
+setMensaje("");
+setIdEvento("");
+}catch(error){
+console.error(error);
+alert("Error creando aviso");
+}
+}
+if(cargando)
+return <p>Cargando eventos...</p>;
+
+return (
+<Card>
+<form
+onSubmit={handleSubmit}
+className={forms.form}
+>
+<div className={forms.row}>
+<div className={forms.field}>
+<label className={forms.label}>
+Evento
+</label>
+<select
+className={forms.select}
+value={idEvento}
+onChange={
+e=>setIdEvento(e.target.value)
+}
+>
+<option value="">
+Seleccionar evento
+</option>
+{
+eventos.map(ev=>(
+<option
+key={ev.id_evento}
+value={ev.id_evento}
+>
+{ev.titulo}
+{" - "}
+{ev.fecha}
+{" - "}
+{ev.horaInicio}
+</option>
+))
+}
+</select>
+</div>
+</div>
+<div className={forms.row}>
+<div className={forms.field}>
+<label className={forms.label}>
+Mensaje
+</label>
+<textarea
+className={forms.input}
+value={mensaje}
+onChange={
+e=>setMensaje(e.target.value)
+}
+placeholder="Escribí el aviso..."
+rows={5}
+/>
+</div>
+</div>
+<div className={forms.actions}>
+<Button type="submit">
+Crear aviso
+</Button>
+</div>
+</form>
+</Card>
+);
+
 }

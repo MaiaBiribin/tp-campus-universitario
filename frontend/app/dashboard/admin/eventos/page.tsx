@@ -6,7 +6,7 @@ import dashboard from "@/app/styles/dashboard.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import table from "@/app/styles/table.module.css";
 import { Evento } from "../../../types/entidades";
-import { getEventos } from "@/app/services/eventos";
+import { getEventos, eliminarEvento as borrarEvento } from "@/app/services/eventos";
 
 export default function EventosAdmin() {
   const [eventos, setEventos] = useState<Evento[]>([]);
@@ -33,7 +33,7 @@ export default function EventosAdmin() {
 
   async function eliminarEvento(id: number) {
     try {
-      await eliminarEvento(id);
+      await borrarEvento(id);
 
       setEventos((prev) =>
         prev.filter((e) => e.id_evento !== id));

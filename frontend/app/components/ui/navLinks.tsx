@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "@/app/styles/dashboard.module.css";
+import { useEffect,useState } from "react";
+import { CantidadNotificacionesSinLeer } from "@/app/services/notificaciones";
 
 type Role =
   | "admin"
@@ -55,8 +57,8 @@ const linksByRole = {
       href: "/dashboard/mapa",
     },
     {
-      name: "Notificaciones",
-      href: "/dashboard/docente/notificaciones",
+      name: "Avisos",
+      href: "/dashboard/docente/avisos",
     },
 
   ],
@@ -75,47 +77,72 @@ const linksByRole = {
       href: "/dashboard/mapa",
     },
     {
-      name: "Notificaciones",
-      href: "/dashboard/estudiante/notificaciones",
-    },
+    name: "Notificaciones",
+    href: "/dashboard/estudiante/notificaciones",
+  },
   ],
-
 };
 
 export default function NavLinks({
   role,
 }: Props) {
 
-  const pathname =
-    usePathname();
+  const pathname = usePathname();
+  const [pendientes,setPendientes] = useState(0);
 
-  const links =
-    linksByRole[role];
+  useEffect(()=>{
+
+    async function cargarPendientes(){
+      try{
+        const cantidad = await CantidadNotificacionesSinLeer();
+        setPendientes(cantidad);
+      }catch(error){
+        console.error(
+          "Error cargando notificaciones",
+          error
+        );
+      }
+    }
+    if(role === "estudiante"){
+      cargarPendientes();
+    }
+  },[role]);
+
+
+  const links = linksByRole[role].map((link)=>{
+    if(
+      link.href === "/dashboard/estudiante/notificaciones"
+    ){
+      return {
+        ...link,
+        name:
+          pendientes > 0
+          ? `Notificaciones (${pendientes})`
+          : "Notificaciones"
+      };
+    }
+    return link;
+  });
+
 
   return (
-
     <nav className={styles.nav}>
-
-      {links.map((link) => (
-
+      {links.map((link)=>(
         <Link
           key={link.href}
           href={link.href}
-          className={`${styles.link}
-          ${
-            pathname === link.href
+          className={
+            `${styles.link}
+            ${
+              pathname === link.href
               ? styles.active
               : ""
-          }`}
+            }`
+          }
         >
-
           {link.name}
-
         </Link>
-
       ))}
-
     </nav>
-
   );
 }

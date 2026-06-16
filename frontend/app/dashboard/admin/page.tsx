@@ -77,35 +77,30 @@ export default function DashboardAdmin() {
         </h2>
         <div className={dashboard.quickGrid}>
           {[
-            [
-              "Crear evento",
-              "Crear clases, parciales o finales",
-              "/dashboard/admin/eventos/nuevo",
-            ],
-            [
-              "Solicitudes",
-              "Revisar registros pendientes",
-              "/dashboard/admin/solicitudes",
-            ],
-            [
-              "Mapa de aulas",
-              "Visualizar distribución del edificio",
-              "/dashboard/admin/aulas",
-            ],
-          ].map(([titulo, desc, ruta]) => (
-            <Link
-              key={ruta}
-              href={ruta}
-              className={cards.quickCard}
-            >
-              <h3>
-                {titulo}
-              </h3>
-              <p>
-                {desc}
-              </p>
-            </Link>
-          ))}
+  {
+    titulo: "Crear evento",
+    desc: "Crear clases, parciales o finales",
+    ruta: "/dashboard/admin/eventos/nuevo",
+  },
+  {
+    titulo: "Académico",
+    desc: "Gestionar carreras y materias",
+    ruta: "/dashboard/admin/academico",
+  },
+].map((item) => (
+  <Link
+    key={item.ruta}
+    href={item.ruta}
+    className={cards.quickCard}
+  >
+    <h3>
+      {item.titulo}
+    </h3>
+    <p>
+      {item.desc}
+    </p>
+  </Link>
+))}
         </div>
       </section>
     </>
