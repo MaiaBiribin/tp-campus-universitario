@@ -1,4 +1,5 @@
 import { api } from "../api";
+import { Inscripcion } from "../types/entidades";
 
 export async function getInscripcionesPorMateria(
   idMateria: number
@@ -43,4 +44,15 @@ export async function inscribirUsuarios(
   }
 
   return res.json();
+}
+
+export function obtenerIdsUsuariosInscriptos(
+  inscripciones: Inscripcion[]
+): number[] {
+
+  return inscripciones.map(
+    inscripcion =>
+      inscripcion.usuario.id_usuario
+  );
+
 }
