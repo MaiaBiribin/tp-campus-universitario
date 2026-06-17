@@ -43,8 +43,6 @@ import { AvisosModule } from './avisos/avisos.module';
     RolesModule,
     CarrerasModule,
     MateriasModule,
-    CarrerasModule,
-    MateriasModule,
     InscripcionesModule,
     NotificacionesModule,
     AvisosModule,

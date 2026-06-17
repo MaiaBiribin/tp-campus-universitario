@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Inscripcion } from "./inscripcion.entity";
@@ -39,7 +39,7 @@ async crear(dto:CrearInscripcionDto){
 
 
  if(!materia){
-   throw new Error("Materia no encontrada");
+   throw new NotFoundException('Materia no encontrada');
  }
 
 
