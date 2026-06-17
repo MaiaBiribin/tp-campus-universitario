@@ -1,26 +1,46 @@
 @startuml der
 
+skinparam linetype ortho
+
+' ─── usuarios y roles ───
+
 entity Rol {
-    * id_rol : int (PK)
-    --
-    * nombre : varchar(50)
+  * id_rol : int (PK)
+  --
+  * nombre : varchar(50)
 }
 
 entity Usuario {
-  * id_usuario : int
+  * id_usuario : int (PK)
   --
   nombre : varchar
   apellido : varchar
-  dni : int
+  dni : varchar
   mail : varchar
   contrasena : varchar
+  estado : enum
   id_rol : int (FK)
-  habilitado : boolean
-  
 }
 
+' ─── carreras y materias ───
+
+entity Carrera {
+  * id_carrera : int (PK)
+  --
+  nombre : varchar
+}
+
+entity Materia {
+  * id_materia : int (PK)
+  --
+  nombre : varchar
+  id_carrera : int (FK)
+}
+
+' ─── aula y eventos ───
+
 entity Aula {
-  * id_aula : int
+  * id_aula : int (PK)
   --
   nombre : varchar
   capacidad : int
@@ -28,55 +48,69 @@ entity Aula {
   ubicacion : varchar
 }
 
+entity TipoEvento {
+  * id_tipo_evento : int (PK)
+  --
+  nombre : varchar(50)
+}
+
 entity Evento {
-  * id_evento : int
+  * id_evento : int (PK)
   --
   titulo : varchar
-  tipo : varchar
   fecha : date
   horaInicio : time
   horaFin : time
   estado : varchar
+  id_aula : int (FK)
+  id_tipo_evento : int (FK)
+  id_materia : int (FK)
 }
 
-entity Notificacion {
-  * id_notificacion : int
+' ─── inscripciones ───
+
+entity Inscripcion {
+  * id_inscripcion : int (PK)
   --
-  mensaje : varchar
-  fecha : datetime
-  leida : boolean
+  id_usuario : int (FK)
+  id_materia : int (FK)
 }
+
+' ─── avisos ───
 
 entity Aviso {
-  * id_aviso : int
+  * id_aviso : int (PK)
   --
   mensaje : varchar
-  fecha : datetime
+  fecha_creacion : datetime
+  id_usuario_creador : int (FK)
+  id_evento : int (FK)
 }
 
-' RELACIONES
+' ─── notificaciones ───
 
-note right of Rol
-Valores posibles:
-- User
-- Admin
-- Teacher
-end note
+entity Notificacion {
+  * id_notificacion : int (PK)
+  --
+  id_usuario : int (FK)
+  id_evento : int (FK)
+  mensaje : varchar
+  leida : boolean
+  fecha_creacion : datetime
+}
 
-note right of Usuario
-Usuario (muchos) → Rol (uno)
-  rol: int (FK)         id_rol: int (PK)
-end note
+' ─── relaciones ───
 
-Usuario ||--o{ Evento : responsable
-Aula ||--o{ Evento : asignada
-
+Rol ||--o{ Usuario : tiene
+Carrera ||--o{ Materia : contiene
+Usuario ||--o{ Inscripcion : realiza
+Materia ||--o{ Inscripcion : recibe
+Aula ||--o{ Evento : asigna
+TipoEvento ||--o{ Evento : clasifica
+Materia ||--o{ Evento : pertenece
+Evento ||--o{ Aviso : contiene
+Usuario ||--o{ Aviso : crea
 Usuario ||--o{ Notificacion : recibe
 Evento ||--o{ Notificacion : genera
-
-Usuario ||--o{ Aviso : crea
-Evento ||--o{ Aviso : contiene
-
-Usuario ||--o{ Rol : asignada
 
 @enduml
