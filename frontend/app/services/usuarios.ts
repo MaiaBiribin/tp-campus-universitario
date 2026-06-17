@@ -1,4 +1,5 @@
 import { api } from "../api";
+import { Usuario } from "../types/entidades";
 
 export async function getUsuariosHabilitados() {
   const res =await api("/usuarios/habilitados");
@@ -38,3 +39,12 @@ export async function rechazarUsuario(id:number) {
   }
 }
 
+export function obtenerUsuariosDisponibles(
+  usuarios: Usuario[],
+  usuariosInscriptos: number[]
+) {
+  return usuarios.filter(
+    usuario =>
+      !usuariosInscriptos.includes(usuario.id_usuario)
+  );
+}
