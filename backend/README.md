@@ -124,16 +124,18 @@ Permite:
 
 ---
 
-## 👥 Roles soportados
+## 🧪 Datos de prueba
 
-### Administrador
+Luego de levantar el sistema se puede ingresar con:
 
-- Gestiona sistema.
+- Administrador:
+mail: Admin@campus.com
+contraseña: SoyAdmin1
 
-### Docente
+- Docente:
+mail: Docente@campus.com
+contraseña: SoyDocente2
 
-- Gestiona avisos.
-
-### Estudiante
-
-- Consulta información.
+- Estudiante:
+mail: Estudiante@campus.com
+contraseña: SoyEstudiante3
