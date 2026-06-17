@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notificacion } from './notificacion.entity';
@@ -38,11 +38,13 @@ export class NotificacionesService {
     });
   }
 
-  //  marca como leída
-  async marcarLeida(idNotificacion: number): Promise<void> {
-    await this.notificacionesRepository.update(idNotificacion, {
-      leida: true,
-    });
+  async marcarLeida(idNotificacion: number): Promise<Notificacion> {
+    const notificacion = await this.notificacionesRepository.findOneBy({ id_notificacion: idNotificacion });
+    if (!notificacion) {
+      throw new NotFoundException(`Notificación con ID ${idNotificacion} no encontrada`);
+    }
+    notificacion.leida = true;
+    return this.notificacionesRepository.save(notificacion);
   }
 
   async marcarTodasLeidas(idUsuario: number): Promise<void> {

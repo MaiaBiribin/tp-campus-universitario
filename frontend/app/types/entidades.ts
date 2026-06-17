@@ -65,20 +65,19 @@ export interface Inscripcion {
   materia:Materia;
 }
 
-export interface Aviso{
-  id_aviso:number
-  mensaje:string
-  fecha_creacion:string
-  creador:string
-  evento:Evento
+export interface Aviso {
+  id_aviso: number;
+  mensaje: string;
+  fecha_creacion: string;
+  usuarioCreador: Usuario;
+  evento: Evento;
 }
 
 
-export interface Notificacion{
-   id_notificacion:number
-  mensaje:string
-  fechaCreacion:string
-   leida:boolean
-   aviso?:Aviso
-   evento?:Evento
+export interface Notificacion {
+  id_notificacion:number;
+  mensaje:string;
+  fecha_creacion:string;
+  leida:boolean;
+  evento?:Evento;
 }

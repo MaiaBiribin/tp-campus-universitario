@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+
+const ROL_ALUMNO_ID = 3;
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; // Repository es la clase de TypeORM que tiene todos los métodos para hablar con la DB
 import { Usuario } from './usuario.entity';
@@ -33,12 +35,12 @@ export class UsuariosService {
       nombre,
       apellido,
       estado: EstadoUsuario.PENDIENTE,
-      rol: { id_rol: 3 }, // 3 = Alumno
+      rol: { id_rol: ROL_ALUMNO_ID },
     });
     return this.usuariosRepository.save(usuario);
   }
 
-  async findPendientes(): Promise<Pick<Usuario, 'id_usuario' | 'nombre' | 'apellido' | 'dni'>[]> {
+  async findPendientes(): Promise<Pick<Usuario, 'id_usuario' | 'nombre' | 'apellido' | 'dni' | 'mail'>[]> {
     return this.usuariosRepository.find({
       where: { estado: EstadoUsuario.PENDIENTE },
       select: {

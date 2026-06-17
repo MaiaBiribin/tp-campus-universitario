@@ -1,32 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {Carrera,Materia,Usuario,Inscripcion} from "../../../types/entidades";
+import {Carrera,Materia,Usuario}from "../../../types/entidades";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import styles from "./page.module.css";
 import Card from "@/app/components/ui/card";
 import Button from "@/app/components/ui/button";
-import { getUsuariosHabilitados } from "@/app/services/usuarios";
-import {getInscripcionesPorMateria,inscribirUsuarios as inscribirUsuariosService} from "@/app/services/inscripciones";
 import { getCarreras } from "@/app/services/carreras";
 import { getMateriasPorCarrera } from "@/app/services/materias";
-
+import {getInscripcionesPorMateria,inscribirUsuarios as inscribirUsuariosService,obtenerIdsUsuariosInscriptos}from "@/app/services/inscripciones";
+import {getUsuariosHabilitados,obtenerUsuariosDisponibles}from "@/app/services/usuarios";
 
 export default function AcademicoAdmin() {
-
   const [carreras, setCarreras] =useState<Carrera[]>([]);
-  const [usuariosInscriptos, setUsuariosInscriptos] = useState<number[]>([]);
+  const [usuariosInscriptos, setUsuariosInscriptos] =useState<number[]>([]);
   const [materias, setMaterias] =useState<Materia[]>([]);
   const [materiaSeleccionada, setMateriaSeleccionada] =useState<Materia | null>(null);
   const [usuarios, setUsuarios] =useState<Usuario[]>([]);
-  const [usuariosSeleccionados,setUsuariosSeleccionados] =useState<number[]>([]);
-  const [carreraSeleccionada,setCarreraSeleccionada] =useState<number>();
-  const [cargando,setCargando] =useState(true);
+  const [usuariosSeleccionados, setUsuariosSeleccionados] =useState<number[]>([]);
+  const [carreraSeleccionada, setCarreraSeleccionada] =useState<number>();
+  const [cargando, setCargando] =useState(true);
 
   useEffect(() => {
-
     async function cargar() {
+
       try {
         const data =await getCarreras();
         setCarreras(data);
@@ -35,67 +33,86 @@ export default function AcademicoAdmin() {
 
         if (data.length > 0) {
           setCarreraSeleccionada(data[0].id_carrera);
-          const materiasData = await getMateriasPorCarrera(data[0].id_carrera);
+          const materiasData =await getMateriasPorCarrera(data[0].id_carrera);
           setMaterias(materiasData);
         }
       }
+
       catch (error) {
-        console.error(error);}
+        console.error(error);
+      }
+
       finally {
-        setCargando(false);}
+        setCargando(false);
+      }
     }
     cargar();
   }, []);
-  async function cambiarCarrera(id:number){
+
+  async function cambiarCarrera(id: number) {
     setCarreraSeleccionada(id);
     try {
-      const data = await getMateriasPorCarrera(id);
+      const data =await getMateriasPorCarrera(id);
       setMaterias(data);
     }
-    catch(error){
+
+    catch (error) {
       console.error(error);
     }
   }
 
-  async function cargarUsuariosInscriptos(idMateria:number){
+  async function cargarUsuariosInscriptos(
+    idMateria: number
+  ) {
 
     try {
       const data =await getInscripcionesPorMateria(idMateria);
       setUsuariosInscriptos(
-        data.map(
-          (inscripcion:Inscripcion)=>
-            inscripcion.usuario.id_usuario) 
+        obtenerIdsUsuariosInscriptos(
+          data
+        )
       );
-
     }
 
-    catch(error){
-      console.error(error);}
+    catch (error) {
+      console.error(error);
+    }
   }
 
-  function toggleUsuario(id:number){
+  function toggleUsuario(
+    id: number
+  ) {
+
     setUsuariosSeleccionados(
-      (prev)=>
+      prev =>
         prev.includes(id)
-        ? prev.filter(
-            (u)=>u !== id
-          )
-        : [
-            ...prev,
-            id
-          ]
+          ? prev.filter(
+              u =>
+                u !== id
+            )
+          : [
+              ...prev,
+              id
+            ]
     );
   }
 
-  async function inscribirUsuarios(idMateria:number){
-    if(usuariosSeleccionados.length === 0){
+  async function inscribirUsuarios(
+    idMateria: number
+  ) {
+    if (
+      usuariosSeleccionados.length === 0
+    ) {
       alert("Seleccioná usuarios");
       return;
     }
-    try {
-      await inscribirUsuariosService(idMateria,usuariosSeleccionados);
-      alert("Usuarios inscriptos");
 
+    try {
+      await inscribirUsuariosService(
+        idMateria,
+        usuariosSeleccionados
+      );
+      alert("Usuarios inscriptos");
       setUsuariosInscriptos(
         prev => [
           ...prev,
@@ -105,29 +122,22 @@ export default function AcademicoAdmin() {
       setUsuariosSeleccionados([]);
     }
 
-    catch(error){
+    catch (error) {
       console.error(error);
       alert("No se pudo inscribir");
     }
   }
 
-  if(cargando){
-
+  if (cargando) {
     return (
       <main className={layout.main}>
-
         <div className={layout.content}>
-
-          <h1>Cargando...</h1>
-
+          <h1>
+            Cargando...</h1>
         </div>
-
       </main>
     );
-
   }
-
-
 
   return (
     <main className={layout.main}>
@@ -135,11 +145,10 @@ export default function AcademicoAdmin() {
         <header className={dashboard.header}>
           <div>
             <h1>
-              Asignación académica
-            </h1>
+              Asignación académica</h1>
             <p>
-              Visualizá carreras y materias. Inscribí a los usuarios.
-            </p>
+              Visualizá carreras y materias.
+              Inscribí a los usuarios.</p>
           </div>
         </header>
         <section className={styles.grid}>
@@ -152,14 +161,18 @@ export default function AcademicoAdmin() {
                 carreras.map(
                   carrera => (
                     <Button
-                      key={carrera.id_carrera}
+                      key={
+                        carrera.id_carrera
+                      }
                       onClick={() =>
                         cambiarCarrera(
                           carrera.id_carrera
                         )
                       }
                     >
-                      {carrera.nombre}
+                      {
+                        carrera.nombre
+                      }
                     </Button>
                   )
                 )
@@ -175,20 +188,23 @@ export default function AcademicoAdmin() {
                 materias.map(
                   materia => (
                     <button
-                      key={materia.id_materia}
+                      key={
+                        materia.id_materia
+                      }
                       className={
-                        materiaSeleccionada?.id_materia === materia.id_materia
-                        ? styles.active
-                        : styles.item
+                        materiaSeleccionada?.id_materia ===
+                        materia.id_materia
+                          ? styles.active
+                          : styles.item
                       }
                       onClick={() => {
                         setMateriaSeleccionada(materia);
-                        cargarUsuariosInscriptos(
-                          materia.id_materia
-                        );
+                        cargarUsuariosInscriptos(materia.id_materia);
                       }}
                     >
-                      {materia.nombre}
+                      {
+                        materia.nombre
+                      }
                     </button>
                   )
                 )
@@ -199,8 +215,8 @@ export default function AcademicoAdmin() {
             <h2>
               {
                 materiaSeleccionada
-                ? `Inscribir en ${materiaSeleccionada.nombre}`
-                : "Seleccioná una materia"
+                  ? `Inscribir en ${materiaSeleccionada.nombre}`
+                  : "Seleccioná una materia"
               }
             </h2>
             {
@@ -208,42 +224,43 @@ export default function AcademicoAdmin() {
                 <>
                   <div className={styles.usersList}>
                     {
-                      usuarios
-                      .filter(
-                        usuario =>
-                        !usuariosInscriptos.includes(
-                          usuario.id_usuario
+                      obtenerUsuariosDisponibles(
+                        usuarios,
+                        usuariosInscriptos
+                      )
+                      .map(
+                        usuario => (
+
+                          <label
+                            key={
+                              usuario.id_usuario
+                            }
+                            className={
+                              styles.userRow
+                            }
+                          >
+                            <input
+                              type="checkbox"
+                              checked={
+                                usuariosSeleccionados.includes(
+                                  usuario.id_usuario
+                                )
+                              }
+                              onChange={() =>
+                                toggleUsuario(
+                                  usuario.id_usuario
+                                )
+                              }
+                            />
+                            {usuario.nombre}
+                            {" "}
+                            {usuario.apellido}
+                            {" · DNI "}
+                            {usuario.dni}
+                          </label>
                         )
                       )
-                      .map(usuario => (
-                        <label
-                          key={usuario.id_usuario}
-                          className={styles.userRow}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={
-                              usuariosSeleccionados.includes(
-                                usuario.id_usuario
-                              )
-                            }
-                            onChange={() =>
-                              toggleUsuario(
-                                usuario.id_usuario
-                              )
-                            }
-
-                          />
-
-                          {usuario.nombre}
-                          {" "}
-                          {usuario.apellido}
-                          {" · DNI "}
-                          {usuario.dni}
-                        </label>
-                      ))
                     }
-
                   </div>
                   <div className={styles.actions}>
                     <Button
@@ -253,6 +270,7 @@ export default function AcademicoAdmin() {
                         )
                       }
                     >
+
                       Inscribir seleccionados
                     </Button>
                   </div>

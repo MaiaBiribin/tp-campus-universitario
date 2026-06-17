@@ -17,6 +17,4 @@ export class Aula {
   @Column()
   ubicacion!: string;
 
-  //@Column({ default: true })
-  //disponible!: boolean;
 }

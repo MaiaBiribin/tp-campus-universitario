@@ -1,9 +1,10 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, MoreThanOrEqual } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Evento } from './evento.entity';
 import { Inscripcion } from '../inscripciones/inscripcion.entity';
 import { NotificacionesService } from '../notificaciones/notificaciones.service';
+import { CreateEventoDto } from './dto/create-evento.dto';
 
 @Injectable()
 export class EventosService {
@@ -25,7 +26,7 @@ export class EventosService {
     return this.repo.findOneBy({ id_evento: id });
   }
 
-  async create(data: any) {
+  async create(data: CreateEventoDto) {
     if (data.horaInicio >= data.horaFin) {
       throw new BadRequestException('La hora de inicio debe ser menor que la hora de fin');
     }
@@ -68,7 +69,6 @@ export class EventosService {
       },
     });
 
-    //return await this.repo.save(nuevoEvento);
     const eventoGuardado = await this.repo.save(nuevoEvento);
 
     // Busca todos los inscriptos en esa materia

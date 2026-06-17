@@ -4,10 +4,23 @@ export const ROLES = {
   ALUMNO: "Alumno",
 } as const;
 
-export type Role = typeof ROLES[keyof typeof ROLES];
+export type Role =
+  typeof ROLES[keyof typeof ROLES];
 
 export const ROLE_PERMISSIONS = {
-  [ROLES.ADMIN]: ["/dashboard/admin"],
-  [ROLES.PROFESOR]: ["/dashboard/docente"],
-  [ROLES.ALUMNO]: ["/dashboard/estudiante"],
+  [ROLES.ADMIN]: [
+    "/dashboard/admin",
+    "/dashboard/mapa",
+    "/dashboard/eventos",
+  ],
+  [ROLES.PROFESOR]: [
+    "/dashboard/docente",
+    "/dashboard/mapa",
+    "/dashboard/eventos",
+  ],
+  [ROLES.ALUMNO]: [
+    "/dashboard/estudiante",
+    "/dashboard/mapa",
+    "/dashboard/eventos",
+  ],
 } as const;
