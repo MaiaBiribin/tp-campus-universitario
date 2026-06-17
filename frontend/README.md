@@ -23,12 +23,6 @@ La aplicación frontend se encarga de:
 
 ## 🚀 Instalación
 
-Clonar el repositorio:
-
-```bash
-git clone https://github.com/MaiaBiribin/tp-campus-universitario.git
-```
-
 Entrar al frontend:
 
 ```bash

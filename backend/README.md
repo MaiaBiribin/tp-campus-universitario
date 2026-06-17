@@ -70,6 +70,29 @@ npm install
 
 ---
 
+## 🔐 Variables de entorno
+
+Dentro del backend existe un archivo:
+
+```bash
+.env.example
+```
+
+Hacer una copia de ese archivo dentro de la carpeta backend y renombrarlo como:
+
+```bash
+.env
+```
+
+Completar el archivo con:
+
+```bash
+DATABASE_URL=postgresql://neondb_owner:npg_Pjpl1vzabG8o@ep-withered-king-aclgdgqs.sa-east-1.aws.neon.tech/neondb?sslmode=require 
+JWT_SECRET=clave_secreta_muy_larga_y_random
+```
+
+---
+
 ## ▶️ Ejecutar en desarrollo
 
 ```bash
