@@ -64,7 +64,7 @@ describe("Pagina Login <Login>",()=>{
        });
 
         (decodeToken as jest.Mock).mockReturnValue({
-            rol:ROLES.PROFESOR,
+            rol:ROLES.DOCENTE,
         });
 
         render(<Login />)

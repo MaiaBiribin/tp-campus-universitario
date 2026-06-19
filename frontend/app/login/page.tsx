@@ -48,8 +48,8 @@ const LoginForm=()=> {
       const rol = payload.rol;
       const rutas = {
         [ROLES.ADMIN]: "/dashboard/admin",
-        [ROLES.PROFESOR]: "/dashboard/docente",
-        [ROLES.ALUMNO]: "/dashboard/estudiante",
+        [ROLES.DOCENTE]: "/dashboard/docente",
+        [ROLES.ESTUDIANTE]: "/dashboard/estudiante",
       } as const;
       router.push(rutas[rol as keyof typeof rutas]);
   }

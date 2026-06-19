@@ -14,7 +14,7 @@ return (
     <div className={layout.content}>
         <header className={dashboard.header}>
             <h1>Crear aviso</h1>
-            <p>Informá a los alumnos sobre tus eventos.</p>
+            <p>Informá a los estudiante sobre tus eventos.</p>
         </header>
         <CrearAviso />
     </div>

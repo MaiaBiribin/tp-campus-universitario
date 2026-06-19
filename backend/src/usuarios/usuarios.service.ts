@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-const ROL_ALUMNO_ID = 3;
+const ROL_ESTUDIANTE_ID = 3;
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; // Repository es la clase de TypeORM que tiene todos los métodos para hablar con la DB
 import { Usuario } from './usuario.entity';
@@ -35,7 +35,7 @@ export class UsuariosService {
       nombre,
       apellido,
       estado: EstadoUsuario.PENDIENTE,
-      rol: { id_rol: ROL_ALUMNO_ID },
+      rol: { id_rol: ROL_ESTUDIANTE_ID },
     });
     return this.usuariosRepository.save(usuario);
   }

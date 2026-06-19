@@ -91,23 +91,22 @@ export default function NavLinks({
   const [pendientes,setPendientes] = useState(0);
 
   useEffect(()=>{
-
     async function cargarPendientes(){
-      try{
-        const cantidad = await CantidadNotificacionesSinLeer();
-        setPendientes(cantidad);
-      }catch(error){
-        console.error(
-          "Error cargando notificaciones",
-          error
-        );
-      }
+    try{
+      const cantidad = await CantidadNotificacionesSinLeer();
+      setPendientes(cantidad);
+    }catch(error){
+      console.error("Error cargando notificaciones",error);
     }
-    if(role === "estudiante"){
-      cargarPendientes();
-    }
-  },[role]);
+  }
 
+  if(role === "estudiante"){
+    cargarPendientes();
+    const intervalo = setInterval(cargarPendientes,5000);
+    return () => clearInterval(intervalo);
+  }
+
+},[role]);
 
   const links = linksByRole[role].map((link)=>{
     if(

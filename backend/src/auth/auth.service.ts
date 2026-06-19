@@ -60,7 +60,6 @@ export class AuthService {
       throw new BadRequestException('El mail ya está registrado');
     }
 
-    // 2. Crea el usuario con habilitado=false (PENDIENTE) y rol=Alumno
     await this.usuariosService.create(nombre, apellido, mail, dni, contrasena);
 
     return {

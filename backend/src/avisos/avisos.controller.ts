@@ -15,16 +15,16 @@ export class AvisosController {
   constructor(private readonly avisosService: AvisosService) {}
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin', 'Profesor'])
+  @Roles(['Admin', 'Docente'])
   @Post()
   @ApiOperation({
     summary: 'Crear un nuevo aviso',
-    description: 'Publica un aviso asociado a un evento. Solo pueden crear avisos los usuarios con rol Admin o Profesor.',
+    description: 'Publica un aviso asociado a un evento. Solo pueden crear avisos los usuarios con rol Admin o Docente.',
   })
   @ApiBody({ type: CreateAvisoDto, description: 'Mensaje del aviso y el evento al que pertenece' })
   @ApiResponse({ status: 201, description: 'Aviso creado exitosamente', type: AvisoResponseDto })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Admin o Profesor)' })
+  @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Admin o Docente)' })
   create(@Body() createAvisoDto: CreateAvisoDto, @Request() req) {
     const idUsuarioCreador = req.user.sub;
     return this.avisosService.create(createAvisoDto.mensaje, idUsuarioCreador, createAvisoDto.id_evento);
