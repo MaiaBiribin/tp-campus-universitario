@@ -1,5 +1,5 @@
 "use client";
-
+import {Suspense} from "react";
 import {useRouter,useSearchParams} from "next/navigation";
 import Link from "next/link";
 import {login,guardarSesion,}from "../services/auth";
@@ -10,8 +10,9 @@ import forms from "../styles/forms.module.css";
 import Button from "../components/ui/button";
 import Card from "../components/ui/card";
 import Form from "../components/ui/form";
+import React from "react";
 
-export default function Login() {
+const LoginForm=()=> {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -102,3 +103,11 @@ return(
     </div>
     );
   }
+
+  export default function Login() {
+    return(
+      <Suspense>
+        <LoginForm /> 
+      </Suspense>
+    )
+  } 
