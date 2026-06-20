@@ -23,6 +23,8 @@ export default function CrearEvento() {
   const [idMateria, setIdMateria] =useState("");
   const [idAula, setIdAula] =useState("");
   const [idTipoEvento, setIdTipoEvento] =useState("");
+  const [error,setError] = useState("");
+  const [exito,setExito] = useState("");
 
   useEffect(() => {
     async function cargar() {
@@ -32,7 +34,10 @@ export default function CrearEvento() {
         setAulas(
           await getAulas());
         }
-        catch (error) {console.error(error);}
+        catch (error) {
+          console.error(error);
+          setError("No se pudieron cargar los datos");
+        }
       }
       cargar();}, []);
 
@@ -48,19 +53,23 @@ export default function CrearEvento() {
       const data = await getMateriasPorCarrera(Number(carreraId));
       setMaterias(data);
     }
-    catch (error) {console.error(error);}
-  }
+    catch (error) {
+      console.error(error);
+      setError("No se pudieron cargar los datos");
+    }
+    }
 
-  async function handleSubmit(
-    e: React.FormEvent) {
-      e.preventDefault();
-      if (horaInicio >= horaFin) {
-        alert(
-          "La hora de inicio debe ser menor que la hora de fin");
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setExito("");
+    if (horaInicio >= horaFin) {
+        setError("La hora de inicio debe ser menor que la hora de fin");
           return;
         }
       const materiaSeleccionada = materias.find((m) => m.id_materia === Number(idMateria));
-      if (!materiaSeleccionada) {alert("Seleccioná una materia");
+      if (!materiaSeleccionada) {
+        setError("Seleccioná una materia");
         return;}
       try {
         await crearEvento({
@@ -71,12 +80,14 @@ export default function CrearEvento() {
           aula: {id_aula: Number(idAula),},
           tipoEvento: {id_tipo_evento: Number(idTipoEvento),},
           materia: {id_materia: Number(idMateria),},});
-          alert("Evento creado");
-          window.location.href = "/dashboard/admin/eventos";
+          setExito("Evento creado correctamente");
+          setTimeout(() => {
+            window.location.href = "/dashboard/admin/eventos";
+          }, 1500);
         }
         catch (error) {
           console.error(error);
-          alert("Error al crear evento");
+          setError("Error al crear evento");
         }
       }
   return (
@@ -96,6 +107,12 @@ export default function CrearEvento() {
           onSubmit={handleSubmit}
           className={forms.form}
         >
+          {error && (
+            <p className={forms.error}>{error}</p>
+            )}
+            {exito && (
+              <p className={forms.helper}>{exito}</p>
+              )}
           <div className={forms.row}>
             <div className={forms.field}>
               <label className={forms.label}>

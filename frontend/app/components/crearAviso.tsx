@@ -16,140 +16,128 @@ const [eventos,setEventos] =useState<Evento[]>([]);
 const [idEvento,setIdEvento] =useState("");
 const [mensaje,setMensaje] =useState("");
 const [cargando,setCargando] =useState(true);
+const [error,setError] = useState("");
+const [exito,setExito] = useState("");
 
 useEffect(()=>{
 
 async function cargar(){
-
-try{
-
-const data = await getEventos();
-
-const futuros = data
-.filter((ev:Evento)=>{
- const fecha =
- new Date(
- `${ev.fecha}T${ev.horaInicio}`
- );
-
- return fecha >= new Date();
-})
-.sort((a:Evento,b:Evento)=>{
-
-const fechaA =
-new Date(
-`${a.fecha}T${a.horaInicio}`
-).getTime();
-
-const fechaB =
-new Date(
-`${b.fecha}T${b.horaInicio}`
-).getTime();
-
-return fechaA-fechaB;
-
-});
-setEventos(futuros);
-
-}catch(error){
-console.error(error);
+    try{
+        const data = await getEventos();
+        const futuros = data.filter((ev:Evento)=>{
+            const fecha =new Date(`${ev.fecha}T${ev.horaInicio}`);
+            return fecha >= new Date();}).sort((a:Evento,b:Evento)=>{
+                const fechaA =new Date(
+                    `${a.fecha}T${a.horaInicio}`).getTime();
+            const fechaB =new Date(`${b.fecha}T${b.horaInicio}`).getTime();
+            return fechaA-fechaB;
+        });
+        setEventos(futuros);
+    }catch(error){
+        console.error(error);
+    }
+    finally{
+        setCargando(false);
+    }
 }
-finally{
-setCargando(false);
-}
-}
-cargar();
-},[]);
-async function handleSubmit(
-e:React.FormEvent
-){
-e.preventDefault();
-if(!idEvento){
-alert("Seleccioná un evento");
-return;
-}
-if(!mensaje){
-alert("Escribí un mensaje");
-return;
-}
+cargar();},[]);
+async function handleSubmit(e:React.FormEvent){
+    e.preventDefault();
+    setError("");
+    setExito("");
+    if(!idEvento){
+        setError("Seleccioná un evento");
+        return;
+    }
+    if(!mensaje){
+        setError("Escribí un mensaje");
+        return;
+    }
+    try{
+        await crearAviso(
+            mensaje,
+            Number(idEvento)
+        );
+        setExito("Aviso creado correctamente");
+        setMensaje("");
+        setIdEvento("");
 
-try{
-await crearAviso(
-mensaje,
-Number(idEvento)
-);
-alert("Aviso creado");
-setMensaje("");
-setIdEvento("");
-}catch(error){
-console.error(error);
-alert("Error creando aviso");
-}
+    }catch(error){
+        console.error(error);
+        setError("Error creando aviso");
+    }
 }
 if(cargando)
-return <p>Cargando eventos...</p>;
+    return <p>Cargando eventos...</p>;
+    return (
+    <Card>
+        <form
+        onSubmit={handleSubmit}
+        className={forms.form}
+        >
+            {error && (
+        <p className={forms.error}>
+          {error}
+        </p>
+      )}
 
-return (
-<Card>
-<form
-onSubmit={handleSubmit}
-className={forms.form}
->
-<div className={forms.row}>
-<div className={forms.field}>
-<label className={forms.label}>
-Evento
-</label>
-<select
-className={forms.select}
-value={idEvento}
-onChange={
-e=>setIdEvento(e.target.value)
-}
->
-<option value="">
-Seleccionar evento
-</option>
-{
-eventos.map(ev=>(
-<option
-key={ev.id_evento}
-value={ev.id_evento}
->
-{ev.titulo}
-{" - "}
-{ev.fecha}
-{" - "}
-{ev.horaInicio}
-</option>
-))
-}
-</select>
-</div>
-</div>
-<div className={forms.row}>
-<div className={forms.field}>
-<label className={forms.label}>
-Mensaje
-</label>
-<textarea
-className={forms.input}
-value={mensaje}
-onChange={
-e=>setMensaje(e.target.value)
-}
-placeholder="Escribí el aviso..."
-rows={5}
-/>
-</div>
-</div>
-<div className={forms.actions}>
-<Button type="submit">
-Crear aviso
-</Button>
-</div>
-</form>
-</Card>
-);
-
+      {exito && (
+        <p className={forms.helper}>
+          {exito}
+        </p>
+      )}
+            <div className={forms.row}>
+            <div className={forms.field}>
+                <label className={forms.label}>
+                    Evento
+                </label>
+                <select
+                className={forms.select}
+                value={idEvento}
+                onChange={
+                    e=>setIdEvento(e.target.value)
+                    }
+                >
+                    <option value="">
+                        Seleccionar evento
+                    </option>
+                    {eventos.map(ev=>(
+                    <option
+                    key={ev.id_evento}
+                    value={ev.id_evento}
+                    >
+                        {ev.titulo}
+                        {" - "}
+                        {ev.fecha}
+                        {" - "}
+                        {ev.horaInicio}
+                    </option>
+                ))
+                }
+                </select>
+                </div>
+                </div>
+                <div className={forms.row}>
+                    <div className={forms.field}>
+                        <label className={forms.label}>Mensaje</label>
+                        <textarea
+                        className={forms.input}
+                        value={mensaje}
+                        onChange={e=>setMensaje(e.target.value)}
+                        placeholder="Escribí el aviso..."
+                        rows={5}/>
+            </div>
+            </div>
+            <div className={forms.actions}>
+                {error && (
+                    <p>{error}</p>
+                    )}
+                    {exito && (
+                        <p>{exito}</p>
+                        )}
+                <Button type="submit">Crear aviso</Button>
+            </div>
+        </form>
+    </Card>
+    );
 }

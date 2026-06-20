@@ -1,5 +1,5 @@
 "use client";
-import {Suspense} from "react";
+import {Suspense, useState} from "react";
 import {useRouter,useSearchParams} from "next/navigation";
 import Link from "next/link";
 import {login,guardarSesion,}from "../services/auth";
@@ -15,12 +15,14 @@ import React from "react";
 const LoginForm=()=> {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const accesoDenegado =
-    searchParams.get("acceso") === "denegado";
+  const accesoDenegado =searchParams.get("acceso") === "denegado";
+  const [error,setError] = useState("");
+  const [exito,setExito] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
+    setExito("");
 
     const formData = new FormData(e.currentTarget);
     const datos = Object.fromEntries(formData.entries());
@@ -28,22 +30,18 @@ const LoginForm=()=> {
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      alert(err.message || "Error login");
+      setError(err.message || "Error login");
       return;
     }
 
     const data = await response.json();
     guardarSesion(data.access_token);
 
-    // guardar para api.ts
-    localStorage.setItem(
-    "token",
-     data.access_token
-    );
+    localStorage.setItem("token",data.access_token);
 
     const payload = decodeToken(data.access_token);
     if (!payload) {
-      alert("Token inválido");
+      setError("Token inválido");
       return;}
       const rol = payload.rol;
       const rutas = {
@@ -90,6 +88,12 @@ return(
         className={forms.input}
         />
     </div>
+    {error && (
+      <p className={forms.error}>{error}</p>
+      )}
+      {exito && (
+        <p className={forms.helper}>{exito}</p>
+        )}
     <Button>
       Ingresar
       </Button>
@@ -106,7 +110,7 @@ return(
 
   export default function Login() {
     return(
-      <Suspense>
+      <Suspense fallback={<p>Cargando...</p>}>
         <LoginForm /> 
       </Suspense>
     )

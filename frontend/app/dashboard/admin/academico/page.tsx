@@ -21,6 +21,8 @@ export default function AcademicoAdmin() {
   const [usuariosSeleccionados, setUsuariosSeleccionados] =useState<number[]>([]);
   const [carreraSeleccionada, setCarreraSeleccionada] =useState<number>();
   const [cargando, setCargando] =useState(true);
+  const [error,setError] = useState("");
+  const [exito,setExito] = useState("");
 
   useEffect(() => {
     async function cargar() {
@@ -61,17 +63,10 @@ export default function AcademicoAdmin() {
     }
   }
 
-  async function cargarUsuariosInscriptos(
-    idMateria: number
-  ) {
-
+  async function cargarUsuariosInscriptos(idMateria: number) {
     try {
       const data =await getInscripcionesPorMateria(idMateria);
-      setUsuariosInscriptos(
-        obtenerIdsUsuariosInscriptos(
-          data
-        )
-      );
+      setUsuariosInscriptos(obtenerIdsUsuariosInscriptos(data));
     }
 
     catch (error) {
@@ -97,13 +92,13 @@ export default function AcademicoAdmin() {
     );
   }
 
-  async function inscribirUsuarios(
-    idMateria: number
-  ) {
+  async function inscribirUsuarios(idMateria: number) {
+    setError("");
+    setExito("");
     if (
       usuariosSeleccionados.length === 0
     ) {
-      alert("Seleccioná usuarios");
+      setError("Seleccioná usuarios");
       return;
     }
 
@@ -112,7 +107,7 @@ export default function AcademicoAdmin() {
         idMateria,
         usuariosSeleccionados
       );
-      alert("Usuarios inscriptos");
+      setExito("Usuarios inscriptos");
       setUsuariosInscriptos(
         prev => [
           ...prev,
@@ -124,7 +119,7 @@ export default function AcademicoAdmin() {
 
     catch (error) {
       console.error(error);
-      alert("No se pudo inscribir");
+      setError("No se pudo inscribir");
     }
   }
 
@@ -151,6 +146,12 @@ export default function AcademicoAdmin() {
               Inscribí a los usuarios.</p>
           </div>
         </header>
+        {error && (
+          <p className={dashboard.error}>{error}</p>
+          )}
+          {exito && (
+            <p className={dashboard.success}>{exito}</p>
+            )}
         <section className={styles.grid}>
           <Card>
             <h2>
