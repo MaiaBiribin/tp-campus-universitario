@@ -68,4 +68,19 @@ export class AvisosService {
       order: { fecha_creacion: 'DESC' },
     });
   }
+    async findAll(): Promise<Aviso[]> {
+    return this.avisosRepository.find({
+      relations:{
+        evento:true,
+        usuarioCreador:true,
+      },
+      order:{
+        fecha_creacion:"DESC"
+      }
+
+    });
+  }
 }
+
+
+

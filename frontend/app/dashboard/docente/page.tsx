@@ -6,20 +6,35 @@ import { useEffect, useState } from "react";
 import { Evento } from "@/app/types/entidades";
 import { getEventos } from "@/app/services/eventos";
 import ProximoEvento from "@/app/components/proximoEvento";
+import { getAvisosPorEvento } from "@/app/services/avisos";
 
 export default function DashboardDocente() {
-  const [clasesHoy, setClasesHoy] =
-  useState(0);
+  const [clasesHoy, setClasesHoy] =useState(0);
+  const [avisosActivos,setAvisosActivos] = useState(0);
   useEffect(() => {
     async function cargar() {
-      try {
-        const eventos =await getEventos();
-        const hoy =new Date().toISOString().split("T")[0];
-        const clasesDeHoy =eventos.filter((evento: Evento) =>evento.fecha === hoy);
-        setClasesHoy(clasesDeHoy.length);
+      try{
+        const eventos = await getEventos();
+        const hoy = new Date().toISOString().split("T")[0];
+        const clasesDeHoy =eventos.filter((evento:Evento)=>
+          evento.fecha === hoy
+      );
+      setClasesHoy(clasesDeHoy.length);
+      let cantidadAvisos = 0;
+      for(const evento of eventos){
+      const avisos =
+        await getAvisosPorEvento(evento.id_evento);
+        cantidadAvisos += avisos.length;
       }
-      catch (error) {console.error(error);}}
-      cargar();}, []);
+    setAvisosActivos(cantidadAvisos);
+   }catch(error){
+    console.error(error);
+  }
+}
+
+cargar();
+
+},[]);
     return (
     <>
     <header className={dashboard.header}>
@@ -39,7 +54,7 @@ export default function DashboardDocente() {
           </div>
           <div className={cards.metric}>
             <p>Avisos activos</p>
-            <h3>1</h3>
+            <h3>{avisosActivos}</h3>
           </div>
           </div>
           </section>

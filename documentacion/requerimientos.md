@@ -10,7 +10,6 @@
 ---
 
 ## 🏫 Gestión de aulas
-- El sistema debe permitir editar, asignar y eliminar aulas.
 - El sistema debe permitir visualizar la ubicación de las aulas.
 
 ---

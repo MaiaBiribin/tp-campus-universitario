@@ -30,7 +30,17 @@ export class AvisosController {
     return this.avisosService.create(createAvisoDto.mensaje, idUsuarioCreador, createAvisoDto.id_evento);
   }
 
+  @Get()
   @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: "Ver todos los avisos"})
+    @ApiResponse({
+      status:200,
+      description:"Lista de avisos"
+    })
+    findAll() {
+      return this.avisosService.findAll();
+    }
   @Get('evento/:id_evento')
   @ApiOperation({
     summary: 'Ver avisos de un evento',
