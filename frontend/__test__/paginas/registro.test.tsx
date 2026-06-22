@@ -70,9 +70,7 @@ import userEvent from "@testing-library/user-event";
       });
        
      await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        "Solicitud creada. Esperá a que un administrador apruebe tu registro."
-      );
+       expect(screen.getByText("Solicitud creada. Esperá a que un administrador apruebe tu registro.")).toBeInTheDocument()
       expect(globalMockPush).toHaveBeenCalledWith("/login");
     });
  })

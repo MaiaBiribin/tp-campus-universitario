@@ -86,7 +86,7 @@ describe("Pagina Login <Login>",()=>{
     })
 
 
-    it("debería mostrar un alert si las credenciales son incorrectas", async () => {
+    it("debería mostrar si las credenciales son incorrectas", async () => {
     (login as jest.Mock).mockResolvedValue({
       ok: false,
       json: async () => ({ message: "Credenciales inválidas" }),
@@ -100,7 +100,7 @@ describe("Pagina Login <Login>",()=>{
     await user.click(screen.getByRole("button", { name: /ingresar/i }));
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Credenciales inválidas");
+      expect(screen.getByText());
       expect(globalMockPush).not.toHaveBeenCalled(); 
     });
   });

@@ -91,7 +91,7 @@ describe("Servicio de Notificaciones", () => {
     it("debería lanzar un error si el PATCH masivo falla", async () => {
       (api as jest.Mock).mockResolvedValue({ ok: false });
 
-      await expect(NotificacionLeidas()).rejects.toThrow("Error al cambiar estado notifications");
+      await expect(NotificacionLeidas()).rejects.toThrow("Error al cambiar estado notificaciones");
     });
   });
 
