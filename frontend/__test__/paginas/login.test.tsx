@@ -37,10 +37,11 @@ describe("Pagina Login <Login>",()=>{
 
         mockGetparam.mockReturnValue(null)
 
-        Object.defineProperty(window,"localStorage",{
-           value:{setItem:jest.fn()},
-           writable:true
-        })
+        Object.defineProperty(window,"localStorage",{value:{
+          setItem:jest.fn(),
+          getItem:jest.fn(),
+          removeItem:jest.fn()},
+          writable:true})
        })
 
 
@@ -86,24 +87,23 @@ describe("Pagina Login <Login>",()=>{
     })
 
 
-    it("debería mostrar si las credenciales son incorrectas", async () => {
-    (login as jest.Mock).mockResolvedValue({
-      ok: false,
-      json: async () => ({ message: "Credenciales inválidas" }),
-    });
-
-    render(<Login />);
-    const user = userEvent.setup();
-
-    await user.type(screen.getByPlaceholderText("Ej: aula@gmail.com"), "error@gmail.com");
-    await user.type(screen.getByPlaceholderText("********"), "claveErronea");
-    await user.click(screen.getByRole("button", { name: /ingresar/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText());
-      expect(globalMockPush).not.toHaveBeenCalled(); 
-    });
-  });
-
-})
+    it("debería mostrar error si las credenciales son incorrectas", async () => {
+      (login as jest.Mock).mockResolvedValue({
+        ok:false,
+        json:async()=>({
+          message:"Credenciales inválidas"
+        })});
+        render(<Login />);
+        const user = userEvent.setup();
+        await user.type(
+          screen.getByPlaceholderText("Ej: aula@gmail.com"),
+          "error@gmail.com"
+        );
+        await user.type(screen.getByPlaceholderText("********"),"claveErronea");
+        await user.click(screen.getByRole("button",{name:/ingresar/i}));
+        await waitFor(()=>{
+          expect(screen.getByText("Credenciales inválidas")).toBeInTheDocument();
+          expect(globalMockPush).not.toHaveBeenCalled();});
+        });
+      })
 
