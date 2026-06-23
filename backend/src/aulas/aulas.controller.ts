@@ -4,11 +4,6 @@ import { AulasService } from './aulas.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 import { AulaResponseDto } from './dto/aula-response.dto';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../auth/guards/auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { ROLES } from '../auth/constants';
 
 @ApiTags('aulas')
 @Controller('aulas')
@@ -24,54 +19,7 @@ export class AulasController {
   obtenerTodasLasAulas() {
     return this.aulasService.findAll();
   }
-  @UseGuards(
-  AuthGuard,
-  RolesGuard,
-)
 
-@Roles(
-  ROLES.ADMIN,
-)
-  @Post()
-  @ApiOperation({
-    summary: 'Registrar una nueva aula',
-    description: 'Crea un nuevo registro de aula en el sistema con los datos de nombre, capacidad, piso y ubicación.',
-  })
-  @ApiBody({ type: CreateAulaDto, description: 'Datos requeridos para registrar el aula' })
-  @ApiResponse({ status: 201, description: 'Aula registrada exitosamente', type: AulaResponseDto })
-  @ApiResponse({ status: 400, description: 'Datos inválidos o faltantes en el cuerpo de la petición' })
-  registrarNuevaAula(@Body() createAulaDto: CreateAulaDto) {
-    return this.aulasService.create(createAulaDto);
-  }
-  @UseGuards(
-  AuthGuard,
-  RolesGuard,
-)
-
-@Roles(
-  ROLES.ADMIN,
-)
-
-  @Patch(':id')
-  @ApiOperation({
-    summary: 'Actualizar parcialmente un aula',
-    description: 'Modifica únicamente los campos enviados en el cuerpo de la petición, sin afectar los campos omitidos.',
-  })
-  @ApiParam({ name: 'id', description: 'ID numérico del aula a modificar', example: 1 })
-  @ApiBody({ type: UpdateAulaDto, description: 'Campos a actualizar (todos opcionales)' })
-  @ApiResponse({ status: 200, description: 'Aula actualizada exitosamente', type: AulaResponseDto })
-  @ApiResponse({ status: 404, description: 'Aula no encontrada' })
-  actualizarDatosDelAula(@Param('id') id: string, @Body() updateAulaDto: UpdateAulaDto) {
-    return this.aulasService.update(+id, updateAulaDto);
-  }
-  @UseGuards(
-  AuthGuard,
-  RolesGuard,
-)
-
-@Roles(
-  ROLES.ADMIN,
-)
   @Put(':id')
   @ApiOperation({
     summary: 'Reemplazar por completo un aula',
@@ -84,14 +32,7 @@ export class AulasController {
   reemplazarAulaCompleta(@Param('id') id: string, @Body() createAulaDto: CreateAulaDto) {
     return this.aulasService.replace(+id, createAulaDto);
   }
-  @UseGuards(
-  AuthGuard,
-  RolesGuard,
-)
 
-@Roles(
-  ROLES.ADMIN,
-)
   @Delete(':id')
   @ApiOperation({
     summary: 'Eliminar un aula',
