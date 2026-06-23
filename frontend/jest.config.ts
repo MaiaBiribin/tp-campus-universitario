@@ -169,6 +169,7 @@ const config: Config = {
   //   "**/?(*.)+(spec|test).?([mc])[jt]s?(x)"
   // ],
  moduleNameMapper: {
+    '^@/app/(.*)$': '<rootDir>/app/$1',
     '^@/(.*)$': '<rootDir>/app/$1',
   },
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
