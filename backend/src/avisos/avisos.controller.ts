@@ -15,7 +15,7 @@ export class AvisosController {
   constructor(private readonly avisosService: AvisosService) {}
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin', 'Docente'])
+  @Roles('Admin', 'Docente')
   @Post()
   @ApiOperation({
     summary: 'Crear un nuevo aviso',
