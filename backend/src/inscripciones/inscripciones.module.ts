@@ -5,11 +5,13 @@ import { InscripcionesController } from "./inscripciones.controller";
 import { InscripcionesService } from "./inscripciones.service";
 import { Usuario } from "../usuarios/usuario.entity";
 import { Materia } from "../materias/materia.entity";
+import { AuthModule } from '../auth/auth.module';
 
 
 @Module({
 
   imports:[
+    AuthModule,
     TypeOrmModule.forFeature([
       Inscripcion,
       Usuario,

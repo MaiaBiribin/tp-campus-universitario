@@ -40,7 +40,7 @@ export class MateriasController {
   }
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Post()
   @ApiOperation({
     summary: 'Crear una nueva materia',

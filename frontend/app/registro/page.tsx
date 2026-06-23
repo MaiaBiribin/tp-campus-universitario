@@ -13,12 +13,14 @@ export default function Registrarse() {
   const ruta = useRouter();
   const [error,setError] = useState("");
   const [exito,setExito] = useState("");
+  const [cargando,setCargando] = useState(false);
   async function MandarDatos(
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
     setError("");
     setExito("");
+    setCargando(true);
     const formData =new FormData(event.currentTarget);
     const datosUsuario =Object.fromEntries(formData.entries());
     try {
@@ -33,7 +35,7 @@ export default function Registrarse() {
       setExito("Solicitud creada. Esperá a que un administrador apruebe tu registro.");
       setTimeout(() => {
         ruta.push("/login");
-      }, 2000);
+      }, 7000);
 
     } else {
       const errorData = await response
@@ -42,10 +44,10 @@ export default function Registrarse() {
 
       setError(errorData.message ||"Hubo un error en el registro.");
     }
-
-  } catch (error) {
-    console.error("Error al conectar con el servidor:",error);
+  } catch {
     setError("Hubo un problema al conectar con el servidor.");
+  } finally {
+    setCargando(false);
   }
 }
 

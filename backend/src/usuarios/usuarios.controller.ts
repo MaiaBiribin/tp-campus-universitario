@@ -28,7 +28,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Get()
   @ApiOperation({
     summary: 'Listar todos los usuarios',
@@ -43,7 +43,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Get('/pendientes')
   @ApiOperation({
     summary: 'Listar usuarios pendientes',
@@ -58,7 +58,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Get('/habilitados')
   @ApiOperation({
     summary: 'Listar usuarios habilitados',
@@ -73,7 +73,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Patch(':id/habilitar')
   @ApiOperation({
     summary: 'Habilitar un usuario',
@@ -90,7 +90,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Patch(':id/rechazar')
   @ApiOperation({
     summary: 'Rechazar un usuario',
@@ -155,7 +155,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Docente'])
+  @Roles('Admin')
   @Get('mis-eventos')
   @ApiOperation({
     summary: 'Obtener mis eventos',
@@ -169,7 +169,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin', 'Docente'])
+  @Roles('Admin')
   @Get('aulas')
   @ApiOperation({
     summary: 'Obtener aulas disponibles',

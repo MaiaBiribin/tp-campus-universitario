@@ -4,6 +4,11 @@ import { AulasService } from './aulas.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 import { AulaResponseDto } from './dto/aula-response.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { ROLES } from 'src/auth/constants';
 
 @ApiTags('aulas')
 @Controller('aulas')
@@ -19,7 +24,14 @@ export class AulasController {
   obtenerTodasLasAulas() {
     return this.aulasService.findAll();
   }
+  @UseGuards(
+  AuthGuard,
+  RolesGuard,
+)
 
+@Roles(
+  ROLES.ADMIN,
+)
   @Post()
   @ApiOperation({
     summary: 'Registrar una nueva aula',
@@ -31,6 +43,14 @@ export class AulasController {
   registrarNuevaAula(@Body() createAulaDto: CreateAulaDto) {
     return this.aulasService.create(createAulaDto);
   }
+  @UseGuards(
+  AuthGuard,
+  RolesGuard,
+)
+
+@Roles(
+  ROLES.ADMIN,
+)
 
   @Patch(':id')
   @ApiOperation({
@@ -44,7 +64,14 @@ export class AulasController {
   actualizarDatosDelAula(@Param('id') id: string, @Body() updateAulaDto: UpdateAulaDto) {
     return this.aulasService.update(+id, updateAulaDto);
   }
+  @UseGuards(
+  AuthGuard,
+  RolesGuard,
+)
 
+@Roles(
+  ROLES.ADMIN,
+)
   @Put(':id')
   @ApiOperation({
     summary: 'Reemplazar por completo un aula',
@@ -57,7 +84,14 @@ export class AulasController {
   reemplazarAulaCompleta(@Param('id') id: string, @Body() createAulaDto: CreateAulaDto) {
     return this.aulasService.replace(+id, createAulaDto);
   }
+  @UseGuards(
+  AuthGuard,
+  RolesGuard,
+)
 
+@Roles(
+  ROLES.ADMIN,
+)
   @Delete(':id')
   @ApiOperation({
     summary: 'Eliminar un aula',

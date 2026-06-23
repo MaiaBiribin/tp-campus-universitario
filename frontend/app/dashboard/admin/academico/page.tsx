@@ -5,6 +5,7 @@ import dashboard from "@/app/styles/dashboard.module.css";
 import styles from "./page.module.css";
 import Card from "@/app/components/ui/card";
 import Button from "@/app/components/ui/button";
+import forms from "@/app/styles/forms.module.css";
 import {obtenerUsuariosDisponibles,} from "@/app/services/usuarios";import {useAsignacionAcademica,} from "@/app/hooks/useAsignacionAcademica";
 
 export default function AcademicoAdmin() {
@@ -17,9 +18,7 @@ export default function AcademicoAdmin() {
     return (
       <main className={layout.main}>
         <div className={layout.content}>
-          <h1>
-            Cargando...
-          </h1>
+          <p className={forms.helper}>Cargando información académica...</p>
         </div>
       </main>
     );
@@ -39,16 +38,8 @@ export default function AcademicoAdmin() {
             </p>
           </div>
         </header>
-        {error && (
-          <p className={dashboard.error}>
-            {error}
-          </p>
-        )}
-        {exito && (
-          <p className={dashboard.success}>
-            {exito}
-          </p>
-        )}
+        {error && (<p className={forms.error}>{error}</p>)}
+        {exito && (<p className={forms.helper}>{exito}</p>)}
         <section className={styles.grid}>
           <Card>
             <h2>
@@ -148,6 +139,19 @@ export default function AcademicoAdmin() {
                       )
                     )}
                 </div>
+                {usuariosInscriptos.length > 0 && (<div className={styles.usersList}>
+                  <h3>Usuarios inscriptos</h3>
+                  {usuarios.filter(usuario =>
+                  usuariosInscriptos.includes(usuario.id_usuario)).map(usuario => (
+                  <p
+                  key={usuario.id_usuario}
+                  className={styles.userRow}>
+                    {usuario.nombre}
+                    {" "}
+                    {usuario.apellido}
+                    {" · DNI "}
+                    {usuario.dni}</p>
+                    ))}</div>)}
                 <div className={styles.actions}>
                   <Button
                     onClick={() =>
