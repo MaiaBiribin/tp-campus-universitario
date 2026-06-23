@@ -91,31 +91,27 @@ export function useAsignacionAcademica() {
     );
   }
   async function inscribirUsuarios(idMateria:number){
-    setError("");
-    setExito("");
-    if(usuariosSeleccionados.length===0){
-      setError("Seleccioná usuarios");
-      return;
-
-    }
-    try{
-      await inscribirUsuariosService(idMateria,usuariosSeleccionados);
-      setExito("Usuarios inscriptos" );
-      setUsuariosInscriptos(
-        prev=>[
-          ...prev,
-          ...usuariosSeleccionados
-        ]
-      );
-      setUsuariosSeleccionados([]);
-
-    }
-
-    catch(error){
-      console.error(error);
-      setError("No se pudo inscribir");
-    }
+  setError("");
+  setExito("");
+  if(usuariosSeleccionados.length===0){
+    setError("Seleccioná usuarios");
+    return;
   }
+  try{
+    await inscribirUsuariosService(idMateria,usuariosSeleccionados);
+    setUsuariosInscriptos(
+      prev => [
+        ...prev,
+        ...usuariosSeleccionados
+      ]
+    );
+    setExito(`${usuariosSeleccionados.length} usuario(s) inscripto(s) correctamente`);
+    setUsuariosSeleccionados([]);
+  }
+  catch{
+    setError("No se pudo completar la inscripción.");
+  }
+}
   return {
     carreras,
     usuariosInscriptos,

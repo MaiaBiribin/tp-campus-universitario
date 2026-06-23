@@ -1,4 +1,13 @@
-import { Controller, Post, Get, Body, Param, UseGuards, Request } from '@nestjs/common';
+import { 
+  Controller,
+  Post,
+  Get,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Request
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { AvisosService } from './avisos.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
@@ -52,4 +61,23 @@ export class AvisosController {
   findByEvento(@Param('id_evento') id_evento: number) {
     return this.avisosService.findByEvento(id_evento);
   }
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('Docente')
+  @Delete(':id')
+  @ApiOperation({
+  summary: "Eliminar aviso",
+  description: "Elimina un aviso creado por el docente o administrador."})
+  @ApiParam({
+  name:"id",
+  description:"ID del aviso"
+ })
+ async remove(
+  @Param('id') id:number,
+  @Request() req
+){
+  return this.avisosService.remove(
+    id,
+    req.user.sub
+  );
+}
 }

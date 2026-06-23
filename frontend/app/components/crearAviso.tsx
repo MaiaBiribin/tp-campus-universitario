@@ -16,6 +16,7 @@ const [eventos,setEventos] =useState<Evento[]>([]);
 const [idEvento,setIdEvento] =useState("");
 const [mensaje,setMensaje] =useState("");
 const [cargando,setCargando] =useState(true);
+const [guardando,setGuardando] = useState(false);
 const [error,setError] = useState("");
 const [exito,setExito] = useState("");
 
@@ -33,42 +34,45 @@ async function cargar(){
             return fechaA-fechaB;
         });
         setEventos(futuros);
-    }catch(error){
-        console.error(error);
-    }
-    finally{
-        setCargando(false);
-    }
+    }catch{
+    setError("No se pudieron cargar los eventos.");}
+finally{
+    setCargando(false);
+}
 }
 cargar();},[]);
 async function handleSubmit(e:React.FormEvent){
-    e.preventDefault();
-    setError("");
-    setExito("");
-    if(!idEvento){
-        setError("Seleccioná un evento");
-        return;
-    }
-    if(!mensaje){
-        setError("Escribí un mensaje");
-        return;
-    }
-    try{
-        await crearAviso(
-            mensaje,
-            Number(idEvento)
-        );
-        setExito("Aviso creado correctamente");
-        setMensaje("");
-        setIdEvento("");
+  e.preventDefault();
+  setError("");
+  setExito("");
+  if(!idEvento){
+    setError("Seleccioná un evento.");
+    return;
+  }
+  if(!mensaje.trim()){
+    setError("Escribí un mensaje.");
+    return;
+  }
+  setGuardando(true);
+  try{
+    await crearAviso(
+      mensaje,
+      Number(idEvento)
+    );
+    setExito("Aviso creado correctamente.");
+    setMensaje("");
+    setIdEvento("");
+  }catch{
+    setError("No se pudo crear el aviso."
+    );
 
-    }catch(error){
-        console.error(error);
-        setError("Error creando aviso");
-    }
+  }finally{
+    setGuardando(false);
+  }
 }
 if(cargando)
-    return <p>Cargando eventos...</p>;
+return (
+  <p className={forms.helper}>Cargando eventos...</p>);
     return (
     <Card>
         <form
@@ -129,12 +133,6 @@ if(cargando)
             </div>
             </div>
             <div className={forms.actions}>
-                {error && (
-                    <p>{error}</p>
-                    )}
-                    {exito && (
-                        <p>{exito}</p>
-                        )}
                 <Button type="submit">Crear aviso</Button>
             </div>
         </form>

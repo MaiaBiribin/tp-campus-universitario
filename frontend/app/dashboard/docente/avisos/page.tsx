@@ -5,44 +5,53 @@ import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import buttons from "@/app/styles/buttons.module.css";
 import table from "@/app/styles/table.module.css";
-
+import forms from "@/app/styles/forms.module.css";
 import { Aviso } from "@/app/types/entidades";
 import { getAvisos,eliminarAviso} from "@/app/services/avisos";
-
 
 export default function Avisos(){
 
 const [avisos,setAvisos]=useState<Aviso[]>([]);
 const [cargando,setCargando]=useState(true);
+const [error,setError]=useState("");
+const [exito,setExito]=useState("");
+const [eliminando,setEliminando]=useState<number | null>(null);
 useEffect(()=>{
-    async function cargar(){
-        try{
-            const data = await getAvisos();
-            setAvisos(data);
-        }catch(error){
-            console.error(error);
-        }
-        finally{
-            setCargando(false);
-        }
+  async function cargar(){
+    try{
+      const data = await getAvisos();
+      setAvisos(data);
+    }catch{
+      setError("No se pudieron cargar los avisos.");
+
+    }finally{
+      setCargando(false);
     }
-    cargar();
+  }
+  cargar();
 },[]);
 function crearAviso(){
     window.location.href ="/dashboard/docente/avisos/nuevo";
 }
 async function borrar(id:number){
-    try{
-        await eliminarAviso(id);
-        setAvisos(prev =>
-            prev.filter(
-                aviso =>
-                    aviso.id_aviso !== id
-            ));
-        }catch(error){
-            console.error(error);
-        }
-    }
+  setError("");
+  setExito("");
+  setEliminando(id);
+  try{
+    await eliminarAviso(id);
+    setAvisos(prev =>
+      prev.filter(
+        aviso =>
+          aviso.id_aviso !== id
+      )
+    );
+    setExito("Aviso eliminado correctamente.");
+  }catch{
+    setError("No se pudo eliminar el aviso.");
+  }finally{
+    setEliminando(null);
+  }
+}
 
 return (
   <main className={layout.main}>
@@ -60,9 +69,11 @@ return (
           Crear aviso
         </button>
       </header>
+      {error && (<p className={forms.error}>{error}</p>)}
+      {exito && (<p className={forms.helper}>{exito}</p>)}
       {
         cargando ?
-        <p>Cargando...</p>
+        <p className={forms.helper}>Cargando avisos...</p>
         :
         avisos.length===0 ?
         <div className={table.empty}>

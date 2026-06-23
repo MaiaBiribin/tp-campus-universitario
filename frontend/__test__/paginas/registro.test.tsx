@@ -81,9 +81,16 @@ describe("Pagina registro", () => {
         contrasena:"123456"
       });
     await waitFor(() => {
-  expect(screen.getByText("Solicitud creada. Esperá a que un administrador apruebe tu registro.")).toBeInTheDocument();});
-  jest.advanceTimersByTime(2000);
-  await waitFor(() => {expect(globalMockPush).toHaveBeenCalledWith("/login");});
+  expect(screen.getByText(
+    "Solicitud creada. Esperá a que un administrador apruebe tu registro."
+  )).toBeInTheDocument();
+});
+
+jest.advanceTimersByTime(7000);
+
+await waitFor(() => {
+  expect(globalMockPush).toHaveBeenCalledWith("/login");
+});
   });
 
   it("muestra error cuando backend devuelve mensaje", async()=>{

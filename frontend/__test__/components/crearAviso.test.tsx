@@ -29,15 +29,7 @@ const eventosMock = [
 describe("CrearAviso",()=>{
 beforeEach(()=>{
   jest.clearAllMocks();
-  jest
-    .spyOn(console,"error")
-    .mockImplementation(()=>{});
 });
-
-afterEach(()=>{
-  jest.restoreAllMocks();
-});
-
 
 
 test("muestra cargando mientras carga eventos",()=>{
@@ -62,17 +54,15 @@ await waitFor(()=>{
 expect(screen.queryByText("Evento pasado - 2020-01-01 - 10:00")).not.toBeInTheDocument();
 });
 
-test("maneja error al obtener eventos",async()=>{
-(getEventos as jest.Mock).mockRejectedValue( new Error("fallo"));
-
+it("muestra error si falla cargar eventos",async()=>{
+(getEventos as jest.Mock).mockRejectedValue(new Error("fallo"));
 render(
- <CrearAviso/>
+  <CrearAviso/>
 );
 await waitFor(()=>{
- expect(screen.getByText("Seleccionar evento")).toBeInTheDocument();
+expect(
+ screen.getByText("No se pudieron cargar los eventos.")).toBeInTheDocument();
 });
-expect(console.error)
-.toHaveBeenCalled();
 });
 
 test("no permite crear aviso sin seleccionar evento",async()=>{
@@ -95,7 +85,7 @@ await user.click(
 );
 expect(
  screen.getAllByText(
-  "Seleccioná un evento"
+  "Seleccioná un evento."
  ).length
 )
 .toBeGreaterThan(0);
@@ -133,7 +123,7 @@ await user.click(
 );
 expect(
  screen.getAllByText(
-  "Escribí un mensaje"
+  "Escribí un mensaje."
  ).length
 )
 .toBeGreaterThan(0);
@@ -175,7 +165,7 @@ await user.click(
 );
 await waitFor(()=>{
 expect(crearAviso).toHaveBeenCalledWith("Mañana hay clase",10);
-expect(screen.getAllByText("Aviso creado correctamente").length).toBeGreaterThan(0);
+expect(screen.getAllByText("Aviso creado correctamente.").length).toBeGreaterThan(0);
 });
 });
 
@@ -208,7 +198,7 @@ await user.click(
  })
 );
 await waitFor(()=>{
-expect(screen.getAllByText("Error creando aviso").length).toBeGreaterThan(0);
+expect(screen.getAllByText("No se pudo crear el aviso.").length).toBeGreaterThan(0);
 });
 });
 });
