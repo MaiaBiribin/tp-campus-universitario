@@ -29,7 +29,8 @@ export async function registrarUsuario(datos: {
 }
 
 export function guardarSesion(token: string) {
-  document.cookie = `token=${token}; path=/`;
+  document.cookie =
+    `token=${token}; path=/; SameSite=Lax`;
 }
 
 export function logout() {

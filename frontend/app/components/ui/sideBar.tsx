@@ -28,10 +28,10 @@ const rol =getRoleFromToken(token);
 if(rol==="Admin")
 setRole("admin");
 
-if(rol==="Profesor")
+if(rol==="Docente")
 setRole("docente");
 
-if(rol==="Alumno")
+if(rol==="Estudiante")
 setRole("estudiante");
 
 },[]);

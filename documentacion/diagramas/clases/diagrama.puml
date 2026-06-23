@@ -1,0 +1,185 @@
+@startuml AulaSync
+
+skinparam classFontSize 15
+
+' ENTIDADES
+
+class Usuario {
++id_usuario:int
++nombre:string
++apellido:string
++mail:string
++contrasena:string
++dni:string
++estado:EstadoUsuario
+}
+
+class Rol {
++id_rol:int
++nombre:string
+}
+
+class Aula {
++id_aula:int
++nombre:string
++capacidad:int
++piso:int
++ubicacion:string
+}
+
+class Carrera {
++id_carrera:int
++nombre:string
+}
+
+class Materia {
++id_materia:int
++nombre:string
+}
+
+class Evento {
++id_evento:int
++titulo:string
++fecha:string
++horaInicio:string
++horaFin:string
++estado:string
+}
+
+class Inscripcion {
++id_inscripcion:int
+}
+
+class Aviso {
++id_aviso:int
++mensaje:string
++fecha_creacion:Date
+}
+
+class Notificacion {
++id_notificacion:int
++mensaje:string
++leida:boolean
++fecha_creacion:Date
+}
+
+class TipoEvento
+
+' SERVICIOS
+
+class AuthService {
++signIn()
++register()
+}
+
+class UsuariosService {
++findByMail()
++create()
++findPendientes()
++findHabilitados()
++habilitarUsuario()
++rechazarUsuario()
+}
+
+class EventosService {
++findAll()
++findOne()
++create()
++eventosUsuario()
++updatePartial()
++replace()
++remove()
+}
+
+class AulasService {
++findAll()
++findOne()
++create()
++update()
++replace()
++delete()
+}
+
+class CarrerasService {
++findAll()
++create()
+}
+
+class MateriasService {
++findAll()
++findByCarrera()
++create()
+}
+
+class InscripcionesService {
++crear()
++obtenerPorMateria()
++listar()
+}
+
+class AvisosService {
++create()
++findByEvento()
++findAll()
+}
+
+class NotificacionesService {
++crearNotificaciones()
++getMisNotificaciones()
++marcarLeida()
++marcarTodasLeidas()
+}
+
+' SEGURIDAD
+
+class AuthGuard {
++canActivate()
+-extractTokenFromHeader()
+}
+
+class RolesGuard {
++canActivate()
+}
+
+
+' RELACIONES
+
+Rol "1" <-- "0..*" Usuario
+
+Usuario "1" <-- "0..*" Inscripcion
+Materia "1" <-- "0..*" Inscripcion
+
+Carrera "1" <-- "0..*" Materia
+
+Materia "1" <-- "0..*" Evento
+Aula "1" <-- "0..*" Evento
+TipoEvento "1" <-- "0..*" Evento
+
+Usuario "1" <-- "0..*" Aviso
+Evento "1" <-- "0..*" Aviso
+
+Usuario "1" <-- "0..*" Notificacion
+Evento "0..1" <-- "0..*" Notificacion
+
+
+AuthService ..> UsuariosService
+UsuariosService ..> Usuario
+UsuariosService ..> Rol
+EventosService ..> Evento
+EventosService ..> Inscripcion
+EventosService ..> NotificacionesService
+InscripcionesService ..> Inscripcion
+InscripcionesService ..> Usuario
+InscripcionesService ..> Materia
+AvisosService ..> Aviso
+AvisosService ..> Evento
+AvisosService ..> Inscripcion
+AvisosService ..> NotificacionesService
+NotificacionesService ..> Notificacion
+MateriasService ..> Materia
+CarrerasService ..> Carrera
+AulasService ..> Aula
+AuthGuard ..> AuthService
+RolesGuard ..> Usuario
+
+@enduml

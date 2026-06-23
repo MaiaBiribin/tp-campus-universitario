@@ -68,4 +68,49 @@ export class AvisosService {
       order: { fecha_creacion: 'DESC' },
     });
   }
+    async findAll(): Promise<Aviso[]> {
+    return this.avisosRepository.find({
+      relations:{
+        evento:true,
+        usuarioCreador:true,
+      },
+      order:{
+        fecha_creacion:"DESC"
+      }
+
+    });
+  }
+  async remove(
+  idAviso:number,
+  idUsuario:number
+){
+
+  const aviso =
+    await this.avisosRepository.findOne({
+      where:{
+        id_aviso:idAviso
+      },
+      relations:{
+        usuarioCreador:true
+      }
+    });
+
+  if(!aviso){
+    throw new BadRequestException("El aviso no existe");
+  }
+
+  if(
+    aviso.usuarioCreador.id_usuario !== idUsuario
+  ){
+    throw new BadRequestException("No podés eliminar un aviso que no creaste");
+  }
+
+  await this.avisosRepository.delete(idAviso);
+  return {
+    message:"Aviso eliminado correctamente"
+  };
 }
+}
+
+
+

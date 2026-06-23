@@ -4,6 +4,11 @@ import { EventosService } from './eventos.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
 import { UpdateEventoDto } from './dto/update-evento.dto';
 import { EventoResponseDto } from './dto/evento-response.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { ROLES } from '../auth/constants';
 
 @ApiTags('eventos')
 @Controller('eventos')
@@ -44,6 +49,8 @@ export class EventosController {
     return this.eventosService.findOne(id);
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN, ROLES.DOCENTE)
   @Post()
   @ApiOperation({
     summary: 'Crear un nuevo evento',
@@ -56,6 +63,8 @@ export class EventosController {
     return this.eventosService.create(createEventoDto);
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN, ROLES.DOCENTE)
   @Patch(':id')
   @ApiOperation({
     summary: 'Actualizar parcialmente un evento',
@@ -69,6 +78,8 @@ export class EventosController {
     return this.eventosService.updatePartial(id, updateEventoDto);
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN)
   @Put(':id')
   @ApiOperation({
     summary: 'Reemplazar por completo un evento',
@@ -82,6 +93,8 @@ export class EventosController {
     return this.eventosService.replace(id, createEventoDto);
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN)
   @Delete(':id')
   @ApiOperation({
     summary: 'Eliminar un evento',

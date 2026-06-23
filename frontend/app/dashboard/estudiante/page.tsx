@@ -3,6 +3,7 @@
 
 import dashboard from "@/app/styles/dashboard.module.css";
 import ProximoEvento from "@/app/components/proximoEvento";
+import AvisosRecientes from "@/app/components/avisosRecientes";
 
 export default function DashboardEstudiante() {
 
@@ -44,38 +45,12 @@ export default function DashboardEstudiante() {
 
       </section>
 
-
-
       {/* AVISOS */}
 
       <section>
-
-        <h2 className={dashboard.sectionTitle}>
-          Avisos recientes
-        </h2>
-
-        <div className={dashboard.card}>
-
-          <div className={dashboard.notice}>
-            <h3>Cambio de aula</h3>
-            <p>Programación pasó al aula 2</p>
-          </div>
-
-          <div className={dashboard.notice}>
-            <h3>Recordatorio</h3>
-            <p>Parcial el viernes 19</p>
-          </div>
-
-          <div className={dashboard.notice}>
-            <h3>Nuevo aviso docente</h3>
-            <p>Llego tarde</p>
-          </div>
-
-        </div>
-
-      </section>
-
+        <h2 className={dashboard.sectionTitle}>Avisos recientes</h2>
+        <AvisosRecientes />
+        </section>
     </>
-
   );
 }

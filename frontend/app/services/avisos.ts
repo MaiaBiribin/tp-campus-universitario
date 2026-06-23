@@ -31,3 +31,31 @@ export async function getAvisosPorEvento(
   }
   return res.json();
 }
+
+export async function eliminarAviso(id:number){
+  const res = await api(
+    `/avisos/${id}`,
+    {
+      method:"DELETE",
+    }
+  );
+
+  if(!res.ok){
+    throw new Error(
+      "Error eliminando aviso"
+    );
+  }
+
+  return res.json();
+}
+
+export async function getAvisos(): Promise<Aviso[]> {
+  const res = await api("/avisos");
+  if(!res.ok){
+    throw new Error(
+      "Error cargando avisos"
+    );
+  }
+
+  return res.json();
+}

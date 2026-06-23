@@ -84,12 +84,7 @@ Hacer una copia de ese archivo dentro de la carpeta backend y renombrarlo como:
 .env
 ```
 
-Completar el archivo con:
-
-```bash
-DATABASE_URL=postgresql://neondb_owner:npg_Pjpl1vzabG8o@ep-withered-king-aclgdgqs.sa-east-1.aws.neon.tech/neondb?sslmode=require 
-JWT_SECRET=clave_secreta_muy_larga_y_random
-```
+Completar el archivo con las variables de entorno necesarias adjuntadas por mail.
 
 ---
 

@@ -7,13 +7,20 @@ import Form from "../components/ui/form";
 import Button from "../components/ui/button";
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
+import { useState } from "react";
 
 export default function Registrarse() {
   const ruta = useRouter();
+  const [error,setError] = useState("");
+  const [exito,setExito] = useState("");
+  const [cargando,setCargando] = useState(false);
   async function MandarDatos(
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
+    setError("");
+    setExito("");
+    setCargando(true);
     const formData =new FormData(event.currentTarget);
     const datosUsuario =Object.fromEntries(formData.entries());
     try {
@@ -25,17 +32,24 @@ export default function Registrarse() {
         String(datosUsuario.contrasena),
       });
       if (response.ok) {
-        alert("Solicitud creada. Esperá a que un administrador apruebe tu registro.");
+      setExito("Solicitud creada. Esperá a que un administrador apruebe tu registro.");
+      setTimeout(() => {
         ruta.push("/login");
-      } else {
-        const errorData =await response.json().catch(() => ({}));
-        alert(errorData.message ||"Hubo un error en el registro.");
-      }
-    } catch (error) {
-      console.error("Error al conectar con el servidor:",error);
-      alert("Hubo un problema al conectar con el servidor.");
+      }, 7000);
+
+    } else {
+      const errorData = await response
+        .json()
+        .catch(() => ({}));
+
+      setError(errorData.message ||"Hubo un error en el registro.");
     }
+  } catch {
+    setError("Hubo un problema al conectar con el servidor.");
+  } finally {
+    setCargando(false);
   }
+}
 
   return (
     <div
@@ -120,6 +134,12 @@ export default function Registrarse() {
             }
           />
         </div>
+        {error && (
+          <p className={forms.error}>{error}</p>
+          )}
+          {exito && (
+            <p className={forms.helper}>{exito}</p>
+            )}
         <Button
           type="submit"
         >

@@ -1,7 +1,7 @@
 export const ROLES = {
   ADMIN: "Admin",
-  PROFESOR: "Profesor",
-  ALUMNO: "Alumno",
+  DOCENTE: "Docente",
+  ESTUDIANTE: "Estudiante",
 } as const;
 
 export type Role =
@@ -13,12 +13,12 @@ export const ROLE_PERMISSIONS = {
     "/dashboard/mapa",
     "/dashboard/eventos",
   ],
-  [ROLES.PROFESOR]: [
+  [ROLES.DOCENTE]: [
     "/dashboard/docente",
     "/dashboard/mapa",
     "/dashboard/eventos",
   ],
-  [ROLES.ALUMNO]: [
+  [ROLES.ESTUDIANTE]: [
     "/dashboard/estudiante",
     "/dashboard/mapa",
     "/dashboard/eventos",

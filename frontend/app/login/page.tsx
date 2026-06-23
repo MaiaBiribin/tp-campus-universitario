@@ -1,5 +1,5 @@
 "use client";
-
+import {Suspense, useState} from "react";
 import {useRouter,useSearchParams} from "next/navigation";
 import Link from "next/link";
 import {login,guardarSesion,}from "../services/auth";
@@ -10,48 +10,53 @@ import forms from "../styles/forms.module.css";
 import Button from "../components/ui/button";
 import Card from "../components/ui/card";
 import Form from "../components/ui/form";
+import React from "react";
 
-export default function Login() {
+const LoginForm=()=> {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const accesoDenegado =
-    searchParams.get("acceso") === "denegado";
+  const accesoDenegado =searchParams.get("acceso") === "denegado";
+  const [error,setError] = useState("");
+  const [cargando,setCargando] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
+    setCargando(true);
 
     const formData = new FormData(e.currentTarget);
-    const datos = Object.fromEntries(formData.entries());
-    const response =await login(String(datos.mail),String(datos.contrasena));
-
+    const mail = formData.get("mail") as string;
+    const contrasena = formData.get("contrasena") as string;
+    try {
+    const response = await login(mail, contrasena);
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      alert(err.message || "Error login");
+      setError(err.message || "No se pudo iniciar sesión");
       return;
     }
 
     const data = await response.json();
     guardarSesion(data.access_token);
-
-    // guardar para api.ts
-    localStorage.setItem(
-    "token",
-     data.access_token
-    );
-
     const payload = decodeToken(data.access_token);
+
     if (!payload) {
-      alert("Token inválido");
-      return;}
-      const rol = payload.rol;
-      const rutas = {
-        [ROLES.ADMIN]: "/dashboard/admin",
-        [ROLES.PROFESOR]: "/dashboard/docente",
-        [ROLES.ALUMNO]: "/dashboard/estudiante",
-      } as const;
-      router.push(rutas[rol as keyof typeof rutas]);
+      setError("Token inválido");
+      return;
+    }
+    const rol = payload.rol;
+    const rutas = {
+      [ROLES.ADMIN]: "/dashboard/admin",
+      [ROLES.DOCENTE]: "/dashboard/docente",
+      [ROLES.ESTUDIANTE]: "/dashboard/estudiante",
+    } as const;
+
+    router.push(rutas[rol as keyof typeof rutas]);
+  } catch {
+    setError("No se pudo conectar con el servidor");
+  } finally {
+    setCargando(false);
   }
+}
 
 return(
 <div className={layout.centeredPage}>
@@ -89,9 +94,10 @@ return(
         className={forms.input}
         />
     </div>
-    <Button>
-      Ingresar
-      </Button>
+    {error && (
+      <p className={forms.error}>{error}</p>
+      )}
+    <Button>{cargando ? "Ingresando..." : "Ingresar"}</Button>
       <p className={forms.formFooter}>
         ¿No tenés usuario?
         <Link href="/registro">
@@ -102,3 +108,11 @@ return(
     </div>
     );
   }
+
+  export default function Login() {
+    return(
+      <Suspense fallback={<p>Cargando...</p>}>
+        <LoginForm /> 
+      </Suspense>
+    )
+  } 

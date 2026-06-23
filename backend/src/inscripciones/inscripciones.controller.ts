@@ -3,6 +3,11 @@ import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiParam } from '@nestjs/s
 import { InscripcionesService } from './inscripciones.service';
 import { CrearInscripcionDto } from './crear-inscripcion.dto';
 import { InscripcionResponseDto } from './dto/inscripcion-response.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { ROLES } from '../auth/constants';
 
 @ApiTags('inscripciones')
 @Controller('inscripciones')
@@ -10,18 +15,14 @@ export class InscripcionesController {
 
   constructor(private readonly service: InscripcionesService) {}
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN, ROLES.ESTUDIANTE)
   @Post()
-  @ApiOperation({
-    summary: 'Crear inscripciones',
-    description: 'Inscribe uno o varios usuarios en una materia. Recibe el ID de la materia y un array de IDs de usuarios.',
-  })
-  @ApiBody({ type: CrearInscripcionDto, description: 'Materia y lista de usuarios a inscribir' })
-  @ApiResponse({ status: 201, description: 'Inscripciones creadas exitosamente', type: [InscripcionResponseDto] })
-  @ApiResponse({ status: 400, description: 'Datos inválidos o faltantes' })
   crear(@Body() dto: CrearInscripcionDto) {
-    return this.service.crear(dto);
-  }
+  return this.service.crear(dto);}
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN)
   @Get()
   @ApiOperation({
     summary: 'Listar todas las inscripciones',
@@ -32,6 +33,8 @@ export class InscripcionesController {
     return this.service.listar();
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN, ROLES.DOCENTE, ROLES.ESTUDIANTE)
   @Get('materia/:id')
   @ApiOperation({
     summary: 'Obtener inscripciones por materia',

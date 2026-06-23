@@ -11,18 +11,8 @@ className=""
 }:Props){
 
 return(
-
-<div
-className={`
-${cards.card}
-${className}
-`}
->
-
-{children}
-
-</div>
-
-);
-
+    <div className={`${cards.card}${className}`}>
+        {children}
+    </div>
+    );
 }

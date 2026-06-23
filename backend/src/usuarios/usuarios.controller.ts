@@ -16,7 +16,7 @@ export class UsuariosController {
   @Post()
   @ApiOperation({
     summary: 'Registrar un nuevo usuario',
-    description: 'Crea una cuenta nueva en la plataforma. Por defecto se guarda con rol Alumno y estado PENDIENTE. La contraseña se hashea automáticamente.',
+    description: 'Crea una cuenta nueva en la plataforma. Por defecto se guarda con rol Estudiante y estado PENDIENTE. La contraseña se hashea automáticamente.',
   })
   @ApiBody({ type: CreateUsuarioDto, description: 'Datos personales y credenciales del nuevo usuario' })
   @ApiResponse({ status: 201, description: 'Usuario registrado exitosamente', type: UsuarioResponseDto })
@@ -28,7 +28,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Get()
   @ApiOperation({
     summary: 'Listar todos los usuarios',
@@ -43,7 +43,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Get('/pendientes')
   @ApiOperation({
     summary: 'Listar usuarios pendientes',
@@ -58,7 +58,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Get('/habilitados')
   @ApiOperation({
     summary: 'Listar usuarios habilitados',
@@ -73,7 +73,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Patch(':id/habilitar')
   @ApiOperation({
     summary: 'Habilitar un usuario',
@@ -90,7 +90,7 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin'])
+  @Roles('Admin')
   @Patch(':id/rechazar')
   @ApiOperation({
     summary: 'Rechazar un usuario',
@@ -155,29 +155,29 @@ export class UsuariosController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Profesor'])
+  @Roles('Admin')
   @Get('mis-eventos')
   @ApiOperation({
     summary: 'Obtener mis eventos',
-    description: 'Devuelve los eventos del usuario con rol Profesor actualmente autenticado.',
+    description: 'Devuelve los eventos del usuario con rol Docente actualmente autenticado.',
   })
-  @ApiResponse({ status: 200, description: 'Eventos del profesor' })
-  @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Profesor)' })
+  @ApiResponse({ status: 200, description: 'Eventos del Docente' })
+  @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Docente)' })
   getMisEventos() {
-    return { mensaje: 'Solo Profesor puede ver esto' };
+    return { mensaje: 'Solo Docente puede ver esto' };
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(['Admin', 'Profesor'])
+  @Roles('Admin')
   @Get('aulas')
   @ApiOperation({
     summary: 'Obtener aulas disponibles',
-    description: 'Devuelve las aulas disponibles. Accesible para usuarios con rol Admin o Profesor.',
+    description: 'Devuelve las aulas disponibles. Accesible para usuarios con rol Admin o Docente.',
   })
   @ApiResponse({ status: 200, description: 'Aulas disponibles' })
-  @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Admin o Profesor)' })
+  @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Admin o Docente)' })
   getAulas() {
-    return { mensaje: 'Admin y Profesor pueden ver esto' };
+    return { mensaje: 'Admin y Docente pueden ver esto' };
   }
 }
