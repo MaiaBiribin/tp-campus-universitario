@@ -34,7 +34,7 @@ Cuando el usuario notifique que trajo cambios de `master` a su rama de trabajo, 
 ---
 
 ## Mapa Estructural del Proyecto
-> Última actualización: 2026-06-18 | Rama: franco (sincronizada con master)
+> Última actualización: 2026-06-23 | Rama: franco (sincronizada con master)
 
 ```
 tp-campus-universitario/
@@ -46,7 +46,7 @@ tp-campus-universitario/
 │       │   ├── auth.controller.ts      # POST /auth/login, /auth/register | GET /auth/perfil
 │       │   ├── auth.service.ts         # Lógica JWT + bcrypt
 │       │   ├── auth.module.ts
-│       │   ├── constants.ts            # JWT_SECRET (process.env)
+│       │   ├── constants.ts            # JWT_SECRET + ROLES = { ADMIN, ESTUDIANTE, DOCENTE }
 │       │   ├── dto/
 │       │   │   ├── login.dto.ts
 │       │   │   ├── register.dto.ts
@@ -54,10 +54,10 @@ tp-campus-universitario/
 │       │   │   ├── register-response.dto.ts
 │       │   │   └── perfil-response.dto.ts
 │       │   ├── decorators/
-│       │   │   └── roles.decorator.ts  # @Roles(...)
+│       │   │   └── roles.decorator.ts  # @Roles(...roles) via SetMetadata(ROLES_KEY)
 │       │   └── guards/
 │       │       ├── auth.guard.ts       # Guard JWT
-│       │       └── roles.guard.ts      # Guard por rol
+│       │       └── roles.guard.ts      # Guard por rol — usa getAllAndOverride(ROLES_KEY)
 │       ├── aulas/
 │       │   ├── aula.entity.ts
 │       │   ├── aulas.controller.ts     # GET/POST/PATCH/DELETE /aulas
@@ -124,8 +124,8 @@ tp-campus-universitario/
 │       └── usuarios/
 │           ├── usuario.entity.ts
 │           ├── usuarios.controller.ts  # GET pendientes/habilitados | PATCH habilitar/rechazar
-│           ├── usuarios.service.ts
-│           ├── usuarios.module.ts
+│           ├── usuarios.service.ts     # Rol Estudiante buscado por nombre en DB (sin magic number)
+│           ├── usuarios.module.ts      # Inyecta Repository<Rol>
 │           └── dto/
 │               ├── create-usuario.dto.ts
 │               └── usuario-response.dto.ts
@@ -140,17 +140,21 @@ tp-campus-universitario/
         │   └── roles.ts                # Constantes de roles
         ├── types/
         │   └── entidades.ts            # Tipos TypeScript globales (Aula, Evento, Usuario…)
+        ├── hooks/                      # Custom hooks de lógica de negocio
+        │   ├── useAsignacionAcademica.ts  # Estado para gestión de carreras/materias/inscripciones
+        │   └── useCrearEvento.ts          # Estado y submit del formulario de nuevo evento
         ├── services/                   # Capa de acceso a la API REST
         │   ├── auth.ts
         │   ├── aulas.ts
-        │   ├── avisos.ts
+        │   ├── avisos.ts               # + getAvisosPorEvento()
         │   ├── carreras.ts
         │   ├── eventos.ts
-        │   ├── inscripciones.ts        # + helper obtenerIdsUsuariosInscriptos()
+        │   ├── inscripciones.ts        # + obtenerIdsUsuariosInscriptos()
         │   ├── materias.ts
         │   ├── notificaciones.ts
-        │   └── usuarios.ts             # + helpers obtenerUsuariosDisponibles()
+        │   └── usuarios.ts             # + obtenerUsuariosDisponibles()
         ├── components/
+        │   ├── avisosRecientes.tsx     # Lista avisos recientes de un evento (nuevo)
         │   ├── crearAviso.tsx
         │   ├── eventoDetalle.tsx
         │   ├── eventoSemanaView.tsx
@@ -191,7 +195,9 @@ tp-campus-universitario/
             │   └── usuarios/page.tsx
             ├── docente/
             │   ├── page.tsx            # Dashboard Docente
-            │   └── avisos/page.tsx     # Crear/ver avisos
+            │   └── avisos/
+            │       ├── page.tsx        # Listar avisos del docente
+            │       └── nuevo/page.tsx  # Crear nuevo aviso (nuevo)
             └── estudiante/
                 ├── page.tsx            # Dashboard Estudiante
                 └── notificaciones/page.tsx
@@ -212,3 +218,9 @@ tp-campus-universitario/
 
 ### Estado del backend — Swagger y DTOs
 Todos los módulos tienen cobertura completa: `@ApiTags`, `@ApiOperation` (summary + description), DTOs tipados con `@ApiProperty`, `@ApiResponse` en todos los endpoints. Documentación disponible en `http://localhost:4000/api`.
+
+### Sistema de roles
+Los nombres canónicos de roles están en `backend/src/auth/constants.ts` → `ROLES.ADMIN`, `ROLES.ESTUDIANTE`, `ROLES.DOCENTE`. Usar siempre estas constantes en los guards, no strings literales.
+
+### Tests Frontend
+Suite Jest completa en `frontend/__test__/` cubriendo: servicios, componentes y páginas. Configuración en `frontend/jest.config.ts` + `frontend/jest.setup.ts`.
