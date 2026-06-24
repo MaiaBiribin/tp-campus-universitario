@@ -24,27 +24,14 @@ export class AulasService {
     return aula;
   }
 
-  // 3. Crear aula
-  async create(data: Partial<Aula>): Promise<Aula> {
-    const nuevaAula = this.aulasRepository.create(data);
-    return await this.aulasRepository.save(nuevaAula);
-  }
-
-  // 4. Modificación parcial (PATCH)
-  async update(id: number, updateData: Partial<Aula>): Promise<Aula> {
-    const aula = await this.findOne(id);
-    Object.assign(aula, updateData);
-    return await this.aulasRepository.save(aula);
-  }
-
-  // 5. Reemplazo completo (PUT)
+  // 3. Reemplazo completo (PUT)
   async replace(id: number, aulaData: Partial<Aula>): Promise<Aula> {
     const aula = await this.findOne(id);
     const aulaActualizada = this.aulasRepository.merge(aula, aulaData);
     return await this.aulasRepository.save(aulaActualizada);
   }
 
-  // 6. Eliminar aula
+  // 4. Eliminar aula
   async delete(id: number): Promise<void> {
     const aula = await this.findOne(id);
     await this.aulasRepository.remove(aula);
