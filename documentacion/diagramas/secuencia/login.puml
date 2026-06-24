@@ -1,0 +1,34 @@
+@startuml
+title Flujo Login
+
+actor Usuario
+participant Frontend
+participant Backend
+database DB
+
+Usuario -> Frontend : Ingresa credenciales
+Frontend -> Backend : Solicitud de login
+
+Backend -> DB : Buscar usuario
+DB --> Backend : Datos del usuario
+
+Backend -> Backend : Validar contraseña\ny estado
+
+alt Usuario no habilitado
+    Backend --> Frontend : Error 401
+    Frontend --> Usuario : Mostrar error
+else Usuario habilitado
+    Backend --> Frontend : JWT
+    Frontend -> Frontend : Guardar token
+    Frontend -> Frontend : Obtener rol
+
+    alt Admin
+        Frontend --> Usuario : Dashboard Admin
+    else Profesor
+        Frontend --> Usuario : Dashboard Docente
+    else Alumno
+        Frontend --> Usuario : Dashboard Estudiante
+    end
+end
+
+@enduml
