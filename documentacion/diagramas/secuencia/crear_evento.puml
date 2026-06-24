@@ -1,0 +1,35 @@
+@startuml
+title Flujo Crear Evento
+
+actor Usuario
+participant Frontend
+participant Backend
+database DB
+
+Usuario -> Frontend : Completa formulario
+Frontend -> Backend : POST /eventos/create
+
+Backend -> DB : Verificar disponibilidad del aula
+
+alt Aula ocupada
+    DB --> Backend : Conflicto encontrado
+    Backend --> Frontend : BadRequestException
+    Frontend --> Usuario : Mostrar error
+else Aula disponible
+    DB --> Backend : Sin conflictos
+
+    Backend -> DB : Crear evento
+    DB --> Backend : Evento creado
+
+    Backend -> DB : Buscar alumnos\ninscriptos en la materia
+    DB --> Backend : Lista de alumnos
+
+    loop Por cada alumno
+        Backend -> DB : Crear notificación
+    end
+
+    Backend --> Frontend : Evento creado
+    Frontend --> Usuario : Mostrar notificacion
+end
+
+@enduml
