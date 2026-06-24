@@ -34,7 +34,7 @@ Cuando el usuario notifique que trajo cambios de `master` a su rama de trabajo, 
 ---
 
 ## Mapa Estructural del Proyecto
-> Última actualización: 2026-06-23 | Rama: franco (sincronizada con master)
+> Última actualización: 2026-06-23 v2 | Rama: franco (sincronizada con master)
 
 ```
 tp-campus-universitario/
@@ -60,8 +60,8 @@ tp-campus-universitario/
 │       │       └── roles.guard.ts      # Guard por rol — usa getAllAndOverride(ROLES_KEY)
 │       ├── aulas/
 │       │   ├── aula.entity.ts
-│       │   ├── aulas.controller.ts     # GET/POST/PATCH/DELETE /aulas
-│       │   ├── aulas.service.ts
+│       │   ├── aulas.controller.ts     # GET /aulas | PUT /aulas/:id | DELETE /aulas/:id (sin guards, sin POST/PATCH)
+│       │   ├── aulas.service.ts        # findAll, findOne, replace, delete (create/update eliminados)
 │       │   ├── aulas.module.ts
 │       │   └── dto/
 │       │       ├── create-aula.dto.ts
@@ -221,6 +221,9 @@ Todos los módulos tienen cobertura completa: `@ApiTags`, `@ApiOperation` (summa
 
 ### Sistema de roles
 Los nombres canónicos de roles están en `backend/src/auth/constants.ts` → `ROLES.ADMIN`, `ROLES.ESTUDIANTE`, `ROLES.DOCENTE`. Usar siempre estas constantes en los guards, no strings literales.
+
+### Tests Backend
+Suite Jest completa: 18/18 suites, 98+ tests. Todos los módulos cubiertos con mocks de repositorios TypeORM (`getRepositoryToken`), guards sobreescritos con `overrideGuard` en controllers, y `jest.mock('bcrypt')` para auth.
 
 ### Tests Frontend
 Suite Jest completa en `frontend/__test__/` cubriendo: servicios, componentes y páginas. Configuración en `frontend/jest.config.ts` + `frontend/jest.setup.ts`.
