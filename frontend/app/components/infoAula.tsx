@@ -19,7 +19,6 @@ export default function InfoAula({aulaId, nombre}:Props){
     useEffect(()=>{async function cargar(){
         try{
             const data:Evento[] =await getEventos();
-            console.log("TODOS LOS EVENTOS:", data);
             const filtrados = data.filter(ev => {
 
   return Number(ev.aula?.id_aula) === Number(aulaId);
