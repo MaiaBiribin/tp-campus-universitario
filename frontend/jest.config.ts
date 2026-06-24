@@ -12,6 +12,8 @@ const config: Config = {
   //  solo código real del frontend
   collectCoverageFrom: [
     "app/**/*.{ts,tsx}",
+    "!app/layout.tsx",
+    "!app/**/layout.tsx",
 
     // excluir tipos
     "!app/**/*.d.ts",
@@ -38,6 +40,8 @@ const config: Config = {
   moduleNameMapper: {
     "^@/app/(.*)$": "<rootDir>/app/$1",
     "^@/(.*)$": "<rootDir>/app/$1",
+    "^.+\\.module\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/cards.module.css.js",
+    "^.+\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
   },
 
   testPathIgnorePatterns: [

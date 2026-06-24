@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "__mocks__/cards.module.css.js"  ],
   "exclude": ["node_modules"]
 }

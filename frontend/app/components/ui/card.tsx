@@ -6,13 +6,12 @@ className?:string;
 }
 
 export default function Card({
-children,
-className=""
-}:Props){
-
-return(
-    <div className={`${cards.card}${className}`}>
-        {children}
+  children,
+  className = "",
+}: Props) {
+  return (
+    <div data-testid="card" className={className}>
+      {children}
     </div>
-    );
+  );
 }
