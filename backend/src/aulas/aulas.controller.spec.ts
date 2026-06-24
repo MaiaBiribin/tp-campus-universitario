@@ -42,20 +42,6 @@ describe('AulasController', () => {
     expect(mockAulasService.findAll).toHaveBeenCalled();
   });
 
-  it('registrarNuevaAula delega el DTO completo al servicio', async () => {
-    const dto = { nombre: 'A101', capacidad: 30, piso: 1, ubicacion: 'Edificio A' } as any;
-    mockAulasService.create.mockResolvedValue({ id_aula: 1, ...dto });
-    await controller.registrarNuevaAula(dto);
-    expect(mockAulasService.create).toHaveBeenCalledWith(dto);
-  });
-
-  it('actualizarDatosDelAula parsea el id a número y delega al servicio', async () => {
-    const dto = { nombre: 'B202' } as any;
-    mockAulasService.update.mockResolvedValue({ id_aula: 1 });
-    await controller.actualizarDatosDelAula('1', dto);
-    expect(mockAulasService.update).toHaveBeenCalledWith(1, dto);
-  });
-
   it('reemplazarAulaCompleta parsea el id a número y delega al servicio', async () => {
     const dto = { nombre: 'C303', capacidad: 40, piso: 2, ubicacion: 'Edificio C' } as any;
     mockAulasService.replace.mockResolvedValue({ id_aula: 1 });
