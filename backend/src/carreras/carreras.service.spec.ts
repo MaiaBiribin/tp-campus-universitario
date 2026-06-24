@@ -1,22 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CarrerasService } from './carreras.service';
+
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Carrera } from './carrera.entity';
+
+const mockCarrerasRepository = {
+  find:   jest.fn(),
+  create: jest.fn(),
+  save:   jest.fn(),
+};
 
 describe('CarrerasService', () => {
   let service: CarrerasService;
 
-  const mockCarrerasRepo = {
-    find: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-  };
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        CarrerasService,
-        { provide: getRepositoryToken(Carrera), useValue: mockCarrerasRepo },
+      providers: [CarrerasService,
+        {
+          provide: getRepositoryToken(Carrera),
+          useValue: mockCarrerasRepository,
+        },
+
       ],
     }).compile();
 
@@ -24,29 +28,68 @@ describe('CarrerasService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
   describe('findAll', () => {
-    it('devuelve todas las carreras', async () => {
-      const carreras = [{ id_carrera: 1, nombre: 'Sistemas' }, { id_carrera: 2, nombre: 'Electrónica' }];
-      mockCarrerasRepo.find.mockResolvedValue(carreras);
-      const result = await service.findAll();
-      expect(result).toEqual(carreras);
-    });
+
+    it('debe retornar un array con carreras', async () => {
+    // 1. Preparamos los datos que devolverá el mock
+    const carrerasEsperadas = [
+      { id_carrera: 1, nombre: 'Ingeniería en Sistemas' },
+      { id_carrera: 2, nombre: 'Contador Público' },
+    ];
+    mockCarrerasRepository.find.mockResolvedValue(carrerasEsperadas);
+
+    // 2. Llamamos a la función real del service
+    const resultado = await service.findAll();
+
+    // 3. Verificamos el resultado
+    expect(resultado).toEqual(carrerasEsperadas);
+    expect(mockCarrerasRepository.find).toHaveBeenCalledTimes(1);
   });
 
-  describe('create', () => {
-    it('crea y guarda una nueva carrera', async () => {
-      const carrera = { id_carrera: 1, nombre: 'Sistemas' };
-      mockCarrerasRepo.create.mockReturnValue(carrera);
-      mockCarrerasRepo.save.mockResolvedValue(carrera);
+  it('debe retornar un array vacío si no hay carreras', async () => {
+    // 1. El mock devuelve array vacío
+    mockCarrerasRepository.find.mockResolvedValue([]);
 
-      const result = await service.create('Sistemas');
-      expect(mockCarrerasRepo.create).toHaveBeenCalledWith({ nombre: 'Sistemas' });
-      expect(mockCarrerasRepo.save).toHaveBeenCalledWith(carrera);
-      expect(result).toEqual(carrera);
-    });
+    // 2. Llamamos al service
+    const resultado = await service.findAll();
+
+    // 3. Verificamos
+    expect(resultado).toEqual([]);
+    expect(mockCarrerasRepository.find).toHaveBeenCalledTimes(1);
   });
+  })
+
+  describe ('create', () =>{
+
+    it('debe crear un registro con una carrera nueva', async() =>{
+
+      //Preparamos el resultado: 
+
+      const registroEsperadoSave = {id_carrera: 1, nombre:"Ingeniería"};
+
+      mockCarrerasRepository.save.mockResolvedValue(registroEsperadoSave);
+
+      const resultadoSave = await service.create("Ingeniería");
+      
+      expect(resultadoSave).toEqual(registroEsperadoSave);
+      expect(mockCarrerasRepository.create).toHaveBeenCalledWith({nombre: "Ingeniería"});
+
+      expect(mockCarrerasRepository.create).toHaveBeenCalledTimes(1);
+      expect(mockCarrerasRepository.save).toHaveBeenCalledTimes(1);
+
+    });
+
+    it('debe lanzar error si falla la base de datos', async() => {
+
+    mockCarrerasRepository.save.mockRejectedValue(new Error("Error de conexión a la base de datos"));
+
+    await expect(service.create("Ingeniería")).rejects.toThrow("Error de conexión a la base de datos");
+
+
+    })
+
+
+});
+
+
 });
