@@ -13,3 +13,8 @@ frontend/.env.local
 
 # Opcional: ignorar .env en cualquier subcarpeta
 **/.env
+
+# Coverage de tests
+coverage/
+backend/coverage/
+frontend/coverage/

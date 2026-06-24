@@ -144,4 +144,46 @@ describe("useAsignacionAcademica", () => {
 
     expect(result.current.error).toBe("Seleccioná usuarios");
   });
+  it("muestra error si falla la carga inicial", async () => {
+  (getCarreras as jest.Mock).mockRejectedValue(
+    new Error("error")
+  );
+  const { result } = render();
+  await waitFor(() => {
+    expect(result.current.cargando).toBe(false);
+  });
+  expect(result.current.error).toBe("No se pudieron cargar las carreras.");});
+
+  it("muestra error si falla cambiarCarrera", async () => {
+  (getCarreras as jest.Mock).mockResolvedValue([]);
+  (getUsuariosHabilitados as jest.Mock).mockResolvedValue([]);
+  (getMateriasPorCarrera as jest.Mock).mockRejectedValue(new Error("error"));
+  const { result } = render();
+  await waitFor(() => {
+    expect(result.current.cargando).toBe(false);
+  });
+  await act(async () => {
+    await result.current.cambiarCarrera(1);});
+  expect(result.current.error).toBe("No se pudieron cargar las materias.");});
+
+  it("muestra error si falla cargarUsuariosInscriptos", async () => {
+  (getCarreras as jest.Mock).mockResolvedValue([]);
+  (getUsuariosHabilitados as jest.Mock).mockResolvedValue([]);
+  (getInscripcionesPorMateria as jest.Mock).mockRejectedValue(new Error("error"));
+  const { result } = render();
+  await waitFor(() => {
+    expect(result.current.cargando).toBe(false);
+  });
+  await act(async () => {
+    await result.current.cargarUsuariosInscriptos(10);
+  });
+  expect(result.current.error).toBe("No se pudieron cargar las inscripciones.");});
+
+  it("muestra error si falla la inscripción", async () => {
+  (inscribirUsuariosService as jest.Mock).mockRejectedValue(new Error("error"));
+  const { result } = render();
+  act(() => {result.current.toggleUsuario(1);});
+  await act(async () => {await result.current.inscribirUsuarios(10);});
+  expect(result.current.error).toBe("No se pudo completar la inscripción.");});
+
 });

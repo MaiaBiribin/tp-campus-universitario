@@ -15,6 +15,7 @@ type Props={
 export default function InfoAula({aulaId, nombre}:Props){
     const [eventos,setEventos]=useState<Evento[]>([]);
     const [cargando,setCargando]=useState(true);
+    const [error,setError]=useState("");
     
     useEffect(()=>{async function cargar(){
         try{
@@ -26,7 +27,7 @@ export default function InfoAula({aulaId, nombre}:Props){
             setEventos(filtrados);
         }
         catch(error){
-            console.error(error);
+          setError("No se pudieron cargar los eventos del aula.");
         }
         finally{
             setCargando(false);
@@ -35,7 +36,24 @@ export default function InfoAula({aulaId, nombre}:Props){
     cargar();
 },[aulaId]);
 if(cargando){
-return <p>Cargando...</p>
+  return (
+    <Card className={dashboard.card}>
+      <p>
+        Cargando información del aula...
+      </p>
+    </Card>
+  );
+}
+
+
+if(error){
+  return (
+    <Card className={dashboard.card}>
+      <p className={dashboard.error}>
+        {error}
+      </p>
+    </Card>
+  );
 }
 const ahora = new Date();
 const eventoActual =eventos.find(ev=>{

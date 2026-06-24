@@ -3,10 +3,7 @@ import { getAvisosPorEvento } from "@/app/services/avisos";
 import { getEventos } from "@/app/services/eventos";
 import AvisosRecientes from "@/app/components/avisosRecientes";
 
-jest.mock("@/app/services/avisos",()=>({
-  getAvisosPorEvento:jest.fn()
-}));
-
+jest.mock("@/app/services/avisos",()=>({getAvisosPorEvento:jest.fn()}));
 jest.mock("@/app/services/eventos",()=>({
   getEventos:jest.fn()
 }));
@@ -14,14 +11,15 @@ jest.mock("@/app/services/eventos",()=>({
 
 describe("Componente AvisosRecientes",()=>{
 
-  beforeEach(()=>{
-    jest.clearAllMocks();
-    jest.spyOn(console,"error")
-      .mockImplementation(()=>{});
-  });
+  beforeEach(()=>{jest.clearAllMocks();});
 
-  afterEach(()=>{
-    jest.restoreAllMocks();
+  it("muestra mensaje de carga mientras obtiene avisos",()=>{
+  (getEventos as jest.Mock).mockReturnValue(new Promise(()=>{}));
+  render(
+    <AvisosRecientes/>
+  );
+
+  expect(screen.getByText("Cargando avisos...")).toBeInTheDocument();
   });
 
   it("muestra mensaje cuando no hay avisos recientes",async()=>{
@@ -172,17 +170,13 @@ describe("Componente AvisosRecientes",()=>{
       expect(screen.getByText("Nuevo aviso")).toBeInTheDocument();});
   });
 
-  it("maneja errores cuando falla la carga",async()=>{
+  it("muestra mensaje de error cuando falla la carga",async()=>{
+  (getEventos as jest.Mock).mockRejectedValue(new Error("fallo"));
+  render(
+    <AvisosRecientes/>
+  );
 
-    (getEventos as jest.Mock).mockRejectedValue(new Error("fallo"));
-    render(
-      <AvisosRecientes/>
-    );
-    await waitFor(()=>{
-      expect(console.error).toHaveBeenCalledWith("Error cargando avisos",expect.any(Error));
-    });
-    expect(
-      screen.getByText("No hay avisos recientes.")).toBeInTheDocument();
-  });
-
+  await waitFor(()=>{
+    expect(screen.getByText("No se pudieron cargar los avisos recientes.")).toBeInTheDocument();
+  });});
 });

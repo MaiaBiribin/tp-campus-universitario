@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import styles from "@/app/styles/dashboard.module.css";
 import { useEffect,useState } from "react";
 import { CantidadNotificacionesSinLeer } from "@/app/services/notificaciones";
+import forms from "@/app/styles/forms.module.css";
 
 type Role =
   | "admin"
@@ -89,16 +90,22 @@ export default function NavLinks({
 
   const pathname = usePathname();
   const [pendientes,setPendientes] = useState(0);
+  const [error,setError] = useState("");
+  const [cargando,setCargando] = useState(false);
 
   useEffect(()=>{
     async function cargarPendientes(){
-    try{
-      const cantidad = await CantidadNotificacionesSinLeer();
-      setPendientes(cantidad);
-    }catch(error){
-      console.error("Error cargando notificaciones",error);
+      setCargando(true);
+      setError("");
+      try{
+        const cantidad = await CantidadNotificacionesSinLeer();
+        setPendientes(cantidad);
+      }catch{
+        setError("No se pudieron cargar las notificaciones.");
+      }finally{
+        setCargando(false);
+      }
     }
-  }
 
   if(role === "estudiante"){
     cargarPendientes();
@@ -125,6 +132,18 @@ export default function NavLinks({
 
 
   return (
+    <>
+    {cargando && (
+      <p className={forms.helper}>
+        Cargando notificaciones...
+      </p>
+    )}
+
+    {error && (
+      <p className={forms.error}>
+        {error}
+      </p>
+    )}
     <nav className={styles.nav}>
       {links.map((link)=>(
         <Link
@@ -143,5 +162,6 @@ export default function NavLinks({
         </Link>
       ))}
     </nav>
-  );
+  </>
+);
 }

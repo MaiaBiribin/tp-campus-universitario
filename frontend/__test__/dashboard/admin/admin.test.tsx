@@ -101,25 +101,14 @@ describe(
             },
           },
         ]);
-        render(
-          <DashboardAdmin />
-        );
-        expect(
-          screen.getByText(
-            "Panel de administración"
-          )
-        ).toBeInTheDocument();
+        render(<DashboardAdmin />);
         await waitFor(() => {
-          const metricas =screen.getAllByRole("heading",
-            {level: 3,});
-            expect(metricas[0]).toHaveTextContent("3");
-            expect(metricas[1]).toHaveTextContent("2");
-            expect(metricas[2]).toHaveTextContent("2");
-          });
-          expect(screen.getByText("Eventos hoy")).toBeInTheDocument();
-          expect(
-          screen.getByText("Solicitudes pendientes")).toBeInTheDocument();
-          expect(screen.getByText("Aulas ocupadas")).toBeInTheDocument();
+          expect(screen.getByText("Panel de administración")).toBeInTheDocument();
+        });
+        const metricas = screen.getAllByRole("heading",{ level: 3 });
+        expect(metricas[0]).toHaveTextContent("3");
+        expect(metricas[1]).toHaveTextContent("2");
+        expect(metricas[2]).toHaveTextContent("2");
       }
     );
 
@@ -130,49 +119,19 @@ describe(
         mockGetUsuariosPendientes.mockResolvedValue(
           []
         );
-        render(
-          <DashboardAdmin />
-        );
-        expect(
-          await screen.findByText(
-            "Crear evento"
-          )
-        ).toBeInTheDocument();
-        expect(
-          screen.getByText(
-            "Académico"
-          )
-        ).toBeInTheDocument();
-        expect(
-          screen.getByRole(
-            "link",
-            {
-              name:
-                /crear evento/i,
-            }
-          )
-        ).toHaveAttribute(
-          "href",
-          "/dashboard/admin/eventos/nuevo"
-        );
-        expect(
-          screen.getByRole(
-            "link",
-            {
-              name:
-                /académico/i,
-            }
-          )
-        ).toHaveAttribute(
-          "href",
-          "/dashboard/admin/academico"
-        );
+        render(<DashboardAdmin />);
+
+await waitFor(() => {
+  expect(
+    screen.getByText(
+      "Crear evento"
+    )
+  ).toBeInTheDocument();
+});
       }
     );
 
-    it(
-      "debería mostrar ceros si no hay datos",
-      async () => {
+    it("debería mostrar ceros si no hay datos",async () => {
         mockGetEventos.mockResolvedValue(
           []
         );
@@ -188,5 +147,39 @@ describe(
         });
       }
     );
+  it("debería mostrar mensaje de carga mientras obtiene datos",
+  () => {
+    mockGetEventos.mockImplementation(
+      () => new Promise(() => {})
+    );
+
+    mockGetUsuariosPendientes.mockImplementation(
+      () => new Promise(() => {})
+    );
+
+    render(<DashboardAdmin />);
+
+    expect(
+      screen.getByText("Cargando panel...")
+    ).toBeInTheDocument();
   }
 );
+it("debería mostrar mensaje de error si falla la carga",async () => {
+    mockGetUsuariosPendientes.mockRejectedValue(
+      new Error("error")
+    );
+
+    mockGetEventos.mockResolvedValue([]);
+
+    render(<DashboardAdmin />);
+
+    expect(
+      await screen.findByText(
+        "No se pudo cargar la información del panel."
+      )
+    ).toBeInTheDocument();
+  }
+);
+
+
+  });

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import RenderizarEventosSemana from "@/app/components/renderizarEventosSemana";
 import { getEventosSemana } from "@/app/services/eventos";
 import { Evento } from "@/app/types/entidades";
+import forms from "@/app/styles/forms.module.css";
 
 type Props = {
   titulo: string;
@@ -17,6 +18,7 @@ export default function EventosSemanaView({
 
   const [eventos, setEventos] =useState<Evento[]>([]);
   const [cargando, setCargando] =useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function cargar() {
@@ -25,13 +27,21 @@ export default function EventosSemanaView({
           await getEventosSemana();
         setEventos(data);
       } catch (error) {
-        console.error(error);
+        setError("No se pudieron cargar los eventos de la semana.");
       } finally {
         setCargando(false);
       }
     }
     cargar();
   }, []);
+
+  if (error) {
+  return (
+    <main>
+      <p className={forms.error}>{error}</p>
+    </main>
+  );
+}
 
   return (
     <main>

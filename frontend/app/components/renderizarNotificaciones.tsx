@@ -14,31 +14,36 @@ import Button from "@/app/components/ui/button";
 export default function RenderizarNotifiaciones(){
     const [notificiaciones,setNotificaciones]= useState<Notificacion[]>([])
     const [cargando,setCargando]=useState<boolean>(true)
+    const [error,setError]=useState<string | null>(null);
   
     useEffect(() => {
-      async function TraerNotificaciones() {
-        try {
-          const data = await TraerTodasNotificaciones();
-          setNotificaciones(data);
-        } 
-        catch(error) {
-          console.error("error al traer todas las notificaciones",error);
-        }
-        finally {
-          setCargando(false);
-        }
-      }
-      TraerNotificaciones();
-      const intervalo = setInterval(() => {TraerNotificaciones();}, 5000);
-      return () => clearInterval(intervalo);
-    }, []);
+
+  async function TraerNotificaciones() {
+
+    try {
+      setError(null);
+      const data = await TraerTodasNotificaciones();
+      setNotificaciones(data);
+    } 
+    catch(error) {
+      setError("No se pudieron cargar las notificaciones.");
+    }
+    finally {
+      setCargando(false);
+    }
+  }
+  TraerNotificaciones();
+  const intervalo = setInterval(() => {
+    TraerNotificaciones();
+  },5000);
+  return () => clearInterval(intervalo);},[]);
    
    const handleMarcarNotificacion=async(Id:number)=>{
       try{  
      const notificacionLeida =await NotificacionLeida(Id)
       setNotificaciones((prev)=>prev.map((N)=>(N.id_notificacion === Id ? notificacionLeida:N)))
       }catch(error){
-        console.error("no se pudo marcar la notificacion",error)
+        setError("No se pudo marcar la notificación como leída.");
       }
    }
 
@@ -47,11 +52,23 @@ export default function RenderizarNotifiaciones(){
      const notificacionLeidas= await NotificacionLeidas()
       setNotificaciones(notificacionLeidas)
       }catch(error){
-        console.error("no se pudo marcar la notificacion",error)
+        setError("No se pudo marcar la notificación como leída.");
       }
    }
     const tienePendientes = notificiaciones.some((notif) => !notif.leida);
-   if(cargando) return <p>Cargando Notifiaciones</p>
+   if(cargando){
+    return <p>Cargando notificaciones...</p>;
+  }
+  if(error){
+    return (
+    <div>
+      <p>⚠️ {error}</p>
+      <Button
+      onClick={()=>window.location.reload()}>
+        Reintentar
+      </Button>
+  </div>
+  );}
     return (
     <div>
       {tienePendientes && (

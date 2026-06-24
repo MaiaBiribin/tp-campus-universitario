@@ -27,7 +27,7 @@ export function useAsignacionAcademica() {
   useEffect(()=>{
 
     async function cargar(){
-
+      setError("");
       try{
         const data=await getCarreras();
 
@@ -41,9 +41,8 @@ export function useAsignacionAcademica() {
           const materiasData=await getMateriasPorCarrera(data[0].id_carrera);
           setMaterias(materiasData);
         }
-      }
-      catch(error){
-        console.error(error);
+      }catch{
+        setError("No se pudieron cargar las carreras.");
       }
       finally{
         setCargando(false);
@@ -53,24 +52,23 @@ export function useAsignacionAcademica() {
   },[]);
 
   async function cambiarCarrera(id:number){
+    setError("");
     setCarreraSeleccionada(id);
     try{
       const data=await getMateriasPorCarrera(id);setMaterias(data);
     }
-
-    catch(error){
-      console.error(error);
+    catch{setError("No se pudieron cargar las materias.");
     }
-
   }
 
   async function cargarUsuariosInscriptos(idMateria:number){
+    setError("");
     try{
       const data=await getInscripcionesPorMateria(idMateria);
       setUsuariosInscriptos(obtenerIdsUsuariosInscriptos(data));
     }
-    catch(error){
-      console.error(error);
+    catch{
+      setError("No se pudieron cargar las inscripciones.");
     }
   }
 
