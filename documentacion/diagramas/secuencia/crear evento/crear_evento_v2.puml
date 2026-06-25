@@ -1,0 +1,83 @@
+@startuml crear_evento_secuencia_v2
+title Flujo Crear Evento
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 8
+skinparam backgroundColor #FAFAFA
+skinparam sequence {
+  ActorBorderColor #336699
+  ActorBackgroundColor #DDEEFF
+  ParticipantBorderColor #336699
+  ParticipantBackgroundColor #DDEEFF
+  LifeLineBorderColor #7799CC
+  ArrowColor #336699
+  GroupBackgroundColor #FFF8DC
+  GroupBorderColor #CC9900
+}
+
+actor "Admin" as Client
+participant Frontend
+participant "EventosController" as Controller
+participant "EventosService" as Service
+participant "NotificacionesService" as NotiService
+database "PostgreSQL" as DB
+
+' ─── 1. Request ─────────────────────────────────────────────────────
+Client -> Frontend : Completa formulario
+Frontend -> Controller : POST /eventos\n{ titulo, fecha, horaInicio,\n  horaFin, aula, tipoEvento, materia }
+
+' ─── 2. Auth resumida ───────────────────────────────────────────────
+group Autenticación y autorización [AuthGuard + RolesGuard]
+  Controller -> Controller : Valida JWT\ny rol ADMIN
+  alt Sin token / token inválido / sin rol ADMIN
+    Controller --> Frontend : 401 / 403
+    Frontend --> Client : Mostrar error de acceso
+  end
+end
+
+' ─── 3. Validación de horario ───────────────────────────────────────
+Controller -> Service : create(createEventoDto)
+
+alt horaInicio >= horaFin
+  Service --> Controller : throw BadRequestException\n"Hora de inicio debe ser menor que hora de fin"
+  Controller --> Frontend : 400 BadRequestException
+  Frontend --> Client : Mostrar error
+end
+
+' ─── 4. Verificación de conflicto de aula ───────────────────────────
+Service -> DB : SELECT eventos WHERE\nfecha = .... AND aula_id = ....
+DB --> Service : eventos existentes
+
+alt Conflicto de horario en el aula
+  Service --> Controller : throw BadRequestException\n"El aula X ya está ocupada entre HH:MM y HH:MM"
+  Controller --> Frontend : 400 BadRequestException
+  Frontend --> Client : Mostrar error
+end
+
+' ─── 5. Crear y persistir evento ────────────────────────────────────
+Service -> DB : INSERT INTO evento (...)
+DB --> Service : eventoGuardado (con id_evento)
+
+' ─── 6. Buscar inscriptos ───────────────────────────────────────────
+Service -> DB : inscripcionRepo.find(\n  where: { materia.id_materia },\n  relations: { usuario })
+DB --> Service : inscriptos[]
+
+' ─── 7. Notificaciones ──────────────────────────────────────────────
+alt inscriptos.length > 0
+  Service -> NotiService : crearNotificaciones(\n  id_evento, mensaje, [{ id_usuario }...])
+
+  NotiService -> NotiService : map inscriptos →\ncrea objetos Notificacion\n{ usuario, evento, mensaje, leida: false }
+
+  NotiService -> DB : INSERT INTO notificacion (...)\n(bulk insert)
+  DB --> NotiService : notificaciones guardadas
+  NotiService --> Service : void
+else No hay inscriptos
+  Service -> Service : (no se notifica)
+end
+
+' ─── 8. Respuesta ───────────────────────────────────────────────────
+Service --> Controller : eventoGuardado
+Controller --> Frontend : 201 Created\n{ id_evento, titulo, fecha, horaInicio, horaFin, estado }
+Frontend --> Client : Mostrar confirmación
+
+@enduml

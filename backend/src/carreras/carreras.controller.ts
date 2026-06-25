@@ -7,6 +7,10 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { CreateCarreraDto } from './dto/create-carrera.dto';
 import { CarreraResponseDto } from './dto/carrera-response.dto';
 
+/**
+ * Controlador de carreras universitarias.
+ * Todos los endpoints requieren autenticación. La creación es exclusiva del rol Admin.
+ */
 @ApiTags('carreras')
 @ApiBearerAuth()
 @Controller('carreras')

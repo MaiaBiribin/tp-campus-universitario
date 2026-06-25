@@ -9,6 +9,11 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ROLES } from '../auth/constants';
 
+/**
+ * Controlador de inscripciones.
+ * Gestiona la relación usuario–materia. La creación de inscripciones
+ * acepta múltiples usuarios en un solo request y omite silenciosamente los que no existen.
+ */
 @ApiTags('inscripciones')
 @Controller('inscripciones')
 export class InscripcionesController {

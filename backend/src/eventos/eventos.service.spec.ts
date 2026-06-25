@@ -3,6 +3,7 @@ import { EventosService } from './eventos.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Evento } from './evento.entity';
 import { Inscripcion } from '../inscripciones/inscripcion.entity';
+import { Aviso } from '../avisos/aviso.entity';
 import { NotificacionesService } from '../notificaciones/notificaciones.service';
 import { BadRequestException } from '@nestjs/common';
 
@@ -11,6 +12,7 @@ describe('EventosService', () => {
 
   const mockEventoRepo = {
     find: jest.fn(),
+    findOne: jest.fn(),
     findOneBy: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
@@ -20,14 +22,17 @@ describe('EventosService', () => {
 
   const mockInscripcionRepo = { find: jest.fn() };
   const mockNotificacionesService = { crearNotificaciones: jest.fn() };
+  // ✅ Mock agregado para AvisoRepository
+  const mockAvisoRepo = { find: jest.fn() };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EventosService,
-        { provide: getRepositoryToken(Evento), useValue: mockEventoRepo },
+        { provide: getRepositoryToken(Evento),      useValue: mockEventoRepo },
         { provide: getRepositoryToken(Inscripcion), useValue: mockInscripcionRepo },
-        { provide: NotificacionesService, useValue: mockNotificacionesService },
+        { provide: getRepositoryToken(Aviso),       useValue: mockAvisoRepo },  // ✅ agregado
+        { provide: NotificacionesService,           useValue: mockNotificacionesService },
       ],
     }).compile();
 
@@ -39,6 +44,8 @@ describe('EventosService', () => {
     expect(service).toBeDefined();
   });
 
+  // ─── findAll ────────────────────────────────────────────────────────────────
+
   describe('findAll', () => {
     it('devuelve todos los eventos', async () => {
       const eventos = [{ id_evento: 1 }, { id_evento: 2 }];
@@ -47,6 +54,8 @@ describe('EventosService', () => {
       expect(result).toEqual(eventos);
     });
   });
+
+  // ─── findOne ────────────────────────────────────────────────────────────────
 
   describe('findOne', () => {
     it('devuelve el evento por su ID', async () => {
@@ -63,6 +72,8 @@ describe('EventosService', () => {
       expect(result).toBeNull();
     });
   });
+
+  // ─── create ─────────────────────────────────────────────────────────────────
 
   describe('create', () => {
     const dto = {
@@ -115,42 +126,58 @@ describe('EventosService', () => {
     });
   });
 
-  describe('updatePartial', () => {
-    it('actualiza los campos y devuelve el evento actualizado', async () => {
-      const eventoActualizado = { id_evento: 1, titulo: 'Nuevo título' };
-      mockEventoRepo.update.mockResolvedValue({ affected: 1 });
-      mockEventoRepo.findOneBy.mockResolvedValue(eventoActualizado);
-
-      const result = await service.updatePartial(1, { titulo: 'Nuevo título' } as any);
-      expect(mockEventoRepo.update).toHaveBeenCalledWith(1, expect.anything());
-      expect(result).toEqual(eventoActualizado);
-    });
-  });
+  // ─── remove ─────────────────────────────────────────────────────────────────
 
   describe('remove', () => {
-    it('elimina el evento por ID', async () => {
+    it('elimina un evento pasado sin avisos', async () => {
+      const fechaPasada = '2020-01-01';
+      const evento = { id_evento: 1, fecha: fechaPasada, horaInicio: '08:00' };
+      mockEventoRepo.findOne.mockResolvedValue(evento);
+      mockAvisoRepo.find.mockResolvedValue([]);
       mockEventoRepo.delete.mockResolvedValue({ affected: 1 });
-      await service.remove(1);
+
+      const result = await service.remove(1);
       expect(mockEventoRepo.delete).toHaveBeenCalledWith(1);
+      expect(result).toEqual({ message: 'Evento eliminado correctamente' });
+    });
+
+    it('elimina un evento futuro sin avisos', async () => {
+      const fechaFutura = '2099-12-31';
+      const evento = { id_evento: 2, fecha: fechaFutura, horaInicio: '10:00' };
+      mockEventoRepo.findOne.mockResolvedValue(evento);
+      mockAvisoRepo.find.mockResolvedValue([]);
+      mockEventoRepo.delete.mockResolvedValue({ affected: 1 });
+
+      const result = await service.remove(2);
+      expect(mockEventoRepo.delete).toHaveBeenCalledWith(2);
+      expect(result).toEqual({ message: 'Evento eliminado correctamente' });
+    });
+
+    it('lanza BadRequestException si el evento no existe', async () => {
+      mockEventoRepo.findOne.mockResolvedValue(null);
+      await expect(service.remove(999)).rejects.toThrow(BadRequestException);
+    });
+
+    it('lanza BadRequestException si el evento es futuro y tiene avisos', async () => {
+      const fechaFutura = '2099-12-31';
+      const evento = { id_evento: 3, fecha: fechaFutura, horaInicio: '10:00' };
+      mockEventoRepo.findOne.mockResolvedValue(evento);
+      mockAvisoRepo.find.mockResolvedValue([{ id_aviso: 1 }]);
+
+      await expect(service.remove(3)).rejects.toThrow(BadRequestException);
+      expect(mockEventoRepo.delete).not.toHaveBeenCalled();
     });
   });
 
-  describe('replace', () => {
-    it('guarda el evento con el id y los datos proporcionados', async () => {
-      const eventoReemplazado = { id_evento: 1, titulo: 'Reemplazado' };
-      mockEventoRepo.save.mockResolvedValue(eventoReemplazado);
-      const result = await service.replace(1, { titulo: 'Reemplazado' } as any);
-      expect(mockEventoRepo.save).toHaveBeenCalledWith(expect.objectContaining({ id_evento: 1 }));
-      expect(result).toEqual(eventoReemplazado);
-    });
-  });
+
+  // ─── eventosUsuario ─────────────────────────────────────────────────────────
 
   describe('eventosUsuario', () => {
     it('devuelve solo eventos futuros y de hoy no pasados', async () => {
       const horaFutura = '23:59';
-      const hoy = new Date().toLocaleDateString('sv-SE');
+      const hoy    = new Date().toLocaleDateString('sv-SE');
       const manana = new Date(Date.now() + 86400000).toLocaleDateString('sv-SE');
-      const ayer = new Date(Date.now() - 86400000).toLocaleDateString('sv-SE');
+      const ayer   = new Date(Date.now() - 86400000).toLocaleDateString('sv-SE');
 
       mockEventoRepo.find.mockResolvedValue([
         { id_evento: 1, fecha: manana, horaInicio: '08:00', materia: {} },

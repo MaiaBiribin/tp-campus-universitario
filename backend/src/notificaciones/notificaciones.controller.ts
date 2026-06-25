@@ -4,6 +4,12 @@ import { NotificacionesService } from './notificaciones.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { NotificacionResponseDto } from './dto/notificacion-response.dto';
 
+/**
+ * Controlador de notificaciones internas.
+ * Todos los endpoints requieren autenticación. El ID del usuario se extrae
+ * del payload JWT (req.user.sub) en lugar de recibirlo como parámetro,
+ * garantizando que cada usuario solo acceda a sus propias notificaciones.
+ */
 @ApiTags('notificaciones')
 @ApiBearerAuth()
 @Controller('notificaciones')
