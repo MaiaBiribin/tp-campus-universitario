@@ -9,6 +9,12 @@ import { useEffect, useState } from "react";
 import { Evento } from "@/app/types/entidades";
 import forms from "@/app/styles/forms.module.css";
 
+/**
+ * Panel principal de administración.
+ * Muestra un resumen de eventos del día, solicitudes pendientes y aulas ocupadas.
+ * Consume datos desde servicios de eventos y usuarios.
+ * @returns {JSX.Element} dashboard administrativo renderizado.
+ */
 export default function DashboardAdmin() {
   const [eventosHoy, setEventosHoy] = useState(0);
   const [solicitudes, setSolicitudes] = useState(0);

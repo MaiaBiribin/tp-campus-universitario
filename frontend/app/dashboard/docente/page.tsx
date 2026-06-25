@@ -9,6 +9,11 @@ import ProximoEvento from "@/app/components/proximoEvento";
 import { getAvisosPorEvento } from "@/app/services/avisos";
 import forms from "@/app/styles/forms.module.css";
 
+/**
+ * Dashboard principal del docente.
+ * Muestra un resumen de actividad académica: clases del día, cantidad de avisos activos y el próximo evento programado.
+ * @returns {JSX.Element} Vista del panel docente.
+ */
 export default function DashboardDocente() {
   const [clasesHoy, setClasesHoy] =useState(0);
   const [avisosActivos,setAvisosActivos] = useState(0);

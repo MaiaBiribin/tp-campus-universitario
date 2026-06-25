@@ -10,12 +10,20 @@ export class AulasService {
     private aulasRepository: Repository<Aula>,
   ) {}
 
-  // 1. Obtener todas las aulas
+  /**
+   * Obtiene todas las aulas.
+   * @returns {Promise<Aula[]>} Lista de aulas registradas.
+   */
   async findAll(): Promise<Aula[]> {
     return await this.aulasRepository.find();
   }
 
-  // 2. Obtener una por ID
+   /**
+   * Busca un aula por su id
+   * @param {number} id  identificador del aula.
+   * @returns {Promise<Aula>} Aula encontrada.
+   * @throws {NotFoundException} Si el aula no existe.
+   */
   async findOne(id: number): Promise<Aula> {
     const aula = await this.aulasRepository.findOneBy({ id_aula: id });
     if (!aula) {
