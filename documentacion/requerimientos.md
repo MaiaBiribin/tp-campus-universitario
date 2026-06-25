@@ -460,7 +460,7 @@ La aplicación debe adaptarse a distintos dispositivos.
 | RF-005 | Eventos académicos | Funcional | RF-004 | RF-006 | Alta | Completado |
 | RF-006 | Disponibilidad aulas | Funcional | RF-005 | — | Alta | Completado |
 | RF-008 | Estudiantes | Funcional | RF-007 | RF-011 | Alta | Completado |
-| RF-009 | Avisos docentes | Funcional | RF-005 | RF-011 | Alta | En desarrollo |
+| RF-009 | Avisos docentes | Funcional | RF-005 | RF-011 | Alta | Completado |
 | RF-011 | Notificaciones | Funcional | RF-009 | — | Alta | Completado |
 | RNF-001 | Arquitectura | No funcional | — | Todos | Alta | Completado |
 | RNF-002 | Seguridad | No funcional | RF-003 | Todos | Alta | Completado |

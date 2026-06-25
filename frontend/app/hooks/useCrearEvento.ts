@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {Aula,Carrera,Materia,} from "@/app/types/entidades";
 import {getCarreras,} from "@/app/services/carreras";
 import {getAulas,} from "@/app/services/aulas";
 import {getMateriasPorCarrera,} from "@/app/services/materias";
 import {crearEvento,} from "@/app/services/eventos";
+import {Aula,Carrera,Materia,CrearEventoDTO} from "@/app/types/entidades";
 
 /**
  * Hook para gestionar la creación de eventos.
@@ -28,7 +28,12 @@ export function useCrearEvento() {
   const [exito,setExito] =useState("");
 
   useEffect(() => {
-
+    /**
+   * Carga los datos iniciales necesarios para crear un evento.
+   * Obtiene carreras y aulas en paralelo y actualiza sus estados.
+   * @async
+   * @returns {Promise<void>}
+   */
     async function cargar() {
 
       try {
@@ -46,10 +51,10 @@ export function useCrearEvento() {
   }, []);
 
   /**
- * Actualiza la carrera seleccionada y carga sus materias asociadas.
- * @param {string} carreraId - Identificador de la carrera seleccionada.
+ * Cambia la carrera seleccionada y carga las materias asociadas.
+ * @async
+ * @param {string} id de la carrera seleccionada.
  * @returns {Promise<void>}
- * @throws Actualiza el estado de error si falla la carga de materias.
  */
   async function cambiarCarrera(carreraId: string) {
     setIdCarrera(carreraId);
@@ -68,13 +73,10 @@ export function useCrearEvento() {
   }
 
   /**
- * Valida y envía los datos del formulario para crear un evento.
- *
+ * Valida el formulario y crea un nuevo evento.
+ * @async
  * @returns {Promise<boolean>} 
- * True si el evento fue creado correctamente,
- * false si ocurrió un error de validación o creación.
- *
- * @throws Actualiza el estado de error cuando falla la operación.
+ * True si la creación fue exitosa, false si falla una validación o petición.
  */
   async function submit() {
     setError("");

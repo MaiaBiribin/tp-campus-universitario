@@ -1,5 +1,5 @@
 import { api } from "../api";
-import { Evento } from "../types/entidades";
+import { CrearEventoDTO, Evento } from "../types/entidades";
 
 /**
  * Obtiene los eventos futuros ordenados por fecha.
@@ -53,11 +53,11 @@ export async function getEventoPorId(id: number): Promise<Evento> {
 
 /**
  * Crea un nuevo evento académico.
- * @param {Evento} evento datos del evento a crear.
+ * @param {CrearEventoDTO} datos del evento a crear.
  * @returns {Promise<Evento>} Evento creado.
  * @throws {Error} Si falla la creación.
  */
-export async function crearEvento(evento: Evento): Promise<Evento> {
+export async function crearEvento(evento:CrearEventoDTO): Promise<Evento> {
   const res =await api("/eventos",
       {
         method: "POST",

@@ -116,7 +116,7 @@ export default function CrearEvento() {
                 <option value="2">
                   Parcial
                 </option>
-                <option value="3">
+                <option value="4">
                   Final
                 </option>
               </select>

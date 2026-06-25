@@ -14,19 +14,18 @@ import Card from "@/app/components/ui/card";
  * Crea un nuevo aviso asociado a un evento.
  * Obtiene los eventos futuros disponibles, permite seleccionar uno y enviar un mensaje que será registrado como aviso.
  * Gestiona estados de carga, validación, éxito y error mediante mensajes visibles en pantalla.
- * @component
  * @returns {JSX.Element} Formulario para crear avisos.
  * @example
  * <CrearAviso />
  */
 export default function CrearAviso(){
-const [eventos,setEventos] =useState<Evento[]>([]);
-const [idEvento,setIdEvento] =useState("");
-const [mensaje,setMensaje] =useState("");
-const [cargando,setCargando] =useState(true);
-const [guardando,setGuardando] = useState(false);
-const [error,setError] = useState("");
-const [exito,setExito] = useState("");
+  const [eventos,setEventos] =useState<Evento[]>([]);
+  const [idEvento,setIdEvento] =useState("");
+  const [mensaje,setMensaje] =useState("");
+  const [cargando,setCargando] =useState(true);
+  const [guardando,setGuardando] = useState(false);
+  const [error,setError] = useState("");
+  const [exito,setExito] = useState("");
 
 useEffect(()=>{
 

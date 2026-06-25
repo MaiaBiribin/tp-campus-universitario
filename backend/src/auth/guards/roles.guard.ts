@@ -20,14 +20,11 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Determina si la request puede continuar según los roles del usuario.
-   * @param context contexto de ejecución de NestJS.
+   * @param {ExecutionContext} context contexto de ejecución de NestJS.
    * @returns `true` si el usuario tiene permiso o no hay restricción de roles.
    * @throws {ForbiddenException} Si el usuario no posee el rol requerido.
    */
-  canActivate(
-    context: ExecutionContext,
-  ): boolean {
-
+  canActivate(context: ExecutionContext,): boolean {
     const rolesRequeridos =
       this.reflector.getAllAndOverride<string[]>(
         ROLES_KEY,

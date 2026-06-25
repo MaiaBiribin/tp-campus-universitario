@@ -98,6 +98,6 @@ app/services/
 El frontend muestra notificaciones generadas automáticamente por el backend cuando:
 
 - Se crea un evento.
-- Un docente crea un aviso.
+- Un docente crea o edita un aviso.
 
 Las notificaciones pueden marcarse como leídas.

@@ -51,6 +51,18 @@ export interface Aula {
   ubicacion: string;
 }
 
+export interface AulaRef {
+  id_aula:number;
+}
+
+export interface MateriaRef {
+  id_materia:number;
+}
+
+export interface TipoEventoRef {
+  id_tipo_evento:number;
+}
+
 export interface Solicitud {
   id_usuario: number;
   nombre: string;
@@ -80,4 +92,23 @@ export interface Notificacion {
   fecha_creacion:string;
   leida:boolean;
   evento?:Evento;
+}
+
+export interface CrearEventoDTO {
+  titulo:string;
+  fecha:string;
+  horaInicio:string;
+  horaFin:string;
+
+  aula:{
+    id_aula:number;
+  };
+
+  materia:{
+    id_materia:number;
+  };
+
+  tipoEvento:{
+    id_tipo_evento:number;
+  };
 }
