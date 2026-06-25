@@ -7,6 +7,12 @@ type Props = {
   eventos: Evento[];
 };
 
+/**
+ * Renderiza una lista de eventos semanales en tarjetas informativas.
+ * @param props Propiedades del componente.
+ * @param props.eventos Eventos que serán mostrados.
+ * @returns elemento JSX con los eventos o un mensaje si no existen eventos disponibles.
+ */
 export default function RenderizarEventosSemana({ eventos }: Props) {
   if (!eventos || eventos.length === 0) {
     return <p>No tenés eventos esta semana.</p>;

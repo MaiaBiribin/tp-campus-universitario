@@ -7,33 +7,56 @@ import { getEventos } from "@/app/services/eventos";
 import { getUsuariosPendientes } from "@/app/services/usuarios";
 import { useEffect, useState } from "react";
 import { Evento } from "@/app/types/entidades";
+import forms from "@/app/styles/forms.module.css";
 
+/**
+ * Panel principal de administración.
+ * Muestra un resumen de eventos del día, solicitudes pendientes y aulas ocupadas.
+ * Consume datos desde servicios de eventos y usuarios.
+ * @returns {JSX.Element} dashboard administrativo renderizado.
+ */
 export default function DashboardAdmin() {
   const [eventosHoy, setEventosHoy] = useState(0);
   const [solicitudes, setSolicitudes] = useState(0);
   const [aulasOcupadas, setAulasOcupadas] = useState(0);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
   
   useEffect(() => {
   async function cargarDashboard() {
     try {
-      const pendientes =await getUsuariosPendientes();
+      setCargando(true);
+      setError("");
+      const pendientes = await getUsuariosPendientes();
       setSolicitudes(pendientes.length);
-      const eventos =await getEventos();
-      const hoy =new Date().toISOString().split("T")[0];
+      const eventos = await getEventos();
+      const hoy = new Date().toISOString().split("T")[0];
       const eventosDeHoy = eventos.filter((evento: Evento) => evento.fecha === hoy);
       setEventosHoy(eventosDeHoy.length);
-      const aulas =new Set(eventosDeHoy.map((evento: Evento) =>evento.aula?.id_aula));
+      const aulas = new Set(eventosDeHoy.map((evento: Evento) => evento.aula?.id_aula));
       setAulasOcupadas(aulas.size);
     }
-    catch(error) {
-      console.error(error);
+    catch {
+      setError("No se pudo cargar la información del panel.");
+    }finally {setCargando(false);
+
     }
 
   }
 
   cargarDashboard();
 }, []);
+
+if (cargando) {
   return (
+    <p className={forms.helper}>Cargando panel...</p>);
+}
+if (error) {
+  return (
+    <p className={forms.error}>{error}</p>
+  );
+}  
+return (
     <>
       <header className={dashboard.header}>
         <h1>

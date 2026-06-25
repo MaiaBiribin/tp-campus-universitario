@@ -8,15 +8,7 @@ jest.mock("@/app/services/eventos",()=>({
 
 describe("Componente EventoDetalle",()=>{
 
-  beforeEach(()=>{
-    jest.clearAllMocks();
-    jest.spyOn(console,"error")
-      .mockImplementation(()=>{});
-  });
-
-  afterEach(()=>{
-    jest.restoreAllMocks();
-  });
+  beforeEach(()=>{jest.clearAllMocks();});
 
   it("muestra cargando mientras busca el evento",()=>{
 
@@ -91,17 +83,17 @@ describe("Componente EventoDetalle",()=>{
     });
   });
 
-  it("muestra mensaje de no encontrado si falla la carga",async()=>{
-
-    (getEventoPorId as jest.Mock).mockRejectedValue(new Error("Error servidor"));
-    render(
-      <EventoDetalle id={10}/>
+  it("muestra mensaje de error si falla la carga",async()=>{
+  (getEventoPorId as jest.Mock).mockRejectedValue(
+      new Error("Error servidor")
     );
-    await waitFor(()=>{
-      expect(screen.getByText("No se encontró el evento.")).toBeInTheDocument();
-    });
-    expect(console.error).toHaveBeenCalled();
-  });
+  render(
+    <EventoDetalle id={10}/>
+  );
+  await waitFor(()=>{
+
+    expect(screen.getByText("No se pudo cargar la información del evento.")).toBeInTheDocument();
+  });});
 
   it("pemite cambiar el id y vuelve a consultar el evento",async()=>{
 
@@ -142,4 +134,13 @@ describe("Componente EventoDetalle",()=>{
     expect(getEventoPorId).toHaveBeenNthCalledWith(1,1);
     expect(getEventoPorId).toHaveBeenNthCalledWith(2,2);
   });
+  it("muestra feedback cuando ocurre un error",async()=>{
+
+  (getEventoPorId as jest.Mock).mockRejectedValue(new Error());
+  render(<EventoDetalle id={5}/>);
+
+  expect(await screen.findByText("No se pudo cargar la información del evento.")
+  ).toBeInTheDocument();
+
+});
 });

@@ -31,4 +31,11 @@ describe("Card", () => {
 
     expect(screen.getByText("Sin clase")).toBeInTheDocument();
   });
+  it("debe renderizar el contenedor card", () => {
+  render(<Card>Test</Card>);
+
+  const card = screen.getByTestId("card");
+
+  expect(card).toBeInTheDocument();
+});
 });

@@ -10,6 +10,10 @@ import { AulaResponseDto } from './dto/aula-response.dto';
 export class AulasController {
   constructor(private readonly aulasService: AulasService) {}
 
+  /**
+   * Obtiene todas las aulas registradas.
+   * @returns {Promise<AulaResponseDto[]>} Lista de aulas.
+   */
   @Get()
   @ApiOperation({
     summary: 'Listar todas las aulas',

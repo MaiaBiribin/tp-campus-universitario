@@ -10,7 +10,15 @@ import forms from "@/app/styles/forms.module.css";
 import Button from "@/app/components/ui/button";
 import Card from "@/app/components/ui/card";
 
-
+/**
+ * Crea un nuevo aviso asociado a un evento.
+ * Obtiene los eventos futuros disponibles, permite seleccionar uno y enviar un mensaje que será registrado como aviso.
+ * Gestiona estados de carga, validación, éxito y error mediante mensajes visibles en pantalla.
+ * @component
+ * @returns {JSX.Element} Formulario para crear avisos.
+ * @example
+ * <CrearAviso />
+ */
 export default function CrearAviso(){
 const [eventos,setEventos] =useState<Evento[]>([]);
 const [idEvento,setIdEvento] =useState("");

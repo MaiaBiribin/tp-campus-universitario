@@ -14,16 +14,13 @@ beforeEach(() => {
 it("muestra cargando inicialmente", () => {
 
 (getEventos as jest.Mock).mockReturnValue(new Promise(() => {}));
-
 render(
   <InfoAula
     aulaId={5}
     nombre="202"
   />
 );
-
-expect(screen.getByText("Cargando...")).toBeInTheDocument();
-
+expect(screen.getByText("Cargando información del aula...")).toBeInTheDocument();
 });
 
 it("muestra aula ocupada cuando hay evento actual", async()=>{
@@ -165,6 +162,22 @@ render(
  />
 );
 expect(await screen.findByText(/No hay eventos programados/)).toBeInTheDocument();
+
+});
+it("muestra mensaje de error si falla la carga de eventos", async()=>{
+
+  (getEventos as jest.Mock)
+    .mockRejectedValue(
+      new Error("fallo")
+    );
+  render(
+    <InfoAula
+      aulaId={1}
+      nombre="101"
+    />
+  );
+  expect(
+    await screen.findByText("No se pudieron cargar los eventos del aula.")).toBeInTheDocument();
 
 });
 });
