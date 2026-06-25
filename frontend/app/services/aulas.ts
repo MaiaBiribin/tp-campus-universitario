@@ -1,8 +1,8 @@
 import { api } from "../api";
 /**
- *  usa la api para luego devolver todas las aulas de la base de datos.
- * throw {Error} en el caso de que hubo un problema en traer las aulas
- * @returns {Promise<res>} devuevle la promesa con todas las aulas del sistema * 
+ * Obtiene todas las aulas disponibles
+ * @returns {Promise<Aula[]>} Lista de aulas en formato JSON.
+ * @throws {Error} Si falla la petición al servidor.
  */
 export async function getAulas() {
   const res =

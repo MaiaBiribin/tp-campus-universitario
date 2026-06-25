@@ -21,7 +21,6 @@ import Button from "@/app/components/ui/button";
  */
 export default function RenderizarNotifiaciones(){
     const [notificiaciones,setNotificaciones]= useState<Notificacion[]>([])
-    const [cargando,setCargando]=useState<boolean>(true)
     const [error,setError]=useState<string | null>(null);
   
     useEffect(() => {
@@ -35,9 +34,6 @@ export default function RenderizarNotifiaciones(){
     } 
     catch(error) {
       setError("No se pudieron cargar las notificaciones.");
-    }
-    finally {
-      setCargando(false);
     }
   }
   TraerNotificaciones();
@@ -64,9 +60,6 @@ export default function RenderizarNotifiaciones(){
       }
    }
     const tienePendientes = notificiaciones.some((notif) => !notif.leida);
-   if(cargando){
-    return <p>Cargando notificaciones...</p>;
-  }
   if(error){
     return (
     <div>

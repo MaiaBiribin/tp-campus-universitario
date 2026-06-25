@@ -2,11 +2,11 @@ import { api } from "../api";
 import { Aviso } from "../types/entidades";
 
 /**
- * se encarga de recibir los datos para crear un nuevo aviso de un evento
- * @param {string} mensaje el mensaje que escribe el profesor
- * @param {number} id_evento el id del evento del cual se quiera crear un aviso
- * @throw {Error} si falla en crear el aviso
- * @returns {Promise<res.json>}   crea el aviso
+ * Crea un nuevo aviso asociado a un evento
+ * @param {string} mensaje contenido del aviso
+ * @param {number} id_evento id del evento asociado
+ * @throws {Error} si falla en crear el aviso
+ * @returns {Promise<res.json>} aviso creado
  */
 export async function crearAviso(
   mensaje: string,
@@ -26,10 +26,10 @@ export async function crearAviso(
 }
 
 /**
- * busca los avisos que tiene un evento
- * @param {number} id_evento el evento que se quiere buscar su avisos
- * @returns {Promise<res>} devuelve los avisos del evento buscado
- * @throw {Error} tira error si es que no encuentra los avisos
+ * Obtiene los avisos asociados a un evento.
+ * @param {number} id_evento id del evento.
+ * @returns {Promise<Aviso[]>} Lista de avisos del evento.
+ * @throws {Error} Si no se pueden cargar los avisos.
  */
 export async function getAvisosPorEvento(
   id_evento:number
@@ -43,10 +43,10 @@ export async function getAvisosPorEvento(
   return res.json();
 }
 /**
- *elimina el aviso 
- * @param {number} id el id del aviso que se quiere borrar
- * @returns {Promis<res>} devuelve si fue exitosa la operacion
- * @throw {Error} si es que no se pudo borrar el aviso
+ * Elimina un aviso existente.
+ * @param {number} id - Identificador del aviso.
+ * @returns {Promise<Aviso>} Aviso eliminado.
+ * @throws {Error} Si falla la eliminación.
  */
 export async function eliminarAviso(id:number){
   const res = await api(
@@ -65,9 +65,9 @@ export async function eliminarAviso(id:number){
   return res.json();
 }
 /**
- * busca todos loas aviso que hay en el sistema
- * @returns {Promise<res>} devuelve los avisos que hay
- * @throw {Error} si es que no se pudo conseguir los avisos
+ * Obtiene todos los avisos registrados
+ * @returns {Promise<Aviso[]>} lista de avisos.
+ * @throws {Error} Si falla la carga de avisos.
  */
 export async function getAvisos(): Promise<Aviso[]> {
   const res = await api("/avisos");

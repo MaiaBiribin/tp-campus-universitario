@@ -1,29 +1,29 @@
 import { api } from "../api";
+import { Notificacion } from "../types/entidades";
+
 /**
- * busca todas las notificaciones que tiene un usuario.
- * @returns {Promise<res>} devuelve todas las notificaciones del usuario
- * @throw {Error} si es que no se pudo traer todas las notificaciones
+ * Obtiene las notificaciones del usuario
+ * @returns {Promise<Notificacion[]>} Lista de notificaciones.
+ * @throws {Error} Si no se pueden cargar las notificaciones.
  */
-export async function TraerTodasNotificaciones(){
+export async function TraerTodasNotificaciones(): Promise<Notificacion[]> {
 
     const res = await api("/notificaciones/mis-notificaciones");
     if(!res.ok){
-        console.log(await res.text());
         throw new Error("Error al traer las notificaciones");
     }
     return res.json();
 }
 
-
 /**
- * se encarga de cambiar el estado de la notificacion a leida
- * @param {number} id_notificacion el id de la notificacion que fue leida
- * @returns {Promise<res>} devulve la notificacion con el estado leida
- * @throw {Error} si es que no se pudo cambiar el estado de la notificacion
+ * Marca una notificación específica como leída
+ * @param {number} id_notificacion id de la notificación.
+ * @returns {Promise<Notificacion>} Notificación actualizada.
+ * @throws {Error} Si no se pudo actualizar el estado.
  */
 export async function NotificacionLeida(
-  id_notificacion:number
-){
+  id_notificacion: number
+): Promise<Notificacion> {
     const res = await api(
       `/notificaciones/${id_notificacion}/leida`,
       {
@@ -38,13 +38,12 @@ export async function NotificacionLeida(
     return res.json();
 }
 
-
 /**
- * se encarga de cambiar el estado de todas las notificaciones a leidas
- * @returns {Promise<res>} devuelve a todas las notifiaciones como leidas.
- * @throw {Error} si es que no se pudo cambiar el estado de las notificaciones.
+ * Marca todas las notificaciones pendientes como leídas
+ * @returns {Promise<Notificacion[]>} Lista de notificaciones actualizadas.
+ * @throws {Error} Si falla la actualización masiva.
  */
-export async function NotificacionLeidas(){
+export async function NotificacionLeidas(): Promise<Notificacion[]> {
     const res = await api(
       "/notificaciones/marcar-todas-leidas",
       {
@@ -60,13 +59,12 @@ export async function NotificacionLeidas(){
     return res.json();
 }
 
-
 /**
- * se encarga de cargar todas las notificaciones no leidas
- * @returns {Promise<res>} devuelve la cantidad de notificaciones no leidas.
- * @throw {Error} si es que no se pudo cargar las notificaciones no leidas.
+ * Obtiene la cantidad de notificaciones no leídas.
+ * @returns {Promise<number>} Cantidad de notificaciones pendientes.
+ * @throws {Error} Si falla la carga de notificaciones.
  */
-export async function CantidadNotificacionesSinLeer(){
+export async function CantidadNotificacionesSinLeer(): Promise<number> {
 
     const res = await api(
       "/notificaciones/mis-notificaciones"

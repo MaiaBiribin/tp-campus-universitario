@@ -1,11 +1,12 @@
 import { api } from "../api";
 import { Evento } from "../types/entidades";
+
 /**
- * busca desde el back todos los eventos que hay
- * @returns {Promise<res>} devuevle los eventos 
- * @throw {Error} si es que no se pudo cargar los eventos
+ * Obtiene los eventos futuros ordenados por fecha.
+ * @returns {Promise<Evento[]>} Lista de eventos próximos
+ * @throws {Error} Si falla la carga de eventos.
  */
-export async function getEventos() {
+export async function getEventos(): Promise<Evento[]> {
   const res = await api("/eventos");
 
   if (!res.ok) {
@@ -35,26 +36,28 @@ export async function getEventos() {
       return fechaA - fechaB;
     });
 }
+
 /**
- * busca el evento por su id
- * @param {number} id el id del evento buscado
- * @returns {Promise<res>} devuelve el evento buscado
- * @throw {Error} si es que no se pudo encontrar el evento
+ * Obtiene un evento específico por su identificador.
+ * @param {number} id del evento.
+ * @returns {Promise<Evento>} Evento encontrado.
+ * @throws {Error} Si no se puede obtener el evento.
  */
-export async function getEventoPorId(id: number) {
+export async function getEventoPorId(id: number): Promise<Evento> {
   const res = await api(`/eventos/${id}`);
   if (!res.ok) {
     throw new Error("Error al obtener evento");
   }
   return res.json();
 }
+
 /**
- * se encarga de crear eventos
- * @param {unknown}  evento el evento que se quiere crear 
- * @returns {Promise<res>} crea el evento y se carga al sistema
- * @throw {Error} si es que no se pudo crear el evento
+ * Crea un nuevo evento académico.
+ * @param {Evento} evento datos del evento a crear.
+ * @returns {Promise<Evento>} Evento creado.
+ * @throws {Error} Si falla la creación.
  */
-export async function crearEvento(evento: unknown) {
+export async function crearEvento(evento: Evento): Promise<Evento> {
   const res =await api("/eventos",
       {
         method: "POST",
@@ -69,12 +72,14 @@ export async function crearEvento(evento: unknown) {
   }
   return res.json();
 }
+
 /**
- * elimina el evento del sistema buscado su id
- * @param {number} id el id del evento que se quierra borrar
- * @throw {Error} si es que no se pudo borrar el evento del sistema
+ * Elimina un evento existente
+ * @param {number} id del evento.
+ * @returns {Promise<void>}
+ * @throws {Error} Si falla la eliminación.
  */
-export async function eliminarEvento(id: number) {
+export async function eliminarEvento(id: number): Promise<void> {
   const res =
     await api(`/eventos/${id}`,
       {
@@ -85,12 +90,13 @@ export async function eliminarEvento(id: number) {
     throw new Error("Error eliminando evento");
   }
 }
+
 /**
- * filtra los eventos  que tenga un usuario en la semana
- * @returns {promises<res>} devuelve todos los eventos de la semana del usuario
- * @throw {Error} si es que no se pudo cargas los eventos de la semana
+ * Obtiene los eventos programados durante los próximos 7 días
+ * @returns {Promise<Evento[]>} Eventos dentro del rango semanal.
+ * @throws {Error} Si falla la carga de eventos.
  */
-export async function getEventosSemana() {
+export async function getEventosSemana(): Promise<Evento[]> {
   const res = await api("/eventos");
   if (!res.ok) {
     throw new Error("Error cargando eventos");

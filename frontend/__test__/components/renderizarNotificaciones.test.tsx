@@ -49,18 +49,9 @@ describe("componente renderizacion de notificaciones", () => {
     jest.useFakeTimers();
   })
   afterEach(() => {
-    jest.useRealTimers();
-  });
-
-  it("deberia mostrar carga mientras trae notificaciones", () => {
-    (TraerTodasNotificaciones as jest.Mock).mockReturnValue(new Promise(() => {}));
-    render(
-      <RenderizarNotifiaciones/>
-    );
-    expect(
-      screen.getByText("Cargando notificaciones...")
-    ).toBeInTheDocument();
-  });
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
+});
 
   it("deberia poder renderizar la lista de notificaciones", async () => {
     (TraerTodasNotificaciones as jest.Mock).mockResolvedValue([mockNotificacion]);

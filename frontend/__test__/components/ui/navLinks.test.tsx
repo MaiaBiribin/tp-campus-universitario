@@ -59,18 +59,6 @@ describe("NavLinks", () => {
       await screen.findByText("Notificaciones")
     ).toBeInTheDocument();
   });
-  it("debe mostrar mensaje de carga mientras obtiene notificaciones", () => {
-  (usePathname as jest.Mock).mockReturnValue("/dashboard/estudiante");
-
-  (CantidadNotificacionesSinLeer as jest.Mock).mockImplementation(
-    () => new Promise(() => {})
-  );
-
-  render(<NavLinks role="estudiante" />);
-  expect(
-    screen.getByText("Cargando notificaciones...")
-  ).toBeInTheDocument();
-});
 
 it("debe mostrar mensaje de error si falla la carga de notificaciones", async () => {
   (usePathname as jest.Mock).mockReturnValue("/dashboard/estudiante");

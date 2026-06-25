@@ -1,40 +1,33 @@
 import { api } from "../api";
 import { Inscripcion } from "../types/entidades";
-/**
- * se encarga de buscar las inscripciones que hay de una materia
- * @param {number} idMateria la materia que se este buscando
- * @returns {promise<res>} devuelve las todas las inscripciones de esa materia
- * @throw {Error} si es que no se pudo carga las inscripciones
- */
-export async function getInscripcionesPorMateria(
-  idMateria: number
-) {
 
+/**
+ * Obtiene las inscripciones asociadas a una materia
+ * @param {number} idMateria id de la materia.
+ * @returns {Promise<Inscripcion[]>} Lista de inscripciones.
+ * @throws {Error} Si falla la carga de inscripciones.
+ */
+export async function getInscripcionesPorMateria(idMateria: number): Promise<Inscripcion[]> {
   const res =
     await api(
       `/inscripciones/materia/${idMateria}`
     );
-
   if (!res.ok) {
     throw new Error(
       "Error cargando inscripciones"
     );
   }
-
   return res.json();
 }
-/**
- * se encarga de inscribir a un usario en un materia
- * @param {number} idMateria la materia la cual se quiera inscribir
- * @param {number} usuarios los usuarios que se les quiera escribir a esa materia
- * @returns {Promise<res>} inscribe a los usuarios a la materia designada.
- * @throw {Error} si es que no se pudo inscribir a los usuarios a la materia
- */
-export async function inscribirUsuarios(
-  idMateria: number,
-  usuarios: number[]
-) {
 
+/**
+ * Inscribe usuarios en una materia
+ * @param {number} idMateria id de la materia
+ * @param {number[]} usuarios ids de usuarios a inscribir
+ * @returns {Promise<Inscripcion[]>} Inscripciones creadas
+ * @throws {Error} Si falla la inscripción
+ */
+export async function inscribirUsuarios(idMateria: number,usuarios: number[]): Promise<Inscripcion[]> {
   const res =
     await api(
       "/inscripciones",
@@ -56,14 +49,13 @@ export async function inscribirUsuarios(
 
   return res.json();
 }
+
 /**
- * busca todos los id de los usuarios inscriptos en el sistema
- * @param {Inscripcion} inscripciones array con todas las inscripciones en el sistema
- * @returns {Promise<res>} devulve los id de los usuarios inscriptos en el sistema.
+ * Extrae los identificadores de usuarios inscritos.
+ * @param {Inscripcion[]} inscripciones a procesar.
+ * @returns {number[]} ids de usuarios inscritos.
  */
-export function obtenerIdsUsuariosInscriptos(
-  inscripciones: Inscripcion[]
-): number[] {
+export function obtenerIdsUsuariosInscriptos(inscripciones: Inscripcion[]): number[] {
 
   return inscripciones.map(
     inscripcion =>

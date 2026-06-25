@@ -1,17 +1,16 @@
-
 import { api } from "../api";
+import { Carrera } from "../types/entidades";
 
 /**
- * busca las carreras en el sistema
- * @returns {Promise<res>} devulve todas las carreras que hay
- * @throw {Error} si es que no se pudo cargar las carreras
+ * Obtiene todas las carreras disponibles.
+ * @returns {Promise<Carrera[]>} Lista de carreras registradas.
+ * @throws {Error} Si falla la carga de carreras.
  */
-export async function getCarreras() {
+export async function getCarreras(): Promise<Carrera[]> {
   const res =
     await api("/carreras");
 
   if (!res.ok) {
-    console.log(await res.text());
     throw new Error("Error cargando carreras");
   }
   return res.json();

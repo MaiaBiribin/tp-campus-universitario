@@ -133,11 +133,6 @@ export default function NavLinks({
 
   return (
     <>
-    {cargando && (
-      <p className={forms.helper}>
-        Cargando notificaciones...
-      </p>
-    )}
 
     {error && (
       <p className={forms.error}>
