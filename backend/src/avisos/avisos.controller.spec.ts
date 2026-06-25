@@ -13,6 +13,7 @@ describe('AvisosController', () => {
     findAll: jest.fn(),
     findByEvento: jest.fn(),
     remove: jest.fn(),
+    update: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -61,4 +62,15 @@ describe('AvisosController', () => {
     await controller.remove(1, req);
     expect(mockAvisosService.remove).toHaveBeenCalledWith(1, 5);
   });
+
+  it('update delega al servicio con el id del aviso, el usuario autenticado y el dto', async () => {
+  const dto = { mensaje: 'Mensaje editado' } as any;
+  const req = { user: { sub: 5 } };
+  mockAvisosService.update.mockResolvedValue({ id_aviso: 1, mensaje: 'Mensaje editado' });
+
+  await controller.update(1, dto, req);
+
+  expect(mockAvisosService.update).toHaveBeenCalledWith(1, 5, dto);
+  });
+
 });
