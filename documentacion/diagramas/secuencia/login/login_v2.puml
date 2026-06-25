@@ -1,0 +1,74 @@
+@startuml login_secuencia
+title Flujo Login
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 8
+skinparam backgroundColor #FAFAFA
+skinparam sequence {
+  ActorBorderColor #336699
+  ActorBackgroundColor #DDEEFF
+  ParticipantBorderColor #336699
+  ParticipantBackgroundColor #DDEEFF
+  LifeLineBorderColor #7799CC
+  ArrowColor #336699
+  GroupBackgroundColor #FFF8DC
+  GroupBorderColor #CC9900
+}
+
+actor Usuario
+participant Frontend
+participant "AuthController" as Controller
+participant "AuthService" as AuthService
+participant "UsuariosService" as UsuariosService
+database "PostgreSQL" as DB
+
+' ─── 1. Request ─────────────────────────────────────────────────────
+Usuario -> Frontend : Ingresa mail y contraseña
+Frontend -> Controller : POST /auth/login\n{ mail, contrasena }
+
+' ─── 2. Buscar usuario ──────────────────────────────────────────────
+Controller -> AuthService : signIn(mail, contrasena)
+
+AuthService -> UsuariosService : findByMail(mail)
+UsuariosService -> DB : usuariosRepository.findOne(\n  where: { mail })
+DB --> UsuariosService : Usuario | null
+UsuariosService --> AuthService : usuario
+
+' ─── 3. Validaciones ────────────────────────────────────────────────
+alt Usuario no encontrado
+  AuthService --> Controller : throw UnauthorizedException\n"Credenciales inválidas"
+  Controller --> Frontend : 401
+  Frontend --> Usuario : Mostrar error
+end
+
+AuthService -> AuthService : bcrypt.compare(\n  contrasena, usuario.contrasena)
+
+alt Contraseña incorrecta
+  AuthService --> Controller : throw UnauthorizedException\n"Credenciales inválidas"
+  Controller --> Frontend : 401
+  Frontend --> Usuario : Mostrar error
+end
+
+alt usuario.estado !== HABILITADO
+  AuthService --> Controller : throw UnauthorizedException\n"Usuario no habilitado"
+  Controller --> Frontend : 401
+  Frontend --> Usuario : Mostrar error
+end
+
+' ─── 4. Generar JWT ─────────────────────────────────────────────────
+AuthService -> AuthService : jwtService.signAsync({\n  sub, mail, rol,\n  nombre, apellido, dni })
+AuthService --> Controller : { access_token }
+Controller --> Frontend : 200 OK\n{ access_token }
+
+' ─── 5. Frontend redirige según rol ─────────────────────────────────
+Frontend -> Frontend : Guardar token\nObtener rol del payload
+
+alt rol === ADMIN
+  Frontend --> Usuario : Dashboard Admin
+else rol === Profesor
+  Frontend --> Usuario : Dashboard Docente
+else rol === Alumno
+  Frontend --> Usuario : Dashboard Estudiante
+end
+
+@enduml
