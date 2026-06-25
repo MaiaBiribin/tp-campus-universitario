@@ -11,6 +11,20 @@ type Props = {
   descripcion?: string;
 };
 
+/**
+ * Vista contenedora de los eventos de la semana.
+ * obtiene los eventos mediante el servicio correspondiente y gestiona los estados de carga, error y visualización.
+ * @component
+ * @param {Props} props propiedades del componente.
+ * @param {string} props.titulo título mostrado en pantalla.
+ * @param {string} [props.descripcion] Descripción opcional.
+ * @returns {JSX.Element} Página con los eventos semanales.
+ * @example
+ * <EventosSemanaView
+ *   titulo="Eventos de la semana"
+ *   descripcion="Próximas actividades"
+ * />
+ */
 export default function EventosSemanaView({
   titulo,
   descripcion

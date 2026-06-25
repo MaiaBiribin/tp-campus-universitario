@@ -11,6 +11,14 @@ import cards from "@/app/styles/cards.module.css";
 import Card from "@/app/components/ui/card";
 import Button from "@/app/components/ui/button";
 
+/**
+ * Renderiza la lista de notificaciones del usuario.
+ * Obtiene notificaciones periódicamente (cada 5s), permite marcar una notificación como leída o todas a la vez y muestra estados de carga y error en pantalla.
+ * @component
+ * @returns {JSX.Element} Lista de notificaciones con acciones asociadas.
+ * @example
+ * <RenderizarNotificaciones />
+ */
 export default function RenderizarNotifiaciones(){
     const [notificiaciones,setNotificaciones]= useState<Notificacion[]>([])
     const [cargando,setCargando]=useState<boolean>(true)

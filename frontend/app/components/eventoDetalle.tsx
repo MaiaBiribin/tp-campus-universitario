@@ -9,8 +9,17 @@ type Props = {
   id: number;
 };
 
+/**
+ * Muestra la información detallada de un evento.
+ * Obtiene el evento por su identificador y gestiona los estados de carga, error y ausencia de datos.
+ * @component
+ * @param {Props} props propiedades del componente
+ * @param {number} props.id id del evento a consultar
+ * @returns {JSX.Element} detalle del evento o mensaje de estado
+ * @example
+ * <EventoDetalle id={15} />
+ */
 export default function EventoDetalle({id,}: Props) {
-
   const [evento, setEvento] =useState<Evento | null>(null);
   const [cargando, setCargando] =useState(true);
   const [error, setError] = useState("");

@@ -13,6 +13,21 @@ type Props = {
   label: string;
 };
 
+/**
+ * Muestra el próximo evento disponible.
+ * Obtiene los eventos, filtra los futuros y selecciona el más cercano según fecha y hora de inicio.
+ * Incluye estados visuales de carga, error y ausencia de eventos.
+ * @component
+ * @param {Props} props propiedades del componente.
+ * @param {string} props.rutaBase ruta base para navegar al detalle del evento.
+ * @param {string} props.label etiqueta descriptiva del evento.
+ * @returns {JSX.Element} tarjeta con información del próximo evento.
+ * @example
+ * <ProximoEvento
+ *   rutaBase="/eventos"
+ *   label="Próximo evento"
+ * />
+ */
 export default function ProximoEvento({
   rutaBase,
   label,

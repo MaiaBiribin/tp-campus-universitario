@@ -12,6 +12,19 @@ type Props={
  nombre:string;
 }
 
+/**
+ * Muestra información dinámica de un aula.
+ * Consulta los eventos disponibles y determina el estado del aula:
+ * ocupada si existe un evento en curso, libre si tiene eventos futuros
+ * o sin eventos si no posee actividades programadas.
+ * @component
+ * @param {Props} props - Datos del aula.
+ * @param {number} props.aulaId - Identificador del aula.
+ * @param {string} props.nombre - Nombre visible del aula.
+ * @returns {JSX.Element} Información del aula renderizada.
+ * @example
+ * <InfoAula aulaId={13} nombre="101" />
+ */
 export default function InfoAula({aulaId, nombre}:Props){
     const [eventos,setEventos]=useState<Evento[]>([]);
     const [cargando,setCargando]=useState(true);

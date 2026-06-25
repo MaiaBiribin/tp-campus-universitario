@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import {Carrera,Materia,Usuario,} from "../types/entidades";
 import { getCarreras } from "../services/carreras";
 import { getMateriasPorCarrera } from "../services/materias";
-import {
-  getInscripcionesPorMateria,
-  inscribirUsuarios as inscribirUsuariosService,
-  obtenerIdsUsuariosInscriptos,
-} from "../services/inscripciones";
-import {
-  getUsuariosHabilitados,
-} from "../services/usuarios";
+import {getInscripcionesPorMateria,inscribirUsuarios as inscribirUsuariosService,obtenerIdsUsuariosInscriptos,} from "../services/inscripciones";
+import {getUsuariosHabilitados,} from "../services/usuarios";
 
+/**
+ * Hook encargado de gestionar la asignación académica.
+ *
+ * Maneja la carga de carreras, materias y usuarios,
+ * selección de usuarios e inscripción a materias.
+ *
+ * @returns {UseAsignacionAcademicaReturn} estado y acciones de asignación.
+ */
 export function useAsignacionAcademica() {
 
   const [carreras,setCarreras]=useState<Carrera[]>([]);
@@ -30,14 +32,11 @@ export function useAsignacionAcademica() {
       setError("");
       try{
         const data=await getCarreras();
-
         setCarreras(data);
-
         const usuariosData=await getUsuariosHabilitados();
         setUsuarios(usuariosData);
         if(data.length>0){
           setCarreraSeleccionada(data[0].id_carrera);
-
           const materiasData=await getMateriasPorCarrera(data[0].id_carrera);
           setMaterias(materiasData);
         }
@@ -73,7 +72,6 @@ export function useAsignacionAcademica() {
   }
 
   function toggleUsuario(id:number){
-
     setUsuariosSeleccionados(
       prev=>
       prev.includes(id)

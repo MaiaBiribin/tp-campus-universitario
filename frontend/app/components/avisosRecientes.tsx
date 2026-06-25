@@ -7,6 +7,16 @@ import { getEventos } from "@/app/services/eventos";
 import dashboard from "@/app/styles/dashboard.module.css";
 import forms from "@/app/styles/forms.module.css";
 
+/**
+ * Muestra los avisos más recientes del sistema.
+ * Obtiene los eventos disponibles, recupera sus avisos asociados,los ordena por fecha de creación y muestra los últimos tres.
+ * Gestiona estados de carga, error y ausencia de avisos mediante
+ * mensajes visibles para el usuario.
+ * @component
+ * @returns {JSX.Element} lista de avisos recientes o mensaje de estado.
+ * @example
+ * <AvisosRecientes />
+ */
 export default function AvisosRecientes() {
 
   const [avisos,setAvisos] = useState<Aviso[]>([]);
