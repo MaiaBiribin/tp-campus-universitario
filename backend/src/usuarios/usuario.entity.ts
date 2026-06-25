@@ -1,16 +1,28 @@
-import {Entity,PrimaryGeneratedColumn,Column,ManyToOne,JoinColumn,} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Rol } from '../roles/rol.entity';
 import { Inscripcion } from "../inscripciones/inscripcion.entity";
-import { OneToMany } from "typeorm";
+
+/**
+ * Enum que representa el ciclo de vida de la cuenta de un usuario.
+ * - PENDIENTE: recién registrado, aguarda aprobación de un administrador.
+ * - HABILITADO: puede iniciar sesión en el sistema.
+ * - RECHAZADO: solicitud denegada, no puede acceder.
+ */
 export enum EstadoUsuario {
   PENDIENTE = 'pendiente',
   HABILITADO = 'habilitado',
   RECHAZADO = 'rechazado',
 }
 
+/**
+ * Entidad que representa un usuario del sistema.
+ * Mapea la tabla `usuarios`. El acceso al sistema está controlado por el campo `estado`
+ * y el campo `rol` determina los permisos disponibles (Admin, Docente, Estudiante).
+ * La contraseña se almacena siempre hasheada con bcrypt.
+ */
 @Entity('usuarios')
 export class Usuario {
-  @PrimaryGeneratedColumn() // Esta columna es la clave primaria (PK) y El valor se genera automáticamente
+  @PrimaryGeneratedColumn()
   id_usuario!: number;
 
   @Column()
@@ -19,15 +31,19 @@ export class Usuario {
   @Column()
   apellido!: string;
 
+  /** Correo electrónico único — usado como identificador de login. */
   @Column({ unique: true })
   mail!: string;
 
+  /** Contraseña hasheada con bcrypt (saltRounds = 12). Nunca se expone en responses. */
   @Column()
   contrasena!: string;
 
+  /** DNI único del usuario. */
   @Column({ unique: true })
   dni!: string;
 
+  /** Estado de la cuenta. Por defecto PENDIENTE al registrarse. */
   @Column({
     type: 'enum',
     enum: EstadoUsuario,
@@ -35,15 +51,12 @@ export class Usuario {
   })
   estado!: EstadoUsuario;
 
-  // Relación con Rol
+  /** Rol asignado al usuario. Cargado automáticamente (eager). FK: `id_rol`. */
   @ManyToOne(() => Rol, { eager: true })
   @JoinColumn({ name: 'id_rol' })
-  rol!: Rol; //genera "id_rol" como FK
+  rol!: Rol;
 
-  @OneToMany(
-    () => Inscripcion,
-    inscripcion => inscripcion.usuario
-  )
+  /** Inscripciones del usuario a materias. Relación inversa de Inscripcion.usuario. */
+  @OneToMany(() => Inscripcion, inscripcion => inscripcion.usuario)
   inscripciones!: Inscripcion[];
-
 }
