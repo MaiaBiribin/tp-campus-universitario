@@ -1,0 +1,128 @@
+@startuml diagrama_componentes
+title Diagrama de Componentes — Backend NestJS
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FAFAFA
+skinparam component {
+  BackgroundColor #DDEEFF
+  BorderColor #336699
+  FontSize 13
+}
+skinparam package {
+  BackgroundColor #F0F4FF
+  BorderColor #7799CC
+  FontSize 14
+  FontStyle bold
+}
+skinparam arrow {
+  Color #336699
+  FontSize 11
+}
+skinparam database {
+  BackgroundColor #FFF8DC
+  BorderColor #CC9900
+}
+
+' ─── Infraestructura ────────────────────────────────────────────────
+database "PostgreSQL\n(Neon)" as DB
+
+package "AppModule" {
+
+  ' ─── AuthModule ─────────────────────────────────────────────────
+  package "AuthModule" {
+    [AuthService]
+    [AuthController]
+    [RolesGuard]
+    [JwtModule] <<library>>
+  }
+
+  ' ─── UsuariosModule ─────────────────────────────────────────────
+  package "UsuariosModule" {
+    [UsuariosService]
+    [UsuariosController]
+  }
+
+  ' ─── RolesModule ────────────────────────────────────────────────
+  package "RolesModule" {
+    [RolesService]
+    [RolesController]
+  }
+
+  ' ─── AulasModule ────────────────────────────────────────────────
+  package "AulasModule" {
+    [AulasService]
+    [AulasController]
+  }
+
+  ' ─── CarrerasModule ─────────────────────────────────────────────
+  package "CarrerasModule" {
+    [CarrerasService]
+    [CarrerasController]
+  }
+
+  ' ─── MateriasModule ─────────────────────────────────────────────
+  package "MateriasModule" {
+    [MateriasService]
+    [MateriasController]
+  }
+
+  ' ─── InscripcionesModule ────────────────────────────────────────
+  package "InscripcionesModule" {
+    [InscripcionesService]
+    [InscripcionesController]
+  }
+
+  ' ─── NotificacionesModule ───────────────────────────────────────
+  package "NotificacionesModule" {
+    [NotificacionesService]
+    [NotificacionesController]
+  }
+
+  ' ─── EventosModule ──────────────────────────────────────────────
+  package "EventosModule" {
+    [EventosService]
+    [EventosController]
+  }
+
+  ' ─── AvisosModule ───────────────────────────────────────────────
+  package "AvisosModule" {
+    [AvisosService]
+    [AvisosController]
+  }
+
+}
+
+' ─── Dependencias entre módulos ─────────────────────────────────────
+
+' AuthModule usa UsuariosModule
+[AuthService]         ..> [UsuariosService]       : usa
+
+' UsuariosModule usa AulasModule
+[UsuariosService]     ..> [AulasService]           : usa
+
+' InscripcionesModule usa AuthModule
+[InscripcionesController] ..> [RolesGuard]         : protegido por
+[InscripcionesController] ..> [JwtModule]           : valida JWT
+
+' NotificacionesModule usa AuthModule
+[NotificacionesController] ..> [RolesGuard]        : protegido por
+[NotificacionesController] ..> [JwtModule]          : valida JWT
+
+' EventosModule usa NotificacionesModule
+[EventosService]      ..> [NotificacionesService]  : notifica
+
+' AvisosModule usa NotificacionesModule
+[AvisosService]       ..> [NotificacionesService]  : notifica
+
+' ─── Acceso a base de datos (TypeORM) ───────────────────────────────
+[AulasService]            --> DB : Aula
+[CarrerasService]         --> DB : Carrera
+[MateriasService]         --> DB : Materia
+[RolesService]            --> DB : Rol
+[UsuariosService]         --> DB : Usuario, Rol, Evento
+[InscripcionesService]    --> DB : Inscripcion, Usuario, Materia
+[NotificacionesService]   --> DB : Notificacion
+[EventosService]          --> DB : Evento, TipoEvento,\nInscripcion, Aviso
+[AvisosService]           --> DB : Aviso, Inscripcion, Evento
+
+@enduml
