@@ -6,6 +6,12 @@ import Card from "@/app/components/ui/card";
 import Button from "@/app/components/ui/button";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { useCrearEvento } from "@/app/hooks/useCrearEvento";
+
+/**
+ * pestaña creacion de eventos
+ * muestra al admin todos los datos necesarios traidos del back para crear un nuevo evento.
+ * @returns {JSX.Element} vista de creacion de eventos.
+ */
 export default function CrearEvento() {
   const evento =useCrearEvento();
   async function handleSubmit(e: React.FormEvent){

@@ -8,7 +8,11 @@ import table from "@/app/styles/table.module.css";
 import forms from "@/app/styles/forms.module.css";
 import { Evento } from "../../../types/entidades";
 import { getEventos, eliminarEvento as borrarEvento } from "@/app/services/eventos";
-
+/**
+ * panel de eventos del admin
+ * muestra todos los eventos que creo el admin y tambien el link para ir a la pestana de crear un nuevo evento.
+ * @returns {JSX.Element} vista de los eventos del admin
+ */
 export default function EventosAdmin() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [cargando, setCargando] = useState(true);
@@ -17,6 +21,10 @@ export default function EventosAdmin() {
   const [eliminando, setEliminando] = useState<number | null>(null);
  
   useEffect(() => {
+    /**
+     * funcion para cargar los eventos a la pestaña
+     *  @throws en el caso que no se pudo cargar los eventos
+     */
     async function cargarEventos() {
       try {
       const data = await getEventos();
@@ -30,11 +38,17 @@ export default function EventosAdmin() {
 
   cargarEventos();
 }, []);
-
+ /**
+  * esta funcion redirige a la pestaña de crear un nuevo evento.
+  */
   function crearEvento() {
     window.location.href = "/dashboard/admin/eventos/nuevo";
   }
-
+ /**
+  * esta funcion sirve para poder eliminar del sistema un evento
+  * @param {number} id id del evento que se quiera borrar
+  *  @throws en caso que no se pudo borrar el evento. 
+  */
   async function eliminarEvento(id: number) {
   setError("");
   setExito("");

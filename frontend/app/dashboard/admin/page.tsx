@@ -23,6 +23,9 @@ export default function DashboardAdmin() {
   const [error, setError] = useState("");
   
   useEffect(() => {
+    /**
+     * esta funcion carga datos para el dashboard del admin.
+     */
   async function cargarDashboard() {
     try {
       setCargando(true);

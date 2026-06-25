@@ -1,7 +1,7 @@
 "use client";
 import {getUsuariosPendientes,aprobarUsuario,rechazarUsuario}
 from "@/app/services/usuarios";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { Solicitud } from "../../../types/entidades";
@@ -9,7 +9,11 @@ import styles from "./page.module.css";
 import Card from "@/app/components/ui/card";
 import Button from "@/app/components/ui/button";
 import forms from "@/app/styles/forms.module.css";
-
+/**
+ * panel de solicitudes del admin
+ * muestra al admin las solicitudes de los nuevos usuarios que esperan ser habilitados
+ * @returns {JSX.Element} 
+ */
 export default function SolicitudesAdmin() {
 
   const [solicitudes, setSolicitudes] =useState<Solicitud[]>([]);
@@ -17,7 +21,10 @@ export default function SolicitudesAdmin() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-
+ /**
+  * funcion que carga las solicitudes pendientes
+  *  @throws en el caso que no se pudo cargar las solicitudes.
+  */
   async function cargarSolicitudes() {
     try {
       setError("");
@@ -30,7 +37,11 @@ export default function SolicitudesAdmin() {
     }
   }
   cargarSolicitudes();}, []);
-
+/**
+ * funcion para poder aprobar un usuario en especifico y cambiarle el estado a habilitado.
+ * @param {number} id  id del usario que se quiera aprobar.
+ * @throws en el caso que no se pudo aprobar el usuario.
+ */
   async function aprobar(id: number) {
     try {
       setError("");
@@ -43,7 +54,11 @@ export default function SolicitudesAdmin() {
       setError("No se pudo aprobar la solicitud.");
     }
   }
-
+ /**
+  * funcion para poder recharzar la solicitud de un usario
+  * @param {number} id el id del usuario cuya solicitud se rechazo
+  *  @throws en el caso que no se pudo rechazar la solicitud.
+  */
   async function rechazar(id: number) {
     try {
       setError("");

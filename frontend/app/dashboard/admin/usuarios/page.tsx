@@ -7,13 +7,21 @@ import table from "@/app/styles/table.module.css";
 import { Usuario } from "../../../types/entidades";
 import { getUsuariosHabilitados } from "@/app/services/usuarios";
 import forms from "@/app/styles/forms.module.css";
-
+/**
+ * panel de usuarios habilitados
+ * muestra al admin todos los usuarios del sistema que estan en estado habilitado
+ * 
+ * @returns {JSX.Element} vista de los usuarios habilitados
+ */
 export default function UsuariosAdmin() {
 
   const [usuarios, setUsuarios] =useState<Usuario[]>([]);
   const [cargando, setCargando] =useState(true);
   const [error, setError] = useState("");
   useEffect(() => {
+    /**
+     * carga a todos los usuarios habilitados del sistema
+     */
     async function cargarUsuarios() {
       try {
         setError("");
