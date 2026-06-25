@@ -82,7 +82,6 @@ export class AvisosService {
       order:{
         fecha_creacion:"DESC"
       }
-
     });
   }
 /**
@@ -129,24 +128,19 @@ export class AvisosService {
     },
     },
     });
-
     if (!aviso) {
       throw new BadRequestException('El aviso no existe');
     }
     if (aviso.usuarioCreador.id_usuario !== idUsuario) {
       throw new BadRequestException('No podés editar un aviso que no creaste');
     }
-
     aviso.mensaje = datosActualizar.mensaje;
-
     const avisoActualizado = await this.avisosRepository.save(aviso);
-
     const inscriptos = await this.inscripcionRepository.find({
       where: { materia: { id_materia: aviso.evento.materia.id_materia } },
       relations: { usuario: true },
       select: { usuario: { id_usuario: true } },
     });
-
     if (inscriptos.length > 0) {
       await this.notificacionesService.crearNotificaciones(
         aviso.evento.id_evento,
