@@ -37,21 +37,22 @@ describe("getCarreras",()=>{
       ]);
   });
 
-  it("lanza error cuando la respuesta no es correcta",async()=>{
-    const consoleSpy =
-      jest.spyOn(
-        console,
-        "log"
-      )
-      .mockImplementation(()=>{});
-    (api as jest.Mock)
-      .mockResolvedValue({
-        ok:false,
-        text: async()=>"Error interno"
-      });
-    await expect(getCarreras()).rejects.toThrow("Error cargando carreras");
-    expect(consoleSpy).toHaveBeenCalledWith("Error interno");
-    expect(api).toHaveBeenCalledWith("/carreras");
-    consoleSpy.mockRestore();
-  });
+  it("lanza error cuando la respuesta no es correcta", async () => {
+
+  (api as jest.Mock)
+    .mockResolvedValue({
+      ok: false,
+    });
+
+  await expect(
+    getCarreras()
+  ).rejects.toThrow(
+    "Error cargando carreras"
+  );
+
+  expect(api)
+    .toHaveBeenCalledWith(
+      "/carreras"
+    );
+});
 });

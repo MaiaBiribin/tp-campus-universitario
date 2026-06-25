@@ -4,7 +4,11 @@ import Link from "next/link";
 import home from "./home.module.css";
 import Card from "./components/ui/card";
 import Button from "./components/ui/button";
-
+/**
+ * pagina de inicio de la pagina web.
+ * muestra lo servicios la pagina provee.
+ * @returns {JSX.Element} la vista de la pagina.
+ */
 export default function Home() {
 const features=[
   {titulo:"Gestión de eventos",texto:"Organizá y asigná eventos académicos"},

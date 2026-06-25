@@ -1,29 +1,33 @@
 import { api } from "../api";
 import { Inscripcion } from "../types/entidades";
 
-export async function getInscripcionesPorMateria(
-  idMateria: number
-) {
-
+/**
+ * Obtiene las inscripciones asociadas a una materia
+ * @param {number} idMateria id de la materia.
+ * @returns {Promise<Inscripcion[]>} Lista de inscripciones.
+ * @throws {Error} Si falla la carga de inscripciones.
+ */
+export async function getInscripcionesPorMateria(idMateria: number): Promise<Inscripcion[]> {
   const res =
     await api(
       `/inscripciones/materia/${idMateria}`
     );
-
   if (!res.ok) {
     throw new Error(
       "Error cargando inscripciones"
     );
   }
-
   return res.json();
 }
 
-export async function inscribirUsuarios(
-  idMateria: number,
-  usuarios: number[]
-) {
-
+/**
+ * Inscribe usuarios en una materia
+ * @param {number} idMateria id de la materia
+ * @param {number[]} usuarios ids de usuarios a inscribir
+ * @returns {Promise<Inscripcion[]>} Inscripciones creadas
+ * @throws {Error} Si falla la inscripción
+ */
+export async function inscribirUsuarios(idMateria: number,usuarios: number[]): Promise<Inscripcion[]> {
   const res =
     await api(
       "/inscripciones",
@@ -46,9 +50,12 @@ export async function inscribirUsuarios(
   return res.json();
 }
 
-export function obtenerIdsUsuariosInscriptos(
-  inscripciones: Inscripcion[]
-): number[] {
+/**
+ * Extrae los identificadores de usuarios inscritos.
+ * @param {Inscripcion[]} inscripciones a procesar.
+ * @returns {number[]} ids de usuarios inscritos.
+ */
+export function obtenerIdsUsuariosInscriptos(inscripciones: Inscripcion[]): number[] {
 
   return inscripciones.map(
     inscripcion =>

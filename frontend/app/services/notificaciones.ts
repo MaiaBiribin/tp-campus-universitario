@@ -1,20 +1,29 @@
 import { api } from "../api";
+import { Notificacion } from "../types/entidades";
 
-export async function TraerTodasNotificaciones(){
+/**
+ * Obtiene las notificaciones del usuario
+ * @returns {Promise<Notificacion[]>} Lista de notificaciones.
+ * @throws {Error} Si no se pueden cargar las notificaciones.
+ */
+export async function TraerTodasNotificaciones(): Promise<Notificacion[]> {
 
     const res = await api("/notificaciones/mis-notificaciones");
     if(!res.ok){
-        console.log(await res.text());
         throw new Error("Error al traer las notificaciones");
     }
     return res.json();
 }
 
-
-
+/**
+ * Marca una notificación específica como leída
+ * @param {number} id_notificacion id de la notificación.
+ * @returns {Promise<Notificacion>} Notificación actualizada.
+ * @throws {Error} Si no se pudo actualizar el estado.
+ */
 export async function NotificacionLeida(
-  id_notificacion:number
-){
+  id_notificacion: number
+): Promise<Notificacion> {
     const res = await api(
       `/notificaciones/${id_notificacion}/leida`,
       {
@@ -29,9 +38,12 @@ export async function NotificacionLeida(
     return res.json();
 }
 
-
-
-export async function NotificacionLeidas(){
+/**
+ * Marca todas las notificaciones pendientes como leídas
+ * @returns {Promise<Notificacion[]>} Lista de notificaciones actualizadas.
+ * @throws {Error} Si falla la actualización masiva.
+ */
+export async function NotificacionLeidas(): Promise<Notificacion[]> {
     const res = await api(
       "/notificaciones/marcar-todas-leidas",
       {
@@ -47,9 +59,12 @@ export async function NotificacionLeidas(){
     return res.json();
 }
 
-
-
-export async function CantidadNotificacionesSinLeer(){
+/**
+ * Obtiene la cantidad de notificaciones no leídas.
+ * @returns {Promise<number>} Cantidad de notificaciones pendientes.
+ * @throws {Error} Si falla la carga de notificaciones.
+ */
+export async function CantidadNotificacionesSinLeer(): Promise<number> {
 
     const res = await api(
       "/notificaciones/mis-notificaciones"

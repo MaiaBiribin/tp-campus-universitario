@@ -11,7 +11,11 @@ import Button from "../components/ui/button";
 import Card from "../components/ui/card";
 import Form from "../components/ui/form";
 import React from "react";
-
+/**
+ * pagina donde los usuarios ya existentes ingresan sus usuarios.
+ * se encarga de verificar que el usuario exista y mandarlo a su respectiva pagina.
+ * @returns {JSX.Element} vista del login de la pagina.
+ */
 const LoginForm=()=> {
   const router = useRouter();
   const searchParams = useSearchParams();

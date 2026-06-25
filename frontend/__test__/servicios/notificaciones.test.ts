@@ -1,19 +1,16 @@
 import { TraerTodasNotificaciones,NotificacionLeida, 
   NotificacionLeidas, 
   CantidadNotificacionesSinLeer } from "@/app/services/notificaciones";
+
 import { api } from "@/app/api";
 
-
-jest.mock("@/api", () => ({
+jest.mock("@/app/api", () => ({
   api: jest.fn(),
 }));
 
 describe("Servicio de Notificaciones", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
-    
-    jest.spyOn(console, "log").mockImplementation(() => {});
   });
 
   describe("TraerTodasNotificaciones", () => {
@@ -34,21 +31,22 @@ describe("Servicio de Notificaciones", () => {
       expect(api).toHaveBeenCalledWith("/notificaciones/mis-notificaciones");
       expect(resultado).toEqual(mockNotificaciones);
     });
+    it("debería lanzar error si la respuesta falla", async () => {
+  (api as jest.Mock).mockResolvedValue({
+    ok: false,
+  });
 
-    it("debería loguear el texto del error y lanzar la excepción si la respuesta es !ok", async () => {
-      (api as jest.Mock).mockResolvedValue({
-        ok: false,
-        text: async () => "Unauthorized",
-      });
-
-      await expect(TraerTodasNotificaciones()).rejects.toThrow("Error al traer las notificaciones");
-      expect(console.log).toHaveBeenCalledWith("Unauthorized");
-    });
+  await expect(
+    TraerTodasNotificaciones()
+  ).rejects.toThrow(
+    "Error al traer las notificaciones"
+  );
+});
   });
 
   describe("NotificacionLeida", () => {
     it("debería hacer un PATCH inyectando el ID en la URL y retornar la notificación actualizada", async () => {
-      const mockRespuestaBack = { id_notificacion: 42, leida: true };
+      const mockRespuestaBack = {id_notificacion: 42,mensaje: "Aviso",fecha_creacion: "2026-06-25",leida: true};
 
       (api as jest.Mock).mockResolvedValue({
         ok: true,
@@ -73,7 +71,14 @@ describe("Servicio de Notificaciones", () => {
 
   describe("NotificacionLeidas", () => {
     it("debería hacer un PATCH a la ruta masiva de marcar todas como leídas", async () => {
-      const mockRespuestaBack = { mensaje: "Todas marcadas como leídas" };
+      const mockRespuestaBack = [
+  {
+    id_notificacion: 1,
+    mensaje: "Aviso",
+    fecha_creacion: "2026-06-25",
+    leida: true
+  }
+];
 
       (api as jest.Mock).mockResolvedValue({
         ok: true,

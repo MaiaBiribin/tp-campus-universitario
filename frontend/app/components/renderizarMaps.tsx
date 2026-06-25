@@ -4,18 +4,27 @@ import { useState } from "react";
 import Button from "./ui/button";
 import InfoAula from "./infoAula";
 
-
+/**
+ * Niveles disponibles del edificio para visualizar en el mapa.
+ * @enum {string}
+ */
 enum Mapas {
   PB = "PB",
   P1 = "P1",
   P2 = "P2",
 }
+/**
+ * Área interactiva de un mapa asociada a un aula.
+ */
 interface AreaMapa {
   coords: string;
   alt: string;
   aulaId: number;
   nombre: string;
 }
+/**
+ * Configuración visual de un piso del edificio.
+ */
 interface DatosMapa {
   src: string;
   nombreMapa: string;
@@ -181,8 +190,13 @@ const ConfigurarMapas: Record<Mapas, DatosMapa> = {
   },
 };
 
-
-
+/**
+ * Renderiza mapas interactivos del edificio.
+ * Permite cambiar entre pisos, seleccionar aulas
+ * y mostrar información asociada al aula elegida.
+ * @component
+ * @returns {JSX.Element} Vista del mapa interactivo.
+ */
 export default function RenderizarMapas() {
 
   const [mapaSeleccionado,setMapaSeleccionado] =useState<Mapas>(Mapas.PB);

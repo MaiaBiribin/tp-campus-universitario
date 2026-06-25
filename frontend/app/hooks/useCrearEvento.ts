@@ -7,6 +7,12 @@ import {getAulas,} from "@/app/services/aulas";
 import {getMateriasPorCarrera,} from "@/app/services/materias";
 import {crearEvento,} from "@/app/services/eventos";
 
+/**
+ * Hook para gestionar la creación de eventos.
+ * Maneja el estado del formulario, carga datos auxiliares
+ * (carreras, materias y aulas), valida campos y crea eventos.
+ * @returns {UseCrearEventoReturn} estados, setters y acciones del formulario.
+ */
 export function useCrearEvento() {
   const [fecha, setFecha] =useState("");
   const [horaInicio,setHoraInicio] =useState("");
@@ -39,26 +45,37 @@ export function useCrearEvento() {
     cargar();
   }, []);
 
+  /**
+ * Actualiza la carrera seleccionada y carga sus materias asociadas.
+ * @param {string} carreraId - Identificador de la carrera seleccionada.
+ * @returns {Promise<void>}
+ * @throws Actualiza el estado de error si falla la carga de materias.
+ */
   async function cambiarCarrera(carreraId: string) {
-
     setIdCarrera(carreraId);
     setIdMateria("");
-
     if (!carreraId) {
       setMaterias([]);
       return;
     }
-
     try {
       const data =await getMateriasPorCarrera(Number(carreraId));
       setMaterias(data);
     }
-
     catch {
       setError("No se pudieron cargar materias");
     }
   }
 
+  /**
+ * Valida y envía los datos del formulario para crear un evento.
+ *
+ * @returns {Promise<boolean>} 
+ * True si el evento fue creado correctamente,
+ * false si ocurrió un error de validación o creación.
+ *
+ * @throws Actualiza el estado de error cuando falla la operación.
+ */
   async function submit() {
     setError("");
     setExito("");

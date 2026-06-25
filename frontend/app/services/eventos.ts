@@ -1,7 +1,12 @@
 import { api } from "../api";
 import { Evento } from "../types/entidades";
 
-export async function getEventos() {
+/**
+ * Obtiene los eventos futuros ordenados por fecha.
+ * @returns {Promise<Evento[]>} Lista de eventos próximos
+ * @throws {Error} Si falla la carga de eventos.
+ */
+export async function getEventos(): Promise<Evento[]> {
   const res = await api("/eventos");
 
   if (!res.ok) {
@@ -32,7 +37,13 @@ export async function getEventos() {
     });
 }
 
-export async function getEventoPorId(id: number) {
+/**
+ * Obtiene un evento específico por su identificador.
+ * @param {number} id del evento.
+ * @returns {Promise<Evento>} Evento encontrado.
+ * @throws {Error} Si no se puede obtener el evento.
+ */
+export async function getEventoPorId(id: number): Promise<Evento> {
   const res = await api(`/eventos/${id}`);
   if (!res.ok) {
     throw new Error("Error al obtener evento");
@@ -40,7 +51,13 @@ export async function getEventoPorId(id: number) {
   return res.json();
 }
 
-export async function crearEvento(evento: unknown) {
+/**
+ * Crea un nuevo evento académico.
+ * @param {Evento} evento datos del evento a crear.
+ * @returns {Promise<Evento>} Evento creado.
+ * @throws {Error} Si falla la creación.
+ */
+export async function crearEvento(evento: Evento): Promise<Evento> {
   const res =await api("/eventos",
       {
         method: "POST",
@@ -56,7 +73,13 @@ export async function crearEvento(evento: unknown) {
   return res.json();
 }
 
-export async function eliminarEvento(id: number) {
+/**
+ * Elimina un evento existente
+ * @param {number} id del evento.
+ * @returns {Promise<void>}
+ * @throws {Error} Si falla la eliminación.
+ */
+export async function eliminarEvento(id: number): Promise<void> {
   const res =
     await api(`/eventos/${id}`,
       {
@@ -68,7 +91,12 @@ export async function eliminarEvento(id: number) {
   }
 }
 
-export async function getEventosSemana() {
+/**
+ * Obtiene los eventos programados durante los próximos 7 días
+ * @returns {Promise<Evento[]>} Eventos dentro del rango semanal.
+ * @throws {Error} Si falla la carga de eventos.
+ */
+export async function getEventosSemana(): Promise<Evento[]> {
   const res = await api("/eventos");
   if (!res.ok) {
     throw new Error("Error cargando eventos");

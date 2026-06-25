@@ -8,10 +8,11 @@ import { EventosService } from './eventos.service';
 import { EventosController } from './eventos.controller';
 import { NotificacionesModule } from '../notificaciones/notificaciones.module';
 import { Inscripcion } from '../inscripciones/inscripcion.entity';
+import { Aviso } from '../avisos/aviso.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TipoEvento, Evento, Inscripcion]),
+    TypeOrmModule.forFeature([TipoEvento, Evento, Inscripcion, Aviso]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

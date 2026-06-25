@@ -13,6 +13,7 @@ export default function EventosAdmin() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
+  const [exito, setExito] = useState("");
   const [eliminando, setEliminando] = useState<number | null>(null);
  
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function EventosAdmin() {
 
   async function eliminarEvento(id: number) {
   setError("");
+  setExito("");
   setEliminando(id);
   try {
     await borrarEvento(id);
@@ -44,6 +46,7 @@ export default function EventosAdmin() {
         (e) => e.id_evento !== id
       )
     );
+    setExito("Evento eliminado correctamente.");
   } catch {
     setError("No se pudo eliminar el evento. Puede tener información asociada."
     );
@@ -74,6 +77,7 @@ return (
         </button>
       </header>
       {error && (<p className={forms.error}>{error}</p>)}
+      {exito && (<p className={forms.success}>{exito}</p>)}
       {eventos.length === 0 ? (
         <div className={table.empty}>
           <h2>

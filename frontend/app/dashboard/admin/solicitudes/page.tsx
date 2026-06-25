@@ -8,63 +8,63 @@ import { Solicitud } from "../../../types/entidades";
 import styles from "./page.module.css";
 import Card from "@/app/components/ui/card";
 import Button from "@/app/components/ui/button";
+import forms from "@/app/styles/forms.module.css";
 
 export default function SolicitudesAdmin() {
 
   const [solicitudes, setSolicitudes] =useState<Solicitud[]>([]);
   const [cargando, setCargando] =useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
 
-    async function cargarSolicitudes() {
-      try {
-        const data =await getUsuariosPendientes();
-        setSolicitudes(data);
-      } finally {
-        setCargando(false);
-      }
+  async function cargarSolicitudes() {
+    try {
+      setError("");
+      const data = await getUsuariosPendientes();
+      setSolicitudes(data);
+    } catch (error) {
+      setError("No se pudieron cargar las solicitudes.");
+    } finally {
+      setCargando(false);
     }
-
-    cargarSolicitudes();
-  }, []);
+  }
+  cargarSolicitudes();}, []);
 
   async function aprobar(id: number) {
-  try {
-    await aprobarUsuario(id);
-    setSolicitudes((prev) =>
+    try {
+      setError("");
+      await aprobarUsuario(id);
+      setSolicitudes((prev) =>
       prev.filter(
-        (u) => u.id_usuario !== id)
-    );
-  } catch (error) {
-    console.error(error);}
+        (u) => u.id_usuario !== id
+      ));
+    } catch (error) {
+      setError("No se pudo aprobar la solicitud.");
+    }
   }
 
   async function rechazar(id: number) {
-  try {
-    await rechazarUsuario(id);
-    setSolicitudes((prev) =>
+    try {
+      setError("");
+      await rechazarUsuario(id);
+      setSolicitudes((prev) =>
       prev.filter(
-        (u) => u.id_usuario !== id
-      )
-    );
+        (u) => u.id_usuario !== id));
   } catch (error) {
-    console.error(error);}
+    setError("No se pudo rechazar la solicitud.");
+  }
+
 }
 
   if (cargando) {
-
     return (
-
       <main className={layout.main}>
         <div className={layout.content}>
-          <h1>
-            Cargando solicitudes...
-          </h1>
+          <h1>Cargando solicitudes...</h1>
         </div>
       </main>
-
     );
-
   }
 
 return (
@@ -84,23 +84,18 @@ return (
         }
       >
         <div>
-          <h1>
-            Solicitudes de registro
-          </h1>
+          <h1>Solicitudes de registro</h1>
           <p>
             Revisá solicitudes pendientes
             y aprobá únicamente usuarios
             autorizados.
           </p>
         </div>
-        <div
-          className={
-            styles.counter
-          }
-        >
+        <div className={styles.counter}>
           {solicitudes.length}
         </div>
       </header>
+      {error && (<p role="alert" className={forms.error}>⚠️ {error}</p>)}
       <section>
         {
           solicitudes.length === 0 ? (
@@ -110,9 +105,7 @@ return (
                   styles.empty
                 }
               >
-                <h2>
-                  No hay solicitudes pendientes
-                </h2>
+                <h2>No hay solicitudes pendientes</h2>
                 <p>
                   Cuando un usuario se registre
                   aparecerá acá.

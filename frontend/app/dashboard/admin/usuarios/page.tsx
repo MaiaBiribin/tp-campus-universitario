@@ -6,27 +6,24 @@ import dashboard from "@/app/styles/dashboard.module.css";
 import table from "@/app/styles/table.module.css";
 import { Usuario } from "../../../types/entidades";
 import { getUsuariosHabilitados } from "@/app/services/usuarios";
+import forms from "@/app/styles/forms.module.css";
 
 export default function UsuariosAdmin() {
 
-  const [usuarios, setUsuarios] =
-    useState<Usuario[]>([]);
-
-  const [cargando, setCargando] =
-    useState(true);
-
+  const [usuarios, setUsuarios] =useState<Usuario[]>([]);
+  const [cargando, setCargando] =useState(true);
+  const [error, setError] = useState("");
   useEffect(() => {
     async function cargarUsuarios() {
       try {
+        setError("");
         const usuariosData =await getUsuariosHabilitados();
         setUsuarios(usuariosData);
+      } catch (error) {
+        setError("No se pudieron cargar los usuarios habilitados.");
+      } finally {
+        setCargando(false);
       }
-      catch (error) {
-        console.error(error);}
-
-      finally {
-        setCargando(false); }
-
     }
     cargarUsuarios();
   }, []);
@@ -35,14 +32,10 @@ export default function UsuariosAdmin() {
     return (
       <main className={layout.main}>
         <div className={layout.content}>
-          <h1>
-            Cargando usuarios...
-          </h1>
+          <h1>Cargando usuarios...</h1>
         </div>
       </main>
-
     );
-
   }
 
   return (
@@ -61,6 +54,14 @@ export default function UsuariosAdmin() {
             {usuarios.length}
           </div>
         </header>
+        {error && (
+          <p
+            role="alert"
+            className={forms.error}
+          >
+            ⚠️ {error}
+          </p>
+        )}
         {usuarios.length === 0 ? (
           <div className={table.empty}>
             <h2>

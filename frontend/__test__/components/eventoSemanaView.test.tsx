@@ -19,15 +19,8 @@ jest.mock("@/app/components/renderizarEventosSemana",()=>({
 }));
 
 describe("EventosSemanaView",()=>{
-  beforeEach(()=>{
-    jest.clearAllMocks();
-    jest.spyOn(console,"error")
-      .mockImplementation(()=>{});
-  });
+  beforeEach(()=>{jest.clearAllMocks();});
 
-  afterEach(()=>{
-    jest.restoreAllMocks();
-  });
 
   it("muestra el titulo y descripcion correctamente",()=>{
 
@@ -110,18 +103,23 @@ describe("EventosSemanaView",()=>{
     expect(screen.queryByText("Cargando...")).not.toBeInTheDocument();
   });
 
-  it("maneja error al cargar eventos",async()=>{
-    (getEventosSemana as jest.Mock).mockRejectedValue( new Error("fallo"));
-    render(
-      <EventosSemanaView
-        titulo="Eventos"
-      />
-    );
-    await waitFor(()=>{
-      expect(screen.getByTestId("render-eventos")).toBeInTheDocument();});
-    expect(console.error).toHaveBeenCalled();
-    expect(getEventosSemana).toHaveBeenCalledTimes(1);
+  it("muestra mensaje de error cuando falla la carga",async()=>{
+
+  (getEventosSemana as jest.Mock).mockRejectedValue(new Error("fallo"));
+
+  render(<EventosSemanaView
+    titulo="Eventos"
+    />
+  );
+
+  await waitFor(()=>{
+    expect(screen.getByText("No se pudieron cargar los eventos de la semana.")
+    )
+    .toBeInTheDocument();
   });
+
+
+  expect(getEventosSemana).toHaveBeenCalledTimes(1);});
 
   it("no muestra descripcion cuando no viene",()=>{
 
@@ -135,4 +133,18 @@ describe("EventosSemanaView",()=>{
     expect(screen.getByRole("heading",{name:"Prueba"})).toBeInTheDocument();
     expect(screen.queryByText("Estos son tus eventos próximos")).not.toBeInTheDocument();
   });
+
+  it("no renderiza eventos si ocurre un error",async()=>{
+  (getEventosSemana as jest.Mock).mockRejectedValue(new Error());
+
+  render(
+    <EventosSemanaView
+      titulo="Eventos"
+    />
+  );
+
+  await waitFor(()=>{
+    expect(screen.queryByTestId("render-eventos")).not.toBeInTheDocument();
+
+  });});
 });

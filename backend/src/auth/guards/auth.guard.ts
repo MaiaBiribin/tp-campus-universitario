@@ -8,12 +8,21 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { jwtConstants } from '../constants';
 
+/**
+ * Guard de autenticación
+ * Valida el token enviado en el header Authorization y adjunta el payload al request.
+ */
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
+   /**
+   * Verifica si la request puede continuar según la validez del JWT
+   * @param context contexto de ejecución de NestJS.
+   * @returns `true` si el token es válido.
+   * @throws {UnauthorizedException} Si no hay token o es inválido/expirado.
+   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // 1. Extrae el token del header de la petición
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
@@ -22,12 +31,9 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      // 2. Verifica que el token sea válido
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
-
-      // 3. Guarda los datos del usuario en la request
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException('Token inválido o expirado');
@@ -36,7 +42,11 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  // Extrae el token del header Authorization: Bearer <token>
+  /**
+   * Extrae el JWT desde el header Authorization.
+   * @param request request HTTP de Express.
+   * @returns Token JWT o `undefined` si no existe o no es Bearer.
+   */
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;

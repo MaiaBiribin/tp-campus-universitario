@@ -6,6 +6,7 @@ import {
   Body,
   Param,
   UseGuards,
+  Patch,
   Request
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
@@ -15,6 +16,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CreateAvisoDto } from './dto/create-aviso.dto';
 import { AvisoResponseDto } from './dto/aviso-response.dto';
+import { UpdateAvisoDto } from './dto/update-aviso.dto';
 
 @ApiTags('avisos')
 @ApiBearerAuth()
@@ -79,5 +81,35 @@ export class AvisosController {
     id,
     req.user.sub
   );
+
 }
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('Docente')
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Editar aviso',
+    description: 'Edita el mensaje de un aviso. Solo puede editarlo el usuario que lo creó.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID del aviso a editar',
+  })
+  @ApiBody({ type: UpdateAvisoDto, description: 'Nuevo mensaje del aviso' })
+  @ApiResponse({ status: 200, description: 'Aviso actualizado exitosamente', type: AvisoResponseDto })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
+  @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Docente)' })
+  @ApiResponse({ status: 400, description: 'El aviso no existe o el usuario no es el creador' })
+  async update(
+    @Param('id') id: number,
+    @Body() updateAvisoDto: UpdateAvisoDto,
+    @Request() req,
+  ) {
+    return this.avisosService.update(
+      id,
+      req.user.sub,
+      updateAvisoDto,
+    );
+  }
+
 }

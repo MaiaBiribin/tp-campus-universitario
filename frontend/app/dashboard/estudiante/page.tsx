@@ -1,10 +1,16 @@
 "use client";
 
-
 import dashboard from "@/app/styles/dashboard.module.css";
 import ProximoEvento from "@/app/components/proximoEvento";
 import AvisosRecientes from "@/app/components/avisosRecientes";
 
+/**
+ * Dashboard principal del estudiante.
+ * Muestra información resumida del usuario:
+ * - Próximo evento académico
+ * - Avisos recientes del sistema
+ * @returns {JSX.Element} Vista del panel de estudiante.
+ */
 export default function DashboardEstudiante() {
 
   return (

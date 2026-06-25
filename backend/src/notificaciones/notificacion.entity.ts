@@ -20,7 +20,13 @@ export class Notificacion {
   @JoinColumn({ name: 'id_usuario' })
   usuario!: Usuario;
 
-  @ManyToOne(() => Evento, { eager: true, nullable: true })
+  @ManyToOne(
+  () => Evento,
+  {
+    eager: true,
+    nullable: true,
+    onDelete: "CASCADE",
+  },)
   @JoinColumn({ name: 'id_evento' })
   evento?: Evento;
 

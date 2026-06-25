@@ -8,19 +8,16 @@ jest.mock("@/app/services/eventos",()=>({
 
 describe("Componente ProximoEvento",()=>{
   beforeEach(()=>{
-    jest.clearAllMocks();
-    jest.useFakeTimers()
-      .setSystemTime(
-        new Date("2026-06-20T10:00:00")
-      );
-    jest.spyOn(console,"error")
-      .mockImplementation(()=>{});
-  });
+  jest.clearAllMocks();
 
+  jest.useFakeTimers()
+    .setSystemTime(
+      new Date("2026-06-20T10:00:00")
+    );
+});
   afterEach(()=>{
-    jest.useRealTimers();
-    jest.restoreAllMocks();
-  });
+  jest.useRealTimers();
+});
 
   it("muestra evento proximo correctamente",async()=>{
   const eventosMock=[
@@ -177,18 +174,38 @@ describe("Componente ProximoEvento",()=>{
     });
   });
 
-  it("maneja error del servicio correctamente",async()=>{
+  it("muestra mensaje de error cuando falla el servicio",async()=>{
 
-    (getEventos as jest.Mock).mockRejectedValue(new Error("fallo"));
-    render(
-      <ProximoEvento
-        rutaBase="/eventos"
-        label="Evento"
-      />
+  (getEventos as jest.Mock).mockRejectedValue(
+      new Error("fallo")
     );
+  render(
+    <ProximoEvento
+      rutaBase="/eventos"
+      label="Evento"
+    />
+  );
+  await waitFor(()=>{
+    expect(
+      screen.getByText(
+        "No se pudo cargar el próximo evento."
+      )
+    ).toBeInTheDocument();
+  });
+  expect(getEventos).toHaveBeenCalledTimes(1);
+});
+it("muestra estado de carga mientras obtiene eventos",()=>{
 
-    await waitFor(()=>{
-    expect(screen.getByText("No hay eventos próximos.")).toBeInTheDocument();});
-    expect(console.error).toHaveBeenCalled();
+  (getEventos as jest.Mock)
+    .mockReturnValue(
+      new Promise(()=>{})
+    );
+  render(
+    <ProximoEvento
+      rutaBase="/eventos"
+      label="Evento"
+    />
+  );
+  expect(screen.getByText("Cargando evento...")).toBeInTheDocument();
 });
 });

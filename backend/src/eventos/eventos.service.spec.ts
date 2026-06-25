@@ -134,4 +134,41 @@ describe('EventosService', () => {
       expect(mockEventoRepo.delete).toHaveBeenCalledWith(1);
     });
   });
+
+  describe('replace', () => {
+    it('guarda el evento con el id y los datos proporcionados', async () => {
+      const eventoReemplazado = { id_evento: 1, titulo: 'Reemplazado' };
+      mockEventoRepo.save.mockResolvedValue(eventoReemplazado);
+      const result = await service.replace(1, { titulo: 'Reemplazado' } as any);
+      expect(mockEventoRepo.save).toHaveBeenCalledWith(expect.objectContaining({ id_evento: 1 }));
+      expect(result).toEqual(eventoReemplazado);
+    });
+  });
+
+  describe('eventosUsuario', () => {
+    it('devuelve solo eventos futuros y de hoy no pasados', async () => {
+      const horaFutura = '23:59';
+      const hoy = new Date().toLocaleDateString('sv-SE');
+      const manana = new Date(Date.now() + 86400000).toLocaleDateString('sv-SE');
+      const ayer = new Date(Date.now() - 86400000).toLocaleDateString('sv-SE');
+
+      mockEventoRepo.find.mockResolvedValue([
+        { id_evento: 1, fecha: manana, horaInicio: '08:00', materia: {} },
+        { id_evento: 2, fecha: ayer,   horaInicio: '08:00', materia: {} },
+        { id_evento: 3, fecha: hoy,    horaInicio: horaFutura, materia: {} },
+      ]);
+
+      const result = await service.eventosUsuario(5);
+      const ids = result.map(e => e.id_evento);
+      expect(ids).toContain(1);
+      expect(ids).toContain(3);
+      expect(ids).not.toContain(2);
+    });
+
+    it('devuelve array vacío si no hay eventos', async () => {
+      mockEventoRepo.find.mockResolvedValue([]);
+      const result = await service.eventosUsuario(5);
+      expect(result).toEqual([]);
+    });
+  });
 });
