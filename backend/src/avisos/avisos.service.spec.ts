@@ -123,4 +123,91 @@ describe('AvisosService', () => {
       await expect(service.remove(1, 99)).rejects.toThrow(BadRequestException);
     });
   });
+
+
+  describe('update', () => {
+  const aviso = {
+    id_aviso: 1,
+    mensaje: 'Mensaje original',
+    usuarioCreador: { id_usuario: 5 },
+    evento: {
+      id_evento: 1,
+      materia: { id_materia: 2 },
+    },
+  };
+
+  it('lanza BadRequestException si el aviso no existe', async () => {
+    mockAvisosRepo.findOne.mockResolvedValue(null);
+
+    await expect(service.update(999, 5, { mensaje: 'Nuevo' })).rejects.toThrow(BadRequestException);
+    expect(mockAvisosRepo.save).not.toHaveBeenCalled();
+  });
+
+  it('lanza BadRequestException si el usuario no es el creador', async () => {
+    mockAvisosRepo.findOne.mockResolvedValue(aviso);
+
+    await expect(service.update(1, 99, { mensaje: 'Nuevo' })).rejects.toThrow(BadRequestException);
+    expect(mockAvisosRepo.save).not.toHaveBeenCalled();
+    expect(mockNotificacionesService.crearNotificaciones).not.toHaveBeenCalled();
+  });
+
+  it('actualiza el mensaje y retorna el aviso guardado', async () => {
+    const avisoActualizado = { ...aviso, mensaje: 'Nuevo mensaje' };
+    mockAvisosRepo.findOne.mockResolvedValue({ ...aviso });
+    mockAvisosRepo.save.mockResolvedValue(avisoActualizado);
+    mockInscripcionRepo.find.mockResolvedValue([]);
+
+    const result = await service.update(1, 5, { mensaje: 'Nuevo mensaje' });
+
+    expect(mockAvisosRepo.save).toHaveBeenCalledWith(
+      expect.objectContaining({ mensaje: 'Nuevo mensaje' }),
+    );
+    expect(result).toEqual(avisoActualizado);
+  });
+
+  it('notifica a los inscriptos de la materia si los hay', async () => {
+    mockAvisosRepo.findOne.mockResolvedValue({ ...aviso });
+    mockAvisosRepo.save.mockResolvedValue(aviso);
+    mockInscripcionRepo.find.mockResolvedValue([
+      { usuario: { id_usuario: 10 } },
+      { usuario: { id_usuario: 11 } },
+    ]);
+
+    await service.update(1, 5, { mensaje: 'Clase suspendida' });
+
+    expect(mockNotificacionesService.crearNotificaciones).toHaveBeenCalledWith(
+      1,
+      'Aviso Editado: Clase suspendida',
+      [{ id_usuario: 10 }, { id_usuario: 11 }],
+    );
+  });
+
+  it('no llama a crearNotificaciones si no hay inscriptos', async () => {
+    mockAvisosRepo.findOne.mockResolvedValue({ ...aviso });
+    mockAvisosRepo.save.mockResolvedValue(aviso);
+    mockInscripcionRepo.find.mockResolvedValue([]);
+
+    await service.update(1, 5, { mensaje: 'Nuevo mensaje' });
+
+    expect(mockNotificacionesService.crearNotificaciones).not.toHaveBeenCalled();
+  });
+
+  it('busca inscriptos por la materia del evento del aviso', async () => {
+    mockAvisosRepo.findOne.mockResolvedValue({ ...aviso });
+    mockAvisosRepo.save.mockResolvedValue(aviso);
+    mockInscripcionRepo.find.mockResolvedValue([]);
+
+    await service.update(1, 5, { mensaje: 'Nuevo mensaje' });
+
+    expect(mockInscripcionRepo.find).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { materia: { id_materia: 2 } },
+      }),
+    );
+  });
+});
+
+
+
+
 });
