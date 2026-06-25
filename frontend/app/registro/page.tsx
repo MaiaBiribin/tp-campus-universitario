@@ -8,7 +8,11 @@ import Button from "../components/ui/button";
 import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
 import { useState } from "react";
-
+/**
+ * pagina donde se pueden registrar nuevos usuarios
+ * aqui pueden ingresar sus datos para luego ser registrados en el sistema.
+ * @returns {JSX.Element} vista del registro de la pagina.
+ */
 export default function Registrarse() {
   const ruta = useRouter();
   const [error,setError] = useState("");
