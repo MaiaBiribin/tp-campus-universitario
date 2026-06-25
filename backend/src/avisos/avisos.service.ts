@@ -68,7 +68,7 @@ export class AvisosService {
       order: { fecha_creacion: 'DESC' },
     });
   }
-    async findAll(): Promise<Aviso[]> {
+  async findAll(): Promise<Aviso[]> {
     return this.avisosRepository.find({
       relations:{
         evento:true,
@@ -80,12 +80,14 @@ export class AvisosService {
 
     });
   }
+
+
   async remove(
   idAviso:number,
   idUsuario:number
-){
+    ){
 
-  const aviso =
+    const aviso =
     await this.avisosRepository.findOne({
       where:{
         id_aviso:idAviso
@@ -95,21 +97,77 @@ export class AvisosService {
       }
     });
 
-  if(!aviso){
-    throw new BadRequestException("El aviso no existe");
+    if(!aviso){throw new BadRequestException("El aviso no existe");}
+
+    if(aviso.usuarioCreador.id_usuario !== idUsuario)
+    {throw new BadRequestException("No podés eliminar un aviso que no creaste");}
+
+    await this.avisosRepository.delete(idAviso);
+    return {message:"Aviso eliminado correctamente"};
   }
 
-  if(
-    aviso.usuarioCreador.id_usuario !== idUsuario
-  ){
-    throw new BadRequestException("No podés eliminar un aviso que no creaste");
+  async update(
+    idAviso: number,
+    idUsuario: number,
+    datosActualizar: { mensaje: string },
+  ) {
+
+    const aviso = await this.avisosRepository.findOne({
+    where: {
+    id_aviso: idAviso,
+    },
+    relations: {
+    usuarioCreador: true,
+    evento: {
+      materia: true,
+    },
+    },
+    });
+
+    if (!aviso) {
+      throw new BadRequestException('El aviso no existe');
+    }
+
+    if (aviso.usuarioCreador.id_usuario !== idUsuario) {
+      throw new BadRequestException('No podés editar un aviso que no creaste');
+    }
+
+    aviso.mensaje = datosActualizar.mensaje;
+
+    const avisoActualizado = await this.avisosRepository.save(aviso);
+
+    console.log('DEBUG aviso.evento:', aviso.evento);
+    console.log('DEBUG aviso.evento.id_evento:', aviso.evento?.id_evento);
+    console.log('DEBUG aviso.evento.materia:', aviso.evento?.materia);
+    console.log('DEBUG aviso.evento.materia.id_materia:', aviso.evento?.materia?.id_materia);
+
+    // Busca los inscriptos a la materia del evento del aviso
+    const inscriptos = await this.inscripcionRepository.find({
+      where: { materia: { id_materia: aviso.evento.materia.id_materia } },
+      relations: { usuario: true },
+      select: { usuario: { id_usuario: true } },
+    });
+
+    console.log('DEBUG cantidad de inscriptos encontrados:', inscriptos.length);
+    console.log('DEBUG inscriptos:', JSON.stringify(inscriptos));
+
+    // Crea una notificación de edición por cada inscripto
+    if (inscriptos.length > 0) {
+      console.log('DEBUG entrando al if, llamando a crearNotificaciones...');
+      await this.notificacionesService.crearNotificaciones(
+        aviso.evento.id_evento,
+        `Aviso Editado: ${datosActualizar.mensaje}`,
+        inscriptos.map(i => ({ id_usuario: i.usuario.id_usuario })),
+      );
+      console.log('DEBUG crearNotificaciones terminó sin errores');
+    } else {
+      console.log('DEBUG NO entró al if, inscriptos.length era 0');
+    }
+
+    return avisoActualizado;
+
   }
 
-  await this.avisosRepository.delete(idAviso);
-  return {
-    message:"Aviso eliminado correctamente"
-  };
-}
 }
 
 
