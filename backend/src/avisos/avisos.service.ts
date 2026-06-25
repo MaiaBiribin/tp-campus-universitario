@@ -5,36 +5,36 @@ import { Aviso } from './aviso.entity';
 import { Inscripcion } from '../inscripciones/inscripcion.entity';
 import { NotificacionesService } from '../notificaciones/notificaciones.service';
 import { Evento } from '../eventos/evento.entity';
-
+import { UpdateAvisoDto } from './dto/update-aviso.dto';
 
 @Injectable()
 export class AvisosService {
-
   constructor(
     @InjectRepository(Aviso)
     private avisosRepository: Repository<Aviso>,
-
     @InjectRepository(Inscripcion)
     private inscripcionRepository: Repository<Inscripcion>,
-
     @InjectRepository(Evento)
     private eventoRepository: Repository<Evento>,
-
     private notificacionesService: NotificacionesService,
   ) {}
 
+  /**
+   * Crea un aviso asociado a un evento y genera notificaciones
+   * para los usuarios inscriptos.
+   * @param {string} mensaje Contenido del aviso
+   * @param {number} idUsuarioCreador Usuario que crea el aviso.
+   * @param {number} idEvento Evento asociado al aviso.
+   * @returns {Promise<Aviso>} Aviso creado.
+   * @throws {BadRequestException} Si el evento no existe.
+   */
   async create(mensaje: string, idUsuarioCreador: number, idEvento: number): Promise<Aviso> {
-
-    // 1. Crea el aviso
     const aviso = this.avisosRepository.create({
       mensaje,
       usuarioCreador: { id_usuario: idUsuarioCreador },
       evento: { id_evento: idEvento },
     });
-
     const avisoGuardado = await this.avisosRepository.save(aviso);
-
-    // 2. Busca el evento para obtener la materia
     const evento = await this.eventoRepository.findOne({
         where: { id_evento: idEvento },
     });
@@ -42,15 +42,12 @@ export class AvisosService {
     if (!evento) {
         throw new BadRequestException('El evento no existe');
     }
-
-    //Busca los ususarios inscriptos a la materia 
     const inscriptos = await this.inscripcionRepository.find({
         where: { materia: { id_materia: evento.materia.id_materia } },
         relations: { usuario: true },
         select: { usuario: { id_usuario: true } },
     });
 
-    // 3. Crea una notificación por cada inscripto
     if (inscriptos.length > 0) {
       await this.notificacionesService.crearNotificaciones(
         idEvento,
@@ -58,16 +55,24 @@ export class AvisosService {
         inscriptos.map(i => ({ id_usuario: i.usuario.id_usuario })),
       );
     }
-
     return avisoGuardado;
   }
 
+  /**
+   * Obtiene todos los avisos asociados a un evento.
+   * @param {number} idEvento ID del evento.
+   * @returns {Promise<Aviso[]>} Avisos encontrados.
+   */
   async findByEvento(idEvento: number): Promise<Aviso[]> {
     return this.avisosRepository.find({
       where: { evento: { id_evento: idEvento } },
       order: { fecha_creacion: 'DESC' },
     });
   }
+  /**
+   * Obtiene todos los avisos registrados.
+   * @returns {Promise<Aviso[]>} Lista de avisos ordenados por fecha.
+   */
   async findAll(): Promise<Aviso[]> {
     return this.avisosRepository.find({
       relations:{
@@ -80,13 +85,14 @@ export class AvisosService {
 
     });
   }
-
-
-  async remove(
-  idAviso:number,
-  idUsuario:number
-    ){
-
+/**
+   * Elimina un aviso verificando que pertenezca al usuario.
+   * @param {number} idAviso id de aviso.
+   * @param {number} idUsuario Usuario solicitante.
+   * @returns {Promise<{message: string}>} Confirmación de eliminación.
+   * @throws {BadRequestException} Si el aviso no existe o no pertenece al usuario.
+   */
+  async remove(idAviso:number,idUsuario:number){
     const aviso =
     await this.avisosRepository.findOne({
       where:{
@@ -96,22 +102,22 @@ export class AvisosService {
         usuarioCreador:true
       }
     });
-
     if(!aviso){throw new BadRequestException("El aviso no existe");}
-
     if(aviso.usuarioCreador.id_usuario !== idUsuario)
     {throw new BadRequestException("No podés eliminar un aviso que no creaste");}
-
     await this.avisosRepository.delete(idAviso);
     return {message:"Aviso eliminado correctamente"};
   }
 
-  async update(
-    idAviso: number,
-    idUsuario: number,
-    datosActualizar: { mensaje: string },
-  ) {
-
+  /**
+   * Actualiza el contenido de un aviso existente. Después genera nuevas notificaciones para los usuarios relacionados.
+   * @param {number} idAviso - Identificador del aviso.
+   * @param {number} idUsuario - Usuario que realiza la edición.
+   * @param {UpdateAvisoDto} datosActualizar - Datos modificados del aviso.
+   * @returns {Promise<Aviso>} Aviso actualizado.
+   * @throws {BadRequestException} Si el aviso no existe o no pertenece al usuario.
+   */
+  async update(idAviso:number,idUsuario:number,datosActualizar: UpdateAvisoDto,): Promise<Aviso> {
     const aviso = await this.avisosRepository.findOne({
     where: {
     id_aviso: idAviso,
@@ -127,7 +133,6 @@ export class AvisosService {
     if (!aviso) {
       throw new BadRequestException('El aviso no existe');
     }
-
     if (aviso.usuarioCreador.id_usuario !== idUsuario) {
       throw new BadRequestException('No podés editar un aviso que no creaste');
     }
@@ -136,39 +141,40 @@ export class AvisosService {
 
     const avisoActualizado = await this.avisosRepository.save(aviso);
 
-    console.log('DEBUG aviso.evento:', aviso.evento);
-    console.log('DEBUG aviso.evento.id_evento:', aviso.evento?.id_evento);
-    console.log('DEBUG aviso.evento.materia:', aviso.evento?.materia);
-    console.log('DEBUG aviso.evento.materia.id_materia:', aviso.evento?.materia?.id_materia);
-
-    // Busca los inscriptos a la materia del evento del aviso
     const inscriptos = await this.inscripcionRepository.find({
       where: { materia: { id_materia: aviso.evento.materia.id_materia } },
       relations: { usuario: true },
       select: { usuario: { id_usuario: true } },
     });
 
-    console.log('DEBUG cantidad de inscriptos encontrados:', inscriptos.length);
-    console.log('DEBUG inscriptos:', JSON.stringify(inscriptos));
-
-    // Crea una notificación de edición por cada inscripto
     if (inscriptos.length > 0) {
-      console.log('DEBUG entrando al if, llamando a crearNotificaciones...');
       await this.notificacionesService.crearNotificaciones(
         aviso.evento.id_evento,
         `Aviso Editado: ${datosActualizar.mensaje}`,
         inscriptos.map(i => ({ id_usuario: i.usuario.id_usuario })),
       );
-      console.log('DEBUG crearNotificaciones terminó sin errores');
-    } else {
-      console.log('DEBUG NO entró al if, inscriptos.length era 0');
     }
-
     return avisoActualizado;
-
   }
-
+  /**
+   * Busca un aviso específico por su id.
+   * @param {number} idAviso id del aviso
+   * @returns {Promise<Aviso>} Aviso encontrado.
+   * @throws {BadRequestException} Si el aviso no existe.
+   */
+  async findOne(idAviso: number): Promise<Aviso> {
+  const aviso = await this.avisosRepository.findOne({
+    where: {
+      id_aviso: idAviso
+    },
+    relations: {
+      evento: true,
+      usuarioCreador: true,
+    },
+  });
+  if (!aviso) {
+    throw new BadRequestException("El aviso no existe");
+  }
+  return aviso;
 }
-
-
-
+}

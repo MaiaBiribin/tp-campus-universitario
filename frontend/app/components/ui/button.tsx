@@ -5,13 +5,15 @@ children:React.ReactNode;
 type?:"button"|"submit";
 variant?:"primary"|"danger";
 onClick?:()=>void;
+disabled?: boolean;
 }
 
 export default function Button({
 children,
 type = "submit",
 variant="primary",
-onClick
+onClick,
+disabled,
 }:Props){
 
 return (
@@ -20,6 +22,7 @@ return (
       type={type}
       onClick={onClick}
       className={buttons[variant]}
+      disabled={disabled}
     >
 
       {children}

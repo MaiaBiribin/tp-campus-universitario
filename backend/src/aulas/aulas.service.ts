@@ -32,16 +32,4 @@ export class AulasService {
     return aula;
   }
 
-  // 3. Reemplazo completo (PUT)
-  async replace(id: number, aulaData: Partial<Aula>): Promise<Aula> {
-    const aula = await this.findOne(id);
-    const aulaActualizada = this.aulasRepository.merge(aula, aulaData);
-    return await this.aulasRepository.save(aulaActualizada);
-  }
-
-  // 4. Eliminar aula
-  async delete(id: number): Promise<void> {
-    const aula = await this.findOne(id);
-    await this.aulasRepository.remove(aula);
-  }
 }

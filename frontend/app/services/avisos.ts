@@ -79,3 +79,39 @@ export async function getAvisos(): Promise<Aviso[]> {
 
   return res.json();
 }
+
+/**
+ * Actualiza el mensaje de un aviso.
+ * @param {number} id identificador del aviso.
+ * @param {string} mensaje nuevo mensaje.
+ * @returns {Promise<Aviso>} Aviso actualizado.
+ * @throws {Error} Si falla la actualización.
+ */
+export async function editarAviso(id: number,mensaje: string,): Promise<Aviso> {
+  const res = await api(
+    `/avisos/${id}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        mensaje,
+      }),
+    },
+  );
+  if (!res.ok) {
+    throw new Error("Error actualizando aviso",);
+  }
+  return res.json();
+}
+/**
+ * Obtiene un aviso por id.
+ * @param {number} id identificador del aviso.
+ * @returns {Promise<Aviso>} Aviso encontrado.
+ * @throws {Error} Si no puede obtenerse.
+ */
+export async function getAvisoById(id:number): Promise<Aviso> {
+  const res = await api(`/avisos/${id}`);
+  if(!res.ok){
+    throw new Error("Error cargando aviso");
+  }
+  return res.json();
+}

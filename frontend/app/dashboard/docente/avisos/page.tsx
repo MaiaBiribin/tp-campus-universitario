@@ -33,6 +33,10 @@ useEffect(()=>{
 function crearAviso(){
     window.location.href ="/dashboard/docente/avisos/nuevo";
 }
+function editar(id:number){
+  window.location.href =
+    `/dashboard/docente/avisos/editar/${id}`;
+}
 async function borrar(id:number){
   setError("");
   setExito("");
@@ -119,14 +123,22 @@ return (
                     </td>
                     <td>
                       <button
+                      className={buttons.secondary}
+                      onClick={() =>
+                        editar(aviso.id_aviso)
+                      }
+                      >
+                        Editar
+                        </button>
+                        <button
                         className={buttons.danger}
-                        onClick={()=>
+                        onClick={() =>
                           borrar(aviso.id_aviso)
                         }
-                      >
-                        Eliminar
-                      </button>
-                    </td>
+                        >
+                          Eliminar
+                          </button>
+                      </td>
                   </tr>
                 ))
               }

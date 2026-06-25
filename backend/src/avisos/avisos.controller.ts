@@ -7,7 +7,8 @@ import {
   Param,
   UseGuards,
   Patch,
-  Request
+  Request,
+  ParseIntPipe
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { AvisosService } from './avisos.service';
@@ -26,11 +27,11 @@ export class AvisosController {
   constructor(private readonly avisosService: AvisosService) {}
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles('Admin', 'Docente')
+  @Roles('Docente')
   @Post()
   @ApiOperation({
     summary: 'Crear un nuevo aviso',
-    description: 'Publica un aviso asociado a un evento. Solo pueden crear avisos los usuarios con rol Admin o Docente.',
+    description: 'Publica un aviso asociado a un evento. Solo pueden crear avisos los usuarios con rol Docente.',
   })
   @ApiBody({ type: CreateAvisoDto, description: 'Mensaje del aviso y el evento al que pertenece' })
   @ApiResponse({ status: 201, description: 'Aviso creado exitosamente', type: AvisoResponseDto })
@@ -68,20 +69,42 @@ export class AvisosController {
   @Delete(':id')
   @ApiOperation({
   summary: "Eliminar aviso",
-  description: "Elimina un aviso creado por el docente o administrador."})
+  description: "Elimina un aviso creado por el docente."})
   @ApiParam({
   name:"id",
   description:"ID del aviso"
  })
  async remove(
-  @Param('id') id:number,
-  @Request() req
-){
+  @Param('id', ParseIntPipe) id: number,
+  @Request() req){
   return this.avisosService.remove(
     id,
     req.user.sub
-  );
+  );}
 
+  @Get(':id')
+@UseGuards(AuthGuard)
+@ApiOperation({
+  summary: "Obtener aviso por id",
+  description: "Devuelve un aviso específico."
+})
+@ApiParam({
+  name: "id",
+  description: "ID del aviso"
+})
+@ApiResponse({
+  status: 200,
+  description: "Aviso encontrado",
+  type: AvisoResponseDto
+})
+@ApiResponse({
+  status: 404,
+  description: "Aviso inexistente"
+})
+findOne(
+  @Param('id', ParseIntPipe) id: number
+) {
+  return this.avisosService.findOne(id);
 }
 
   @UseGuards(AuthGuard, RolesGuard)
@@ -101,7 +124,7 @@ export class AvisosController {
   @ApiResponse({ status: 403, description: 'Sin permisos (se requiere rol Docente)' })
   @ApiResponse({ status: 400, description: 'El aviso no existe o el usuario no es el creador' })
   async update(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateAvisoDto: UpdateAvisoDto,
     @Request() req,
   ) {

@@ -1,7 +1,6 @@
 "use client";
 
 import CrearAviso from "@/app/components/crearAviso";
-
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 
