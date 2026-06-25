@@ -7,6 +7,11 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { CreateMateriaDto } from './dto/create-materia.dto';
 import { MateriaResponseDto } from './dto/materia-response.dto';
 
+/**
+ * Controlador de materias académicas.
+ * Todos los endpoints requieren autenticación. La creación es exclusiva del rol Admin.
+ * El filtro por carrera es el endpoint más usado desde el frontend para poblar selectores.
+ */
 @ApiTags('materias')
 @ApiBearerAuth()
 @Controller('materias')

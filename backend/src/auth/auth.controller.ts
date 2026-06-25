@@ -23,6 +23,12 @@ import { AuthResponseDto } from './dto/auth-response.dto';
 import { RegisterResponseDto } from './dto/register-response.dto';
 import { PerfilResponseDto } from './dto/perfil-response.dto';
 
+/**
+ * Controlador de autenticación.
+ * Expone los endpoints públicos de login y registro, y el endpoint protegido de perfil.
+ * Los tokens JWT emitidos en `/login` deben enviarse como `Authorization: Bearer <token>`
+ * en todas las rutas protegidas del sistema.
+ */
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
