@@ -10,8 +10,8 @@ import Card from "@/app/components/ui/card";
 import Button from "@/app/components/ui/button";
 import forms from "@/app/styles/forms.module.css";
 /**
- * panel de solicitudes del admin
- * muestra al admin las solicitudes de los nuevos usuarios que esperan ser habilitados
+ * Panel de solicitudes del admin.
+ * Muestra las solicitudes de los nuevos usuarios que esperan a ser habilitados.
  * @returns {JSX.Element} 
  */
 export default function SolicitudesAdmin() {
@@ -22,8 +22,7 @@ export default function SolicitudesAdmin() {
 
   useEffect(() => {
  /**
-  * funcion que carga las solicitudes pendientes
-  *  @throws en el caso que no se pudo cargar las solicitudes.
+  * Carga las solicitudes pendientes.
   */
   async function cargarSolicitudes() {
     try {
@@ -38,9 +37,8 @@ export default function SolicitudesAdmin() {
   }
   cargarSolicitudes();}, []);
 /**
- * funcion para poder aprobar un usuario en especifico y cambiarle el estado a habilitado.
+ * Aprueba un usuario en específico y cambia el estado a habilitado.
  * @param {number} id  id del usario que se quiera aprobar.
- * @throws en el caso que no se pudo aprobar el usuario.
  */
   async function aprobar(id: number) {
     try {
@@ -57,7 +55,6 @@ export default function SolicitudesAdmin() {
  /**
   * funcion para poder recharzar la solicitud de un usario
   * @param {number} id el id del usuario cuya solicitud se rechazo
-  *  @throws en el caso que no se pudo rechazar la solicitud.
   */
   async function rechazar(id: number) {
     try {

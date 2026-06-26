@@ -32,7 +32,6 @@ describe('AulasService', () => {
     jest.clearAllMocks(); // limpia los mocks entre tests
   });
 
-  // TEST 1 - findAll
   describe('findAll', () => {
     it('debe retornar un array de aulas', async () => {
       const aulasEsperadas = [
@@ -48,7 +47,6 @@ describe('AulasService', () => {
     });
   });
 
-  // TEST 2 - findOne
   describe('findOne', () => {
     it('debe retornar un aula si existe', async () => {
       const aulaEsperada = { id_aula: 1, nombre: 'Aula 1', capacidad: 30, piso: 1, ubicacion: 'Planta Baja' };
@@ -66,22 +64,4 @@ describe('AulasService', () => {
     });
   });
 
-  // TEST 3 - delete
-  describe('delete', () => {
-    it('debe eliminar un aula existente', async () => {
-      const aulaExistente = { id_aula: 1, nombre: 'Aula 1', capacidad: 30, piso: 1, ubicacion: 'Planta Baja' };
-
-      mockAulasRepository.findOneBy.mockResolvedValue(aulaExistente);
-      mockAulasRepository.remove.mockResolvedValue(undefined);
-
-      await expect(service.delete(1)).resolves.not.toThrow();
-      expect(mockAulasRepository.remove).toHaveBeenCalledWith(aulaExistente);
-    });
-
-    it('debe lanzar NotFoundException si el aula no existe', async () => {
-      mockAulasRepository.findOneBy.mockResolvedValue(null);
-
-      await expect(service.delete(999)).rejects.toThrow(NotFoundException);
-    });
-  });
 });

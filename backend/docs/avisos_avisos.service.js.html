@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: avisos/avisos.service.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: avisos/avisos.service.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __decorate = (this &amp;&amp; this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c &lt; 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c &lt; 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 &amp;&amp; r &amp;&amp; Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this &amp;&amp; this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this &amp;&amp; this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AvisosService = void 0;
+const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const aviso_entity_1 = require("./aviso.entity");
+const inscripcion_entity_1 = require("../inscripciones/inscripcion.entity");
+const notificaciones_service_1 = require("../notificaciones/notificaciones.service");
+const evento_entity_1 = require("../eventos/evento.entity");
+let AvisosService = class AvisosService {
+    avisosRepository;
+    inscripcionRepository;
+    eventoRepository;
+    notificacionesService;
+    constructor(avisosRepository, inscripcionRepository, eventoRepository, notificacionesService) {
+        this.avisosRepository = avisosRepository;
+        this.inscripcionRepository = inscripcionRepository;
+        this.eventoRepository = eventoRepository;
+        this.notificacionesService = notificacionesService;
+    }
+    /**
+     * Crea un aviso asociado a un evento y genera notificaciones
+     * para los usuarios inscriptos.
+     * @param {string} mensaje Contenido del aviso
+     * @param {number} idUsuarioCreador Usuario que crea el aviso.
+     * @param {number} idEvento Evento asociado al aviso.
+     * @returns {Promise&lt;Aviso>} Aviso creado.
+     * @throws {BadRequestException} Si el evento no existe.
+     */
+    async create(mensaje, idUsuarioCreador, idEvento) {
+        const aviso = this.avisosRepository.create({
+            mensaje,
+            usuarioCreador: { id_usuario: idUsuarioCreador },
+            evento: { id_evento: idEvento },
+        });
+        const avisoGuardado = await this.avisosRepository.save(aviso);
+        const evento = await this.eventoRepository.findOne({
+            where: { id_evento: idEvento },
+        });
+        if (!evento) {
+            throw new common_1.BadRequestException('El evento no existe');
+        }
+        const inscriptos = await this.inscripcionRepository.find({
+            where: { materia: { id_materia: evento.materia.id_materia } },
+            relations: { usuario: true },
+            select: { usuario: { id_usuario: true } },
+        });
+        if (inscriptos.length > 0) {
+            await this.notificacionesService.crearNotificaciones(idEvento, `Nuevo aviso: ${mensaje}`, inscriptos.map(i => ({ id_usuario: i.usuario.id_usuario })));
+        }
+        return avisoGuardado;
+    }
+    /**
+     * Obtiene todos los avisos asociados a un evento.
+     * @param {number} idEvento ID del evento.
+     * @returns {Promise&lt;Aviso[]>} Avisos encontrados.
+     */
+    async findByEvento(idEvento) {
+        return this.avisosRepository.find({
+            where: { evento: { id_evento: idEvento } },
+            order: { fecha_creacion: 'DESC' },
+        });
+    }
+    /**
+     * Obtiene todos los avisos registrados.
+     * @returns {Promise&lt;Aviso[]>} Lista de avisos ordenados por fecha.
+     */
+    async findAll() {
+        return this.avisosRepository.find({
+            relations: {
+                evento: true,
+                usuarioCreador: true,
+            },
+            order: {
+                fecha_creacion: "DESC"
+            }
+        });
+    }
+    /**
+       * Elimina un aviso verificando que pertenezca al usuario.
+       * @param {number} idAviso id de aviso.
+       * @param {number} idUsuario Usuario solicitante.
+       * @returns {Promise&lt;{message: string}>} Confirmación de eliminación.
+       * @throws {BadRequestException} Si el aviso no existe o no pertenece al usuario.
+       */
+    async remove(idAviso, idUsuario) {
+        const aviso = await this.avisosRepository.findOne({
+            where: {
+                id_aviso: idAviso
+            },
+            relations: {
+                usuarioCreador: true
+            }
+        });
+        if (!aviso) {
+            throw new common_1.BadRequestException("El aviso no existe");
+        }
+        if (aviso.usuarioCreador.id_usuario !== idUsuario) {
+            throw new common_1.BadRequestException("No podés eliminar un aviso que no creaste");
+        }
+        await this.avisosRepository.delete(idAviso);
+        return { message: "Aviso eliminado correctamente" };
+    }
+    /**
+     * Actualiza el contenido de un aviso existente. Después genera nuevas notificaciones para los usuarios relacionados.
+     * @param {number} idAviso - Identificador del aviso.
+     * @param {number} idUsuario - Usuario que realiza la edición.
+     * @param {UpdateAvisoDto} datosActualizar - Datos modificados del aviso.
+     * @returns {Promise&lt;Aviso>} Aviso actualizado.
+     * @throws {BadRequestException} Si el aviso no existe o no pertenece al usuario.
+     */
+    async update(idAviso, idUsuario, datosActualizar) {
+        const aviso = await this.avisosRepository.findOne({
+            where: {
+                id_aviso: idAviso,
+            },
+            relations: {
+                usuarioCreador: true,
+                evento: {
+                    materia: true,
+                },
+            },
+        });
+        if (!aviso) {
+            throw new common_1.BadRequestException('El aviso no existe');
+        }
+        if (aviso.usuarioCreador.id_usuario !== idUsuario) {
+            throw new common_1.BadRequestException('No podés editar un aviso que no creaste');
+        }
+        aviso.mensaje = datosActualizar.mensaje;
+        const avisoActualizado = await this.avisosRepository.save(aviso);
+        const inscriptos = await this.inscripcionRepository.find({
+            where: { materia: { id_materia: aviso.evento.materia.id_materia } },
+            relations: { usuario: true },
+            select: { usuario: { id_usuario: true } },
+        });
+        if (inscriptos.length > 0) {
+            await this.notificacionesService.crearNotificaciones(aviso.evento.id_evento, `Aviso Editado: ${datosActualizar.mensaje}`, inscriptos.map(i => ({ id_usuario: i.usuario.id_usuario })));
+        }
+        return avisoActualizado;
+    }
+    /**
+     * Busca un aviso específico por su id.
+     * @param {number} idAviso id del aviso
+     * @returns {Promise&lt;Aviso>} Aviso encontrado.
+     * @throws {BadRequestException} Si el aviso no existe.
+     */
+    async findOne(idAviso) {
+        const aviso = await this.avisosRepository.findOne({
+            where: {
+                id_aviso: idAviso
+            },
+            relations: {
+                evento: true,
+                usuarioCreador: true,
+            },
+        });
+        if (!aviso) {
+            throw new common_1.BadRequestException("El aviso no existe");
+        }
+        return aviso;
+    }
+};
+exports.AvisosService = AvisosService;
+exports.AvisosService = AvisosService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(aviso_entity_1.Aviso)),
+    __param(1, (0, typeorm_1.InjectRepository)(inscripcion_entity_1.Inscripcion)),
+    __param(2, (0, typeorm_1.InjectRepository)(evento_entity_1.Evento)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        notificaciones_service_1.NotificacionesService])
+], AvisosService);
+//# sourceMappingURL=avisos.service.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthController.html">AuthController</a></li><li><a href="AuthGuard.html">AuthGuard</a></li><li><a href="AuthService.html">AuthService</a></li><li><a href="Aviso.html">Aviso</a></li><li><a href="Carrera.html">Carrera</a></li><li><a href="CarrerasController.html">CarrerasController</a></li><li><a href="CarrerasService.html">CarrerasService</a></li><li><a href="Evento.html">Evento</a></li><li><a href="EventosController.html">EventosController</a></li><li><a href="EventosService.html">EventosService</a></li><li><a href="Inscripcion.html">Inscripcion</a></li><li><a href="InscripcionesController.html">InscripcionesController</a></li><li><a href="InscripcionesService.html">InscripcionesService</a></li><li><a href="Materia.html">Materia</a></li><li><a href="MateriasController.html">MateriasController</a></li><li><a href="MateriasService.html">MateriasService</a></li><li><a href="Notificacion.html">Notificacion</a></li><li><a href="NotificacionesController.html">NotificacionesController</a></li><li><a href="NotificacionesService.html">NotificacionesService</a></li><li><a href="Rol.html">Rol</a></li><li><a href="RolesGuard.html">RolesGuard</a></li><li><a href="Usuario.html">Usuario</a></li><li><a href="UsuariosService.html">UsuariosService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EstadoUsuario">EstadoUsuario</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 25 2026 22:53:48 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dashboard/admin/usuarios/page.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dashboard/admin/usuarios/page.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useEffect, useState } from "react";
+import layout from "@/app/styles/layout.module.css";
+import dashboard from "@/app/styles/dashboard.module.css";
+import table from "@/app/styles/table.module.css";
+import { getUsuariosHabilitados } from "@/app/services/usuarios";
+import forms from "@/app/styles/forms.module.css";
+/**
+ * panel de usuarios habilitados
+ * muestra al admin todos los usuarios del sistema que estan en estado habilitado
+ *
+ * @returns {JSX.Element} vista de los usuarios habilitados
+ */
+export default function UsuariosAdmin() {
+    const [usuarios, setUsuarios] = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState("");
+    useEffect(() => {
+        /**
+         * carga a todos los usuarios habilitados del sistema
+         */
+        async function cargarUsuarios() {
+            try {
+                setError("");
+                const usuariosData = await getUsuariosHabilitados();
+                setUsuarios(usuariosData);
+            }
+            catch (error) {
+                setError("No se pudieron cargar los usuarios habilitados.");
+            }
+            finally {
+                setCargando(false);
+            }
+        }
+        cargarUsuarios();
+    }, []);
+    if (cargando) {
+        return (_jsx("main", { className: layout.main, children: _jsx("div", { className: layout.content, children: _jsx("h1", { children: "Cargando usuarios..." }) }) }));
+    }
+    return (_jsx("main", { className: layout.main, children: _jsxs("div", { className: layout.content, children: [_jsxs("header", { className: dashboard.header, children: [_jsxs("div", { children: [_jsx("h1", { children: "Usuarios habilitados" }), _jsx("p", { children: "Listado de usuarios activos del sistema." })] }), _jsx("div", { className: table.badge, children: usuarios.length })] }), error &amp;&amp; (_jsxs("p", { role: "alert", className: forms.error, children: ["\u26A0\uFE0F ", error] })), usuarios.length === 0 ? (_jsx("div", { className: table.empty, children: _jsx("h2", { children: "No hay usuarios habilitados" }) })) : (_jsx("div", { className: table.tableContainer, children: _jsx("div", { className: table.tableWrapper, children: _jsxs("table", { className: table.table, children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "ID" }), _jsx("th", { children: "Nombre" }), _jsx("th", { children: "Apellido" }), _jsx("th", { children: "Mail" }), _jsx("th", { children: "DNI" }), _jsx("th", { children: "Rol" })] }) }), _jsx("tbody", { children: usuarios.map((usuario) => (_jsxs("tr", { children: [_jsx("td", { children: usuario.id_usuario }), _jsx("td", { children: usuario.nombre }), _jsx("td", { children: usuario.apellido }), _jsx("td", { children: usuario.mail }), _jsx("td", { children: usuario.dni }), _jsx("td", { children: _jsx("span", { className: `${table.badge} ${table.success}`, children: usuario.rol.nombre }) })] }, usuario.id_usuario))) })] }) }) }))] }) }));
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CantidadNotificacionesSinLeer">CantidadNotificacionesSinLeer</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Mapas">Mapas</a></li><li><a href="global.html#NotificacionLeida">NotificacionLeida</a></li><li><a href="global.html#NotificacionLeidas">NotificacionLeidas</a></li><li><a href="global.html#TraerTodasNotificaciones">TraerTodasNotificaciones</a></li><li><a href="global.html#api">api</a></li><li><a href="global.html#aprobarUsuario">aprobarUsuario</a></li><li><a href="global.html#crearAviso">crearAviso</a></li><li><a href="global.html#crearEvento">crearEvento</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#editarAviso">editarAviso</a></li><li><a href="global.html#eliminarAviso">eliminarAviso</a></li><li><a href="global.html#eliminarEvento">eliminarEvento</a></li><li><a href="global.html#getAulas">getAulas</a></li><li><a href="global.html#getAvisoById">getAvisoById</a></li><li><a href="global.html#getAvisos">getAvisos</a></li><li><a href="global.html#getAvisosPorEvento">getAvisosPorEvento</a></li><li><a href="global.html#getCarreras">getCarreras</a></li><li><a href="global.html#getCookie">getCookie</a></li><li><a href="global.html#getEventoPorId">getEventoPorId</a></li><li><a href="global.html#getEventos">getEventos</a></li><li><a href="global.html#getEventosSemana">getEventosSemana</a></li><li><a href="global.html#getInscripcionesPorMateria">getInscripcionesPorMateria</a></li><li><a href="global.html#getMateriasPorCarrera">getMateriasPorCarrera</a></li><li><a href="global.html#getRoleFromToken">getRoleFromToken</a></li><li><a href="global.html#getUsuariosHabilitados">getUsuariosHabilitados</a></li><li><a href="global.html#getUsuariosPendientes">getUsuariosPendientes</a></li><li><a href="global.html#guardarSesion">guardarSesion</a></li><li><a href="global.html#inscribirUsuarios">inscribirUsuarios</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#obtenerIdsUsuariosInscriptos">obtenerIdsUsuariosInscriptos</a></li><li><a href="global.html#obtenerUsuariosDisponibles">obtenerUsuariosDisponibles</a></li><li><a href="global.html#rechazarUsuario">rechazarUsuario</a></li><li><a href="global.html#registrarUsuario">registrarUsuario</a></li><li><a href="global.html#useAsignacionAcademica">useAsignacionAcademica</a></li><li><a href="global.html#useCrearEvento">useCrearEvento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 21:38:07 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

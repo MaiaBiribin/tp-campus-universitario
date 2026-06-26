@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: eventos/eventos.controller.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: eventos/eventos.controller.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __decorate = (this &amp;&amp; this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c &lt; 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c &lt; 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 &amp;&amp; r &amp;&amp; Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this &amp;&amp; this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this &amp;&amp; this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EventosController = void 0;
+const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
+const eventos_service_1 = require("./eventos.service");
+const create_evento_dto_1 = require("./dto/create-evento.dto");
+const evento_response_dto_1 = require("./dto/evento-response.dto");
+const common_2 = require("@nestjs/common");
+const auth_guard_1 = require("../auth/guards/auth.guard");
+const roles_guard_1 = require("../auth/guards/roles.guard");
+const roles_decorator_1 = require("../auth/decorators/roles.decorator");
+const constants_1 = require("../auth/constants");
+/**
+ * Controlador de eventos académicos.
+ * Expone endpoints para consulta, creación y eliminación de eventos.
+ */
+let EventosController = class EventosController {
+    eventosService;
+    constructor(eventosService) {
+        this.eventosService = eventosService;
+    }
+    /**
+     * Lista todos los eventos registrados.
+     * @returns {Promise&lt;Evento[]>} Lista de eventos.
+     */
+    getAllEventos() {
+        return this.eventosService.findAll();
+    }
+    /**
+     * Obtiene eventos asociados a un usuario.
+     * @param id id del usuario.
+     * @returns {Promise&lt;Evento[]>} Eventos del usuario.
+     */
+    getEventosUsuario(id) {
+        return this.eventosService.eventosUsuario(Number(id));
+    }
+    /**
+     * Obtiene un evento por su ID.
+     * @param id del evento.
+     * @returns {Promise&lt;Evento | null>} Evento encontrado.
+     */
+    getEventoById(id) {
+        return this.eventosService.findOne(id);
+    }
+    /**
+     * Crea un nuevo evento.
+     * @param createEventoDto datos del evento.
+     * @returns {Promise&lt;Evento>} Evento creado.
+     * @throws {BadRequestException} Si los datos son inválidos.
+     */
+    createEvento(createEventoDto) {
+        return this.eventosService.create(createEventoDto);
+    }
+    /**
+     * Elimina un evento por id
+     * @param id del evento.
+     * @returns {{ message: string }} Resultado de la operación.
+     * @throws {BadRequestException} Si el evento no existe o no puede eliminarse.
+     */
+    deleteEvento(id) {
+        return this.eventosService.remove(id);
+    }
+};
+exports.EventosController = EventosController;
+__decorate([
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Listar todos los eventos',
+        description: 'Devuelve el listado completo de eventos registrados en el sistema.',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Listado de eventos obtenido exitosamente', type: [evento_response_dto_1.EventoResponseDto] }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], EventosController.prototype, "getAllEventos", null);
+__decorate([
+    (0, common_1.Get)('usuario/:id'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Obtener eventos de un usuario',
+        description: 'Devuelve todos los eventos asociados al usuario identificado por su ID.',
+    }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'ID numérico del usuario', example: 1 }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Eventos del usuario obtenidos exitosamente', type: [evento_response_dto_1.EventoResponseDto] }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Usuario no encontrado' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], EventosController.prototype, "getEventosUsuario", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Obtener un evento por ID',
+        description: 'Busca y devuelve los datos completos de un evento específico por su ID único.',
+    }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'ID numérico del evento', example: 1 }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Evento encontrado', type: evento_response_dto_1.EventoResponseDto }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Evento no encontrado' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], EventosController.prototype, "getEventoById", null);
+__decorate([
+    (0, common_2.UseGuards)(auth_guard_1.AuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(constants_1.ROLES.ADMIN),
+    (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Crear un nuevo evento',
+        description: 'Registra un nuevo evento en el sistema asignando aula, tipo de evento y materia mediante sus IDs de referencia.',
+    }),
+    (0, swagger_1.ApiBody)({ type: create_evento_dto_1.CreateEventoDto, description: 'Datos del evento a crear, incluyendo referencias a aula, tipo y materia' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Evento creado exitosamente', type: evento_response_dto_1.EventoResponseDto }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Datos inválidos o faltantes' }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_evento_dto_1.CreateEventoDto]),
+    __metadata("design:returntype", void 0)
+], EventosController.prototype, "createEvento", null);
+__decorate([
+    (0, common_2.UseGuards)(auth_guard_1.AuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(constants_1.ROLES.ADMIN),
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Eliminar un evento',
+        description: 'Borra físicamente el registro de un evento de la base de datos de manera irreversible.',
+    }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'ID numérico del evento a eliminar', example: 1 }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Evento eliminado exitosamente' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Evento no encontrado' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], EventosController.prototype, "deleteEvento", null);
+exports.EventosController = EventosController = __decorate([
+    (0, swagger_1.ApiTags)('eventos'),
+    (0, common_1.Controller)('eventos'),
+    __metadata("design:paramtypes", [eventos_service_1.EventosService])
+], EventosController);
+//# sourceMappingURL=eventos.controller.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthController.html">AuthController</a></li><li><a href="AuthGuard.html">AuthGuard</a></li><li><a href="AuthService.html">AuthService</a></li><li><a href="Aviso.html">Aviso</a></li><li><a href="Carrera.html">Carrera</a></li><li><a href="CarrerasController.html">CarrerasController</a></li><li><a href="CarrerasService.html">CarrerasService</a></li><li><a href="Evento.html">Evento</a></li><li><a href="EventosController.html">EventosController</a></li><li><a href="EventosService.html">EventosService</a></li><li><a href="Inscripcion.html">Inscripcion</a></li><li><a href="InscripcionesController.html">InscripcionesController</a></li><li><a href="InscripcionesService.html">InscripcionesService</a></li><li><a href="Materia.html">Materia</a></li><li><a href="MateriasController.html">MateriasController</a></li><li><a href="MateriasService.html">MateriasService</a></li><li><a href="Notificacion.html">Notificacion</a></li><li><a href="NotificacionesController.html">NotificacionesController</a></li><li><a href="NotificacionesService.html">NotificacionesService</a></li><li><a href="Rol.html">Rol</a></li><li><a href="RolesGuard.html">RolesGuard</a></li><li><a href="Usuario.html">Usuario</a></li><li><a href="UsuariosService.html">UsuariosService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EstadoUsuario">EstadoUsuario</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 25 2026 22:53:48 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

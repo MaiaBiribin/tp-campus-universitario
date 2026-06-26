@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: notificaciones/notificaciones.service.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: notificaciones/notificaciones.service.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __decorate = (this &amp;&amp; this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c &lt; 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c &lt; 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 &amp;&amp; r &amp;&amp; Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this &amp;&amp; this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this &amp;&amp; this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NotificacionesService = void 0;
+const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const notificacion_entity_1 = require("./notificacion.entity");
+/**
+ * Servicio de notificaciones internas del sistema.
+ * Es invocado como efecto secundario por EventosService y AvisosService
+ * para informar a los usuarios inscriptos en una materia sobre cambios relevantes.
+ */
+let NotificacionesService = class NotificacionesService {
+    notificacionesRepository;
+    constructor(notificacionesRepository) {
+        this.notificacionesRepository = notificacionesRepository;
+    }
+    /**
+     * Crea y persiste una notificación para cada usuario de la lista.
+     * Es invocado por EventosService y AvisosService al crear o editar eventos y avisos.
+     * @param {number} idEvento - ID del evento al que refiere la notificación.
+     * @param {string} mensajeEvento - Texto de la notificación.
+     * @param {{ id_usuario: number }[]} inscriptos - Destinatarios identificados por su ID.
+     * @returns {Promise&lt;void>}
+     */
+    async crearNotificaciones(idEvento, mensajeEvento, inscriptos) {
+        const notificaciones = inscriptos.map((inscripto) => this.notificacionesRepository.create({
+            usuario: { id_usuario: inscripto.id_usuario },
+            evento: { id_evento: idEvento },
+            mensaje: mensajeEvento,
+            leida: false,
+        }));
+        await this.notificacionesRepository.save(notificaciones);
+    }
+    /**
+     * Devuelve todas las notificaciones del usuario autenticado, ordenadas de más reciente a más antigua.
+     * @param {number} idUsuario - ID del usuario propietario de las notificaciones.
+     * @returns {Promise&lt;Notificacion[]>} Lista de notificaciones ordenadas por fecha DESC.
+     */
+    async getMisNotificaciones(idUsuario) {
+        return this.notificacionesRepository.find({
+            where: { usuario: { id_usuario: idUsuario } },
+            order: { fecha_creacion: 'DESC' },
+        });
+    }
+    /**
+     * Marca una notificación específica como leída y la devuelve actualizada.
+     * @param {number} idNotificacion - ID de la notificación a marcar.
+     * @returns {Promise&lt;Notificacion>} Notificación con `leida = true`.
+     * @throws {NotFoundException} Si no existe una notificación con ese ID.
+     */
+    async marcarLeida(idNotificacion) {
+        const notificacion = await this.notificacionesRepository.findOneBy({ id_notificacion: idNotificacion });
+        if (!notificacion) {
+            throw new common_1.NotFoundException(`Notificación con ID ${idNotificacion} no encontrada`);
+        }
+        notificacion.leida = true;
+        return this.notificacionesRepository.save(notificacion);
+    }
+    /**
+     * Marca como leídas todas las notificaciones no leídas del usuario.
+     * Opera por update masivo sin cargar las entidades individualmente.
+     * @param {number} idUsuario - ID del usuario cuyas notificaciones se marcan.
+     * @returns {Promise&lt;void>}
+     */
+    async marcarTodasLeidas(idUsuario) {
+        await this.notificacionesRepository.update({ usuario: { id_usuario: idUsuario }, leida: false }, { leida: true });
+    }
+};
+exports.NotificacionesService = NotificacionesService;
+exports.NotificacionesService = NotificacionesService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(notificacion_entity_1.Notificacion)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
+], NotificacionesService);
+//# sourceMappingURL=notificaciones.service.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthController.html">AuthController</a></li><li><a href="AuthGuard.html">AuthGuard</a></li><li><a href="AuthService.html">AuthService</a></li><li><a href="Aviso.html">Aviso</a></li><li><a href="Carrera.html">Carrera</a></li><li><a href="CarrerasController.html">CarrerasController</a></li><li><a href="CarrerasService.html">CarrerasService</a></li><li><a href="Evento.html">Evento</a></li><li><a href="EventosController.html">EventosController</a></li><li><a href="EventosService.html">EventosService</a></li><li><a href="Inscripcion.html">Inscripcion</a></li><li><a href="InscripcionesController.html">InscripcionesController</a></li><li><a href="InscripcionesService.html">InscripcionesService</a></li><li><a href="Materia.html">Materia</a></li><li><a href="MateriasController.html">MateriasController</a></li><li><a href="MateriasService.html">MateriasService</a></li><li><a href="Notificacion.html">Notificacion</a></li><li><a href="NotificacionesController.html">NotificacionesController</a></li><li><a href="NotificacionesService.html">NotificacionesService</a></li><li><a href="Rol.html">Rol</a></li><li><a href="RolesGuard.html">RolesGuard</a></li><li><a href="Usuario.html">Usuario</a></li><li><a href="UsuariosService.html">UsuariosService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EstadoUsuario">EstadoUsuario</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 25 2026 22:53:48 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

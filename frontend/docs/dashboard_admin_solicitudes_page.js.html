@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dashboard/admin/solicitudes/page.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dashboard/admin/solicitudes/page.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { getUsuariosPendientes, aprobarUsuario, rechazarUsuario } from "@/app/services/usuarios";
+import { useEffect, useState } from "react";
+import layout from "@/app/styles/layout.module.css";
+import dashboard from "@/app/styles/dashboard.module.css";
+import styles from "./page.module.css";
+import Card from "@/app/components/ui/card";
+import Button from "@/app/components/ui/button";
+import forms from "@/app/styles/forms.module.css";
+/**
+ * Panel de solicitudes del admin.
+ * Muestra las solicitudes de los nuevos usuarios que esperan a ser habilitados.
+ * @returns {JSX.Element}
+ */
+export default function SolicitudesAdmin() {
+    const [solicitudes, setSolicitudes] = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState("");
+    useEffect(() => {
+        /**
+         * Carga las solicitudes pendientes.
+         */
+        async function cargarSolicitudes() {
+            try {
+                setError("");
+                const data = await getUsuariosPendientes();
+                setSolicitudes(data);
+            }
+            catch (error) {
+                setError("No se pudieron cargar las solicitudes.");
+            }
+            finally {
+                setCargando(false);
+            }
+        }
+        cargarSolicitudes();
+    }, []);
+    /**
+     * Aprueba un usuario en específico y cambia el estado a habilitado.
+     * @param {number} id  id del usario que se quiera aprobar.
+     */
+    async function aprobar(id) {
+        try {
+            setError("");
+            await aprobarUsuario(id);
+            setSolicitudes((prev) => prev.filter((u) => u.id_usuario !== id));
+        }
+        catch (error) {
+            setError("No se pudo aprobar la solicitud.");
+        }
+    }
+    /**
+     * funcion para poder recharzar la solicitud de un usario
+     * @param {number} id el id del usuario cuya solicitud se rechazo
+     */
+    async function rechazar(id) {
+        try {
+            setError("");
+            await rechazarUsuario(id);
+            setSolicitudes((prev) => prev.filter((u) => u.id_usuario !== id));
+        }
+        catch (error) {
+            setError("No se pudo rechazar la solicitud.");
+        }
+    }
+    if (cargando) {
+        return (_jsx("main", { className: layout.main, children: _jsx("div", { className: layout.content, children: _jsx("h1", { children: "Cargando solicitudes..." }) }) }));
+    }
+    return (_jsx("main", { className: layout.main, children: _jsxs("div", { className: layout.content, children: [_jsxs("header", { className: dashboard.header, children: [_jsxs("div", { children: [_jsx("h1", { children: "Solicitudes de registro" }), _jsx("p", { children: "Revis\u00E1 solicitudes pendientes y aprob\u00E1 \u00FAnicamente usuarios autorizados." })] }), _jsx("div", { className: styles.counter, children: solicitudes.length })] }), error &amp;&amp; (_jsxs("p", { role: "alert", className: forms.error, children: ["\u26A0\uFE0F ", error] })), _jsx("section", { children: solicitudes.length === 0 ? (_jsx(Card, { children: _jsxs("div", { className: styles.empty, children: [_jsx("h2", { children: "No hay solicitudes pendientes" }), _jsx("p", { children: "Cuando un usuario se registre aparecer\u00E1 ac\u00E1." })] }) })) : (_jsx("div", { className: styles.grid, children: solicitudes.map((usuario) => (_jsxs(Card, { children: [_jsxs("div", { className: styles.user, children: [_jsx("div", { className: styles.avatar, children: usuario.nombre[0] }), _jsxs("div", { children: [_jsxs("h2", { children: [usuario.nombre, " ", usuario.apellido] }), _jsx("p", { children: usuario.mail })] })] }), _jsxs("div", { className: styles.data, children: [_jsxs("div", { children: [_jsx("span", { children: "DNI" }), _jsx("strong", { children: usuario.dni })] }), _jsxs("div", { children: [_jsx("span", { children: "Estado" }), _jsx("strong", { className: styles.pending, children: "Pendiente" })] })] }), _jsxs("div", { className: styles.actions, children: [_jsx(Button, { onClick: () => aprobar(usuario.id_usuario), children: "Aprobar" }), _jsx(Button, { variant: "danger", onClick: () => rechazar(usuario.id_usuario), children: "Rechazar" })] })] }, usuario.id_usuario))) })) })] }) }));
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CantidadNotificacionesSinLeer">CantidadNotificacionesSinLeer</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Mapas">Mapas</a></li><li><a href="global.html#NotificacionLeida">NotificacionLeida</a></li><li><a href="global.html#NotificacionLeidas">NotificacionLeidas</a></li><li><a href="global.html#TraerTodasNotificaciones">TraerTodasNotificaciones</a></li><li><a href="global.html#api">api</a></li><li><a href="global.html#aprobarUsuario">aprobarUsuario</a></li><li><a href="global.html#crearAviso">crearAviso</a></li><li><a href="global.html#crearEvento">crearEvento</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#editarAviso">editarAviso</a></li><li><a href="global.html#eliminarAviso">eliminarAviso</a></li><li><a href="global.html#eliminarEvento">eliminarEvento</a></li><li><a href="global.html#getAulas">getAulas</a></li><li><a href="global.html#getAvisoById">getAvisoById</a></li><li><a href="global.html#getAvisos">getAvisos</a></li><li><a href="global.html#getAvisosPorEvento">getAvisosPorEvento</a></li><li><a href="global.html#getCarreras">getCarreras</a></li><li><a href="global.html#getCookie">getCookie</a></li><li><a href="global.html#getEventoPorId">getEventoPorId</a></li><li><a href="global.html#getEventos">getEventos</a></li><li><a href="global.html#getEventosSemana">getEventosSemana</a></li><li><a href="global.html#getInscripcionesPorMateria">getInscripcionesPorMateria</a></li><li><a href="global.html#getMateriasPorCarrera">getMateriasPorCarrera</a></li><li><a href="global.html#getRoleFromToken">getRoleFromToken</a></li><li><a href="global.html#getUsuariosHabilitados">getUsuariosHabilitados</a></li><li><a href="global.html#getUsuariosPendientes">getUsuariosPendientes</a></li><li><a href="global.html#guardarSesion">guardarSesion</a></li><li><a href="global.html#inscribirUsuarios">inscribirUsuarios</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#obtenerIdsUsuariosInscriptos">obtenerIdsUsuariosInscriptos</a></li><li><a href="global.html#obtenerUsuariosDisponibles">obtenerUsuariosDisponibles</a></li><li><a href="global.html#rechazarUsuario">rechazarUsuario</a></li><li><a href="global.html#registrarUsuario">registrarUsuario</a></li><li><a href="global.html#useAsignacionAcademica">useAsignacionAcademica</a></li><li><a href="global.html#useCrearEvento">useCrearEvento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 21:38:07 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

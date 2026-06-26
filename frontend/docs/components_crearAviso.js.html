@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/crearAviso.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/crearAviso.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useEffect, useState } from "react";
+import { getEventos } from "../services/eventos";
+import { crearAviso } from "../services/avisos";
+import forms from "@/app/styles/forms.module.css";
+import Button from "@/app/components/ui/button";
+import Card from "@/app/components/ui/card";
+/**
+ * Crea un nuevo aviso asociado a un evento.
+ * Obtiene los eventos futuros disponibles, permite seleccionar uno y enviar un mensaje que será registrado como aviso.
+ * Gestiona estados de carga, validación, éxito y error mediante mensajes visibles en pantalla.
+ * @returns {JSX.Element} Formulario para crear avisos.
+ * @example
+ * &lt;CrearAviso />
+ */
+export default function CrearAviso() {
+    const [eventos, setEventos] = useState([]);
+    const [idEvento, setIdEvento] = useState("");
+    const [mensaje, setMensaje] = useState("");
+    const [cargando, setCargando] = useState(true);
+    const [guardando, setGuardando] = useState(false);
+    const [error, setError] = useState("");
+    const [exito, setExito] = useState("");
+    useEffect(() => {
+        async function cargar() {
+            try {
+                const data = await getEventos();
+                const futuros = data.filter((ev) => {
+                    const fecha = new Date(`${ev.fecha}T${ev.horaInicio}`);
+                    return fecha >= new Date();
+                }).sort((a, b) => {
+                    const fechaA = new Date(`${a.fecha}T${a.horaInicio}`).getTime();
+                    const fechaB = new Date(`${b.fecha}T${b.horaInicio}`).getTime();
+                    return fechaA - fechaB;
+                });
+                setEventos(futuros);
+            }
+            catch (_a) {
+                setError("No se pudieron cargar los eventos.");
+            }
+            finally {
+                setCargando(false);
+            }
+        }
+        cargar();
+    }, []);
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setError("");
+        setExito("");
+        if (!idEvento) {
+            setError("Seleccioná un evento.");
+            return;
+        }
+        if (!mensaje.trim()) {
+            setError("Escribí un mensaje.");
+            return;
+        }
+        setGuardando(true);
+        try {
+            await crearAviso(mensaje, Number(idEvento));
+            setExito("Aviso creado correctamente.");
+            setMensaje("");
+            setIdEvento("");
+        }
+        catch (_a) {
+            setError("No se pudo crear el aviso.");
+        }
+        finally {
+            setGuardando(false);
+        }
+    }
+    if (cargando)
+        return (_jsx("p", { className: forms.helper, children: "Cargando eventos..." }));
+    return (_jsx(Card, { children: _jsxs("form", { onSubmit: handleSubmit, className: forms.form, children: [error &amp;&amp; (_jsx("p", { className: forms.error, children: error })), exito &amp;&amp; (_jsx("p", { className: forms.helper, children: exito })), _jsx("div", { className: forms.row, children: _jsxs("div", { className: forms.field, children: [_jsx("label", { className: forms.label, children: "Evento" }), _jsxs("select", { className: forms.select, value: idEvento, onChange: e => setIdEvento(e.target.value), children: [_jsx("option", { value: "", children: "Seleccionar evento" }), eventos.map(ev => (_jsxs("option", { value: ev.id_evento, children: [ev.titulo, " - ", ev.fecha, " - ", ev.horaInicio] }, ev.id_evento)))] })] }) }), _jsx("div", { className: forms.row, children: _jsxs("div", { className: forms.field, children: [_jsx("label", { className: forms.label, children: "Mensaje" }), _jsx("textarea", { className: forms.input, value: mensaje, onChange: e => setMensaje(e.target.value), placeholder: "Escrib\u00ED el aviso...", rows: 5 })] }) }), _jsx("div", { className: forms.actions, children: _jsx(Button, { type: "submit", children: "Crear aviso" }) })] }) }));
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CantidadNotificacionesSinLeer">CantidadNotificacionesSinLeer</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Mapas">Mapas</a></li><li><a href="global.html#NotificacionLeida">NotificacionLeida</a></li><li><a href="global.html#NotificacionLeidas">NotificacionLeidas</a></li><li><a href="global.html#TraerTodasNotificaciones">TraerTodasNotificaciones</a></li><li><a href="global.html#api">api</a></li><li><a href="global.html#aprobarUsuario">aprobarUsuario</a></li><li><a href="global.html#crearAviso">crearAviso</a></li><li><a href="global.html#crearEvento">crearEvento</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#editarAviso">editarAviso</a></li><li><a href="global.html#eliminarAviso">eliminarAviso</a></li><li><a href="global.html#eliminarEvento">eliminarEvento</a></li><li><a href="global.html#getAulas">getAulas</a></li><li><a href="global.html#getAvisoById">getAvisoById</a></li><li><a href="global.html#getAvisos">getAvisos</a></li><li><a href="global.html#getAvisosPorEvento">getAvisosPorEvento</a></li><li><a href="global.html#getCarreras">getCarreras</a></li><li><a href="global.html#getCookie">getCookie</a></li><li><a href="global.html#getEventoPorId">getEventoPorId</a></li><li><a href="global.html#getEventos">getEventos</a></li><li><a href="global.html#getEventosSemana">getEventosSemana</a></li><li><a href="global.html#getInscripcionesPorMateria">getInscripcionesPorMateria</a></li><li><a href="global.html#getMateriasPorCarrera">getMateriasPorCarrera</a></li><li><a href="global.html#getRoleFromToken">getRoleFromToken</a></li><li><a href="global.html#getUsuariosHabilitados">getUsuariosHabilitados</a></li><li><a href="global.html#getUsuariosPendientes">getUsuariosPendientes</a></li><li><a href="global.html#guardarSesion">guardarSesion</a></li><li><a href="global.html#inscribirUsuarios">inscribirUsuarios</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#obtenerIdsUsuariosInscriptos">obtenerIdsUsuariosInscriptos</a></li><li><a href="global.html#obtenerUsuariosDisponibles">obtenerUsuariosDisponibles</a></li><li><a href="global.html#rechazarUsuario">rechazarUsuario</a></li><li><a href="global.html#registrarUsuario">registrarUsuario</a></li><li><a href="global.html#useAsignacionAcademica">useAsignacionAcademica</a></li><li><a href="global.html#useCrearEvento">useCrearEvento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 21:38:07 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

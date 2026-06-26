@@ -16,21 +16,19 @@ import { AvisosModule } from './avisos/avisos.module';
 
 @Module({
   imports: [
-    // 1. Carga el .env y lo hace disponible en todo el proyecto
     ConfigModule.forRoot({
-      isGlobal: true, // no hace falta importarlo en cada módulo
+      isGlobal: true,
     }),
 
-    // 2. Conecta a Postgres leyendo las variables del .env
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // ⚠️ solo en desarrollo
+        synchronize: true,
         ssl: {
-          rejectUnauthorized: false, // necesario para conectarse a Neon
+          rejectUnauthorized: false, 
         },
       }),
       inject: [ConfigService],

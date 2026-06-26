@@ -1,0 +1,14 @@
+{
+  "source": {
+    "include": ["dist"],
+    "includePattern": "\\.js$",
+    "excludePattern": "(node_modules|coverage)"
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true
+  },
+  "plugins": [
+    "plugins/markdown"
+  ]
+}

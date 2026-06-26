@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: inscripciones/inscripcion.entity.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: inscripciones/inscripcion.entity.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __decorate = (this &amp;&amp; this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c &lt; 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c &lt; 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 &amp;&amp; r &amp;&amp; Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this &amp;&amp; this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Inscripcion = void 0;
+const typeorm_1 = require("typeorm");
+const usuario_entity_1 = require("../usuarios/usuario.entity");
+const materia_entity_1 = require("../materias/materia.entity");
+/**
+ * Entidad que representa la inscripción de un usuario en una materia.
+ * Mapea la tabla `inscripciones`. Es la tabla de unión entre Usuario y Materia.
+ * Se consulta desde EventosService y AvisosService para determinar
+ * qué usuarios deben recibir notificaciones al crearse eventos o avisos.
+ */
+let Inscripcion = class Inscripcion {
+    /** Identificador único generado automáticamente. */
+    id_inscripcion;
+    /** Usuario inscripto. Relación inversa de Usuario.inscripciones. FK: `id_usuario`. */
+    usuario;
+    /** Materia en la que está inscripto el usuario. Relación inversa de Materia.inscripciones. FK: `id_materia`. */
+    materia;
+};
+exports.Inscripcion = Inscripcion;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
+], Inscripcion.prototype, "id_inscripcion", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => usuario_entity_1.Usuario, usuario => usuario.inscripciones),
+    (0, typeorm_1.JoinColumn)({ name: "id_usuario" }),
+    __metadata("design:type", usuario_entity_1.Usuario)
+], Inscripcion.prototype, "usuario", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => materia_entity_1.Materia, materia => materia.inscripciones),
+    (0, typeorm_1.JoinColumn)({ name: "id_materia" }),
+    __metadata("design:type", materia_entity_1.Materia)
+], Inscripcion.prototype, "materia", void 0);
+exports.Inscripcion = Inscripcion = __decorate([
+    (0, typeorm_1.Entity)("inscripciones")
+], Inscripcion);
+//# sourceMappingURL=inscripcion.entity.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthController.html">AuthController</a></li><li><a href="AuthGuard.html">AuthGuard</a></li><li><a href="AuthService.html">AuthService</a></li><li><a href="Aviso.html">Aviso</a></li><li><a href="Carrera.html">Carrera</a></li><li><a href="CarrerasController.html">CarrerasController</a></li><li><a href="CarrerasService.html">CarrerasService</a></li><li><a href="Evento.html">Evento</a></li><li><a href="EventosController.html">EventosController</a></li><li><a href="EventosService.html">EventosService</a></li><li><a href="Inscripcion.html">Inscripcion</a></li><li><a href="InscripcionesController.html">InscripcionesController</a></li><li><a href="InscripcionesService.html">InscripcionesService</a></li><li><a href="Materia.html">Materia</a></li><li><a href="MateriasController.html">MateriasController</a></li><li><a href="MateriasService.html">MateriasService</a></li><li><a href="Notificacion.html">Notificacion</a></li><li><a href="NotificacionesController.html">NotificacionesController</a></li><li><a href="NotificacionesService.html">NotificacionesService</a></li><li><a href="Rol.html">Rol</a></li><li><a href="RolesGuard.html">RolesGuard</a></li><li><a href="Usuario.html">Usuario</a></li><li><a href="UsuariosService.html">UsuariosService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EstadoUsuario">EstadoUsuario</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 25 2026 22:53:48 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

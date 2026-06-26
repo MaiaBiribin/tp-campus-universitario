@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dashboard/admin/page.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dashboard/admin/page.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import Link from "next/link";
+import dashboard from "@/app/styles/dashboard.module.css";
+import cards from "@/app/styles/cards.module.css";
+import { getEventos } from "@/app/services/eventos";
+import { getUsuariosPendientes } from "@/app/services/usuarios";
+import { useEffect, useState } from "react";
+import forms from "@/app/styles/forms.module.css";
+/**
+ * Panel principal de administración.
+ * Muestra un resumen de eventos del día, solicitudes pendientes y aulas ocupadas.
+ * Consume datos desde servicios de eventos y usuarios.
+ * @returns {JSX.Element} dashboard administrativo renderizado.
+ */
+export default function DashboardAdmin() {
+    const [eventosHoy, setEventosHoy] = useState(0);
+    const [solicitudes, setSolicitudes] = useState(0);
+    const [aulasOcupadas, setAulasOcupadas] = useState(0);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState("");
+    useEffect(() => {
+        /**
+         * Carga de datos para el dashboard del admin.
+         */
+        async function cargarDashboard() {
+            try {
+                setCargando(true);
+                setError("");
+                const pendientes = await getUsuariosPendientes();
+                setSolicitudes(pendientes.length);
+                const eventos = await getEventos();
+                const hoy = new Date().toISOString().split("T")[0];
+                const eventosDeHoy = eventos.filter((evento) => evento.fecha === hoy);
+                setEventosHoy(eventosDeHoy.length);
+                const aulas = new Set(eventosDeHoy.map((evento) => { var _a; return (_a = evento.aula) === null || _a === void 0 ? void 0 : _a.id_aula; }));
+                setAulasOcupadas(aulas.size);
+            }
+            catch (_a) {
+                setError("No se pudo cargar la información del panel.");
+            }
+            finally {
+                setCargando(false);
+            }
+        }
+        cargarDashboard();
+    }, []);
+    if (cargando) {
+        return (_jsx("p", { className: forms.helper, children: "Cargando panel..." }));
+    }
+    if (error) {
+        return (_jsx("p", { className: forms.error, children: error }));
+    }
+    return (_jsxs(_Fragment, { children: [_jsxs("header", { className: dashboard.header, children: [_jsx("h1", { children: "Panel de administraci\u00F3n" }), _jsx("p", { children: "Gestion\u00E1 eventos, aulas, usuarios y la organizaci\u00F3n acad\u00E9mica desde un \u00FAnico lugar." })] }), _jsxs("section", { children: [_jsx("h2", { className: dashboard.sectionTitle, children: "Resumen r\u00E1pido" }), _jsxs("div", { className: dashboard.summaryGrid, children: [_jsxs("div", { className: cards.metric, children: [_jsx("p", { children: "Eventos hoy" }), _jsx("h3", { children: eventosHoy })] }), _jsxs("div", { className: cards.metric, children: [_jsx("p", { children: "Solicitudes pendientes" }), _jsx("h3", { children: solicitudes })] }), _jsxs("div", { className: cards.metric, children: [_jsx("p", { children: "Aulas ocupadas" }), _jsx("h3", { children: aulasOcupadas })] })] })] }), _jsxs("section", { children: [_jsx("h2", { className: dashboard.sectionTitle, children: "Accesos r\u00E1pidos" }), _jsx("div", { className: dashboard.quickGrid, children: [
+                            {
+                                titulo: "Crear evento",
+                                desc: "Crear clases, parciales o finales",
+                                ruta: "/dashboard/admin/eventos/nuevo",
+                            },
+                            {
+                                titulo: "Académico",
+                                desc: "Gestionar carreras y materias",
+                                ruta: "/dashboard/admin/academico",
+                            },
+                        ].map((item) => (_jsxs(Link, { href: item.ruta, className: cards.quickCard, children: [_jsx("h3", { children: item.titulo }), _jsx("p", { children: item.desc })] }, item.ruta))) })] })] }));
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CantidadNotificacionesSinLeer">CantidadNotificacionesSinLeer</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Mapas">Mapas</a></li><li><a href="global.html#NotificacionLeida">NotificacionLeida</a></li><li><a href="global.html#NotificacionLeidas">NotificacionLeidas</a></li><li><a href="global.html#TraerTodasNotificaciones">TraerTodasNotificaciones</a></li><li><a href="global.html#api">api</a></li><li><a href="global.html#aprobarUsuario">aprobarUsuario</a></li><li><a href="global.html#crearAviso">crearAviso</a></li><li><a href="global.html#crearEvento">crearEvento</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#editarAviso">editarAviso</a></li><li><a href="global.html#eliminarAviso">eliminarAviso</a></li><li><a href="global.html#eliminarEvento">eliminarEvento</a></li><li><a href="global.html#getAulas">getAulas</a></li><li><a href="global.html#getAvisoById">getAvisoById</a></li><li><a href="global.html#getAvisos">getAvisos</a></li><li><a href="global.html#getAvisosPorEvento">getAvisosPorEvento</a></li><li><a href="global.html#getCarreras">getCarreras</a></li><li><a href="global.html#getCookie">getCookie</a></li><li><a href="global.html#getEventoPorId">getEventoPorId</a></li><li><a href="global.html#getEventos">getEventos</a></li><li><a href="global.html#getEventosSemana">getEventosSemana</a></li><li><a href="global.html#getInscripcionesPorMateria">getInscripcionesPorMateria</a></li><li><a href="global.html#getMateriasPorCarrera">getMateriasPorCarrera</a></li><li><a href="global.html#getRoleFromToken">getRoleFromToken</a></li><li><a href="global.html#getUsuariosHabilitados">getUsuariosHabilitados</a></li><li><a href="global.html#getUsuariosPendientes">getUsuariosPendientes</a></li><li><a href="global.html#guardarSesion">guardarSesion</a></li><li><a href="global.html#inscribirUsuarios">inscribirUsuarios</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#obtenerIdsUsuariosInscriptos">obtenerIdsUsuariosInscriptos</a></li><li><a href="global.html#obtenerUsuariosDisponibles">obtenerUsuariosDisponibles</a></li><li><a href="global.html#rechazarUsuario">rechazarUsuario</a></li><li><a href="global.html#registrarUsuario">registrarUsuario</a></li><li><a href="global.html#useAsignacionAcademica">useAsignacionAcademica</a></li><li><a href="global.html#useCrearEvento">useCrearEvento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 21:38:07 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
