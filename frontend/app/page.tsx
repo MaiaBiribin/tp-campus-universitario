@@ -5,9 +5,10 @@ import home from "./home.module.css";
 import Card from "./components/ui/card";
 import Button from "./components/ui/button";
 /**
- * pagina de inicio de la pagina web.
- * muestra lo servicios la pagina provee.
- * @returns {JSX.Element} la vista de la pagina.
+ * Renderiza la página de inicio de AulaSync.
+ * Presenta una descripción general del sistema, sus principales funcionalidades
+ * y un acceso a la pantalla de inicio de sesión.
+ * @returns {JSX.Element} Página principal de la aplicación.
  */
 export default function Home() {
 const features=[

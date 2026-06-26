@@ -4,8 +4,7 @@ import RenderizarNotifiaciones from "@/app/components/renderizarNotificaciones";
 import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 /**
- * pestaña donde los estudiantes pueden ver las notificaciones que tengan
- * muestra las notificaciones sobre algun evento que esten inscriptos.
+ * Pestaña donde los estudiantes ven sus notificaciones
  * @returns {JSX.Element} vista de las notificaciones.
  */
 export default function Notificaciones() {

@@ -11,6 +11,12 @@ type Props = {
   idAviso:number;
 };
 
+/**
+ * Formulario para editar un aviso existente.
+ * @param {Props} props Propiedades del componente.
+ * @param {number} props.idAviso Identificador del aviso.
+ * @returns {JSX.Element} Formulario de edición del aviso.
+ */
 export default function EditarAviso({idAviso,}:Props){
 
   const router = useRouter();
@@ -21,7 +27,10 @@ export default function EditarAviso({idAviso,}:Props){
   const [exito,setExito] = useState("");
 
   useEffect(()=>{
-
+    /**
+     * Obtiene el aviso y carga su mensaje en el formulario.
+     * @returns {Promise<void>}
+     * */
     async function cargar(){
       try{
         const aviso =await getAvisoById(idAviso);
@@ -34,7 +43,11 @@ export default function EditarAviso({idAviso,}:Props){
     }
     cargar();
   },[idAviso]);
-
+  /**
+  * Envía la actualización del aviso.
+  * @param {React.FormEvent} e Evento de envío del formulario.
+  * @returns {Promise<void>}
+  */
   async function handleSubmit(e:React.FormEvent){
     e.preventDefault();
     setError("");
