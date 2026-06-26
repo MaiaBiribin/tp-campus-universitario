@@ -3,6 +3,13 @@ import layout from "@/app/styles/layout.module.css";
 import dashboard from "@/app/styles/dashboard.module.css";
 import { use } from "react";
 
+/**
+ * Página de edición de aviso.
+ * Extrae el ID desde los parámetros de ruta y renderiza el formulario de edición.
+ * @param {{ params: Promise<{ id: string }> }} props
+ * @returns {JSX.Element} Vista de edición o mensaje de error si el ID es inválido.
+ * @throws {Error} Puede fallar si el parámetro `id` no es un número válido.
+ */
 export default function Page(props: {params: Promise<{ id: string }>}) {
   const { id } = use(props.params);
   const idAviso = parseInt(id, 10);

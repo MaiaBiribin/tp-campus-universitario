@@ -3,9 +3,8 @@
 import layout from "@/app/styles/layout.module.css";
 import RenderizarMapas from "@/app/components/renderizarMaps";
 /**
- * la pagina donde los usuarios pueden ver los varios mapas del edificio
- * los usuarios pueden clickear las distintas aulas para ver el estado de esa aula
- * @returns {JSX.Element} vista de los mapas
+ * Renderiza la página de mapas del edificio.
+ * @returns {JSX.Element} Vista con los mapas interactivos.
  */
 export default function MapaPage() {
   return (

@@ -20,6 +20,12 @@ export default function DashboardDocente() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   useEffect(() => {
+    /**
+    * Carga la información necesaria para el panel docente.
+    * Obtiene eventos, calcula las clases del día y cuenta avisos asociados.
+    * @async
+    * @returns {Promise<void>}
+    */
     async function cargar() {
       try{
         setError("");
@@ -37,7 +43,7 @@ export default function DashboardDocente() {
         cantidadAvisos += avisos.length;
       }
     setAvisosActivos(cantidadAvisos);
-   }catch(error){
+   }catch{
     setError("No se pudo cargar la información del panel.");
   }finally {
     setCargando(false);

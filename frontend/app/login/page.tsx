@@ -12,9 +12,8 @@ import Card from "../components/ui/card";
 import Form from "../components/ui/form";
 import React from "react";
 /**
- * pagina donde los usuarios ya existentes ingresan sus usuarios.
- * se encarga de verificar que el usuario exista y mandarlo a su respectiva pagina.
- * @returns {JSX.Element} vista del login de la pagina.
+ * Renderiza el formulario de inicio de sesión y autentica al usuario.
+ * @returns {JSX.Element} Formulario de inicio de sesión.
  */
 const LoginForm=()=> {
   const router = useRouter();
@@ -22,7 +21,12 @@ const LoginForm=()=> {
   const accesoDenegado =searchParams.get("acceso") === "denegado";
   const [error,setError] = useState("");
   const [cargando,setCargando] = useState(false);
-
+  /**
+   * Procesa el inicio de sesión y redirige al usuario según su rol.
+   * @async
+   * @param {React.FormEvent<HTMLFormElement>} e Evento de envío del formulario.
+   * @returns {Promise<void>}
+   */
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
@@ -112,7 +116,10 @@ return(
     </div>
     );
   }
-
+  /**
+  * Renderiza la página de inicio de sesión utilizando Suspense.
+  * @returns {JSX.Element} Página de inicio de sesión.
+  */
   export default function Login() {
     return(
       <Suspense fallback={<p>Cargando...</p>}>

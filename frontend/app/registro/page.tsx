@@ -9,15 +9,20 @@ import layout from "../styles/layout.module.css";
 import forms from "../styles/forms.module.css";
 import { useState } from "react";
 /**
- * pagina donde se pueden registrar nuevos usuarios
- * aqui pueden ingresar sus datos para luego ser registrados en el sistema.
- * @returns {JSX.Element} vista del registro de la pagina.
+ * Renderiza el formulario de solicitud de registro de usuario.
+ * @returns {JSX.Element} Página de registro.
  */
 export default function Registrarse() {
   const ruta = useRouter();
   const [error,setError] = useState("");
   const [exito,setExito] = useState("");
   const [cargando,setCargando] = useState(false);
+  /**
+   * Envía la solicitud de registro al servidor.
+   * @async
+   * @param {React.FormEvent<HTMLFormElement>} event Evento de envío del formulario.
+   * @returns {Promise<void>} Promesa que finaliza al completar el proceso.
+   */
   async function MandarDatos(
     event: React.FormEvent<HTMLFormElement>
   ) {

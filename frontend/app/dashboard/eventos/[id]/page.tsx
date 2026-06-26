@@ -1,6 +1,6 @@
 import EventoDetalle from "@/app/components/eventoDetalle";
 /**
- * pestaña donde los usuarios pueden ver un evento especifico por el id del evento.
+ * Visualización de un evento específico por el id de evento.
  * @param {Promise<evento>} params 
  * @returns {JSX.Element} vista del evento particular
  */

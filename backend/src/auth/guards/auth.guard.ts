@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
 
    /**
    * Verifica si la request puede continuar según la validez del JWT
-   * @param context contexto de ejecución de NestJS.
+   * @param {ExecutionContext}context contexto de ejecución de NestJS.
    * @returns `true` si el token es válido.
    * @throws {UnauthorizedException} Si no hay token o es inválido/expirado.
    */
@@ -44,7 +44,7 @@ export class AuthGuard implements CanActivate {
 
   /**
    * Extrae el JWT desde el header Authorization.
-   * @param request request HTTP de Express.
+   * @param {Request} request request HTTP de Express.
    * @returns Token JWT o `undefined` si no existe o no es Bearer.
    */
   private extractTokenFromHeader(request: Request): string | undefined {

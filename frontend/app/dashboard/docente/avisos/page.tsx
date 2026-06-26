@@ -8,16 +8,24 @@ import table from "@/app/styles/table.module.css";
 import forms from "@/app/styles/forms.module.css";
 import { Aviso } from "@/app/types/entidades";
 import { getAvisos,eliminarAviso} from "@/app/services/avisos";
-
+/**
+ * Gestiona la visualización y administración de avisos del docente.
+ * Permite cargar avisos existentes, crear nuevos, editar y eliminar avisos.
+ * @returns {JSX.Element} Vista de gestión de avisos.
+ */
 export default function Avisos(){
-
-const [avisos,setAvisos]=useState<Aviso[]>([]);
-const [cargando,setCargando]=useState(true);
-const [error,setError]=useState("");
-const [exito,setExito]=useState("");
-const [eliminando,setEliminando]=useState<number | null>(null);
-useEffect(()=>{
-  async function cargar(){
+  const [avisos,setAvisos]=useState<Aviso[]>([]);
+  const [cargando,setCargando]=useState(true);
+  const [error,setError]=useState("");
+  const [exito,setExito]=useState("");
+  const [eliminando,setEliminando]=useState<number | null>(null);
+  useEffect(()=>{
+    /**
+    * Obtiene los avisos registrados y actualiza el estado de la vista.
+    * @async
+    * @returns {Promise<void>}
+    */
+    async function cargar(){
     try{
       const data = await getAvisos();
       setAvisos(data);
@@ -29,19 +37,31 @@ useEffect(()=>{
     }
   }
   cargar();
-},[]);
-function crearAviso(){
-    window.location.href ="/dashboard/docente/avisos/nuevo";
-}
-function editar(id:number){
-  window.location.href =
-    `/dashboard/docente/avisos/editar/${id}`;
-}
-async function borrar(id:number){
-  setError("");
-  setExito("");
-  setEliminando(id);
-  try{
+  },[]);
+  /**
+  * Redirige a la pantalla de creación de avisos.
+  * @returns {void}
+  */
+  function crearAviso(){
+    window.location.href ="/dashboard/docente/avisos/nuevo";}
+  /**
+  * Redirige a la pantalla de edición de un aviso específico.
+  * @param {number} id - Identificador del aviso a editar.
+  * @returns {void}
+  */
+  function editar(id:number){
+    window.location.href =`/dashboard/docente/avisos/editar/${id}`;}
+  /**
+  * Elimina un aviso y actualiza la lista visible.
+  * @async
+  * @param {number} id - Identificador del aviso a eliminar.
+  * @returns {Promise<void>}
+  */
+  async function borrar(id:number){
+    setError("");
+    setExito("");
+    setEliminando(id);
+    try{
     await eliminarAviso(id);
     setAvisos(prev =>
       prev.filter(
@@ -50,12 +70,12 @@ async function borrar(id:number){
       )
     );
     setExito("Aviso eliminado correctamente.");
-  }catch{
-    setError("No se pudo eliminar el aviso.");
-  }finally{
-    setEliminando(null);
+    }catch{
+      setError("No se pudo eliminar el aviso.");
+    }finally{
+     setEliminando(null);
+    }
   }
-}
 
 return (
   <main className={layout.main}>

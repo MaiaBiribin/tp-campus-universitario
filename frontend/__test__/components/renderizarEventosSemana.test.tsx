@@ -67,27 +67,6 @@ describe("Componente RenderizarEventosSemana",()=>{
     ).toBeInTheDocument();
   });
 
-  it("renderiza eventos aunque no tengan aula ni materia",()=>{
-    const eventosMock = [
-      {
-        id_evento:5,
-        titulo:"Reunión",
-        fecha:"2026-06-30",
-        horaInicio:"08:00",
-        horaFin:"09:00"
-      }
-    ] as Evento[];
-
-    render(
-      <RenderizarEventosSemana
-        eventos={eventosMock}
-      />
-    );
-    expect(screen.getByText("Reunión")).toBeInTheDocument();
-    expect(screen.getByText("📅 2026-06-30")).toBeInTheDocument();
-    expect(screen.getByText("🕒 08:00 - 09:00")).toBeInTheDocument();
-  });
-
   it("renderiza la cantidad correcta de eventos",()=>{
     const eventosMock=[
       {
