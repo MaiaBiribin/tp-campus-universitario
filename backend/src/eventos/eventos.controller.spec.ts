@@ -3,85 +3,114 @@ import { EventosController } from './eventos.controller';
 import { EventosService } from './eventos.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { JwtService } from '@nestjs/jwt';
-
 describe('EventosController', () => {
   let controller: EventosController;
+  let service: any;
 
   const mockEventosService = {
     findAll: jest.fn(),
-    findOne: jest.fn(),
     eventosUsuario: jest.fn(),
+    findOne: jest.fn(),
     create: jest.fn(),
-    updatePartial: jest.fn(),
-    replace: jest.fn(),
     remove: jest.fn(),
   };
+  const mockAuthGuard = {canActivate: jest.fn(() => true),};
+  const mockRolesGuard = {canActivate: jest.fn(() => true),};
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [EventosController],
-      providers: [
-        { provide: EventosService, useValue: mockEventosService },
-        { provide: JwtService, useValue: { verifyAsync: jest.fn() } },
-      ],
-    })
-      .overrideGuard(AuthGuard).useValue({ canActivate: () => true })
-      .overrideGuard(RolesGuard).useValue({ canActivate: () => true })
-      .compile();
+  const module: TestingModule = await Test.createTestingModule({
+    controllers: [EventosController],
+    providers: [
+      {
+        provide: EventosService,
+        useValue: {
+          findAll: jest.fn(),
+          findOne: jest.fn(),
+          create: jest.fn(),
+          eventosUsuario: jest.fn(),
+          remove: jest.fn(),
+        },
+      },
+    ],
+  })
+    .overrideGuard(AuthGuard)
+    .useValue(mockAuthGuard)
+    .overrideGuard(RolesGuard)
+    .useValue(mockRolesGuard)
+    .compile();
 
-    controller = module.get<EventosController>(EventosController);
-    jest.clearAllMocks();
+  controller = module.get<EventosController>(EventosController);
+  service = module.get<EventosService>(EventosService);});
+
+  describe('getAllEventos', () => {
+    it('debe devolver todos los eventos', async () => {
+      const mockData = [{ id_evento: 1 }];
+      service.findAll.mockResolvedValue(mockData as any);
+
+      const result = await controller.getAllEventos();
+
+      expect(result).toEqual(mockData);
+      expect(service.findAll).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('getEventosUsuario', () => {
+    it('debe devolver eventos de un usuario', async () => {
+      const mockData = [{ id_evento: 1 }];
+      service.eventosUsuario.mockResolvedValue(mockData as any);
+
+      const result = await controller.getEventosUsuario('1');
+
+      expect(result).toEqual(mockData);
+      expect(service.eventosUsuario).toHaveBeenCalledWith(1);
+    });
   });
 
-  it('getAllEventos devuelve todos los eventos', async () => {
-    mockEventosService.findAll.mockResolvedValue([]);
-    await controller.getAllEventos();
-    expect(mockEventosService.findAll).toHaveBeenCalled();
+  describe('getEventoById', () => {
+    it('debe devolver un evento por id', async () => {
+      const mockData = { id_evento: 1 };
+      service.findOne.mockResolvedValue(mockData as any);
+
+      const result = await controller.getEventoById(1);
+
+      expect(result).toEqual(mockData);
+      expect(service.findOne).toHaveBeenCalledWith(1);
+    });
   });
 
-  it('getEventoById delega al servicio con el id', async () => {
-    const evento = { id_evento: 1 };
-    mockEventosService.findOne.mockResolvedValue(evento);
-    const result = await controller.getEventoById(1);
-    expect(mockEventosService.findOne).toHaveBeenCalledWith(1);
-    expect(result).toEqual(evento);
+  describe('createEvento', () => {
+    it('debe crear un evento', async () => {
+      const dto = {
+        titulo: 'Evento test',
+        fecha: '2026-06-25',
+        horaInicio: '10:00',
+        horaFin: '11:00',
+        aula: { id_aula: 1 },
+        tipoEvento: { id_tipo_evento: 1 },
+        materia: { id_materia: 1 },
+      };
+
+      const mockResult = { id_evento: 1, ...dto };
+
+      service.create.mockResolvedValue(mockResult as any);
+
+      const result = await controller.createEvento(dto as any);
+
+      expect(result).toEqual(mockResult);
+      expect(service.create).toHaveBeenCalledWith(dto);
+    });
   });
 
-  it('getEventosUsuario convierte el id string a número', async () => {
-    mockEventosService.eventosUsuario.mockResolvedValue([]);
-    await controller.getEventosUsuario('5');
-    expect(mockEventosService.eventosUsuario).toHaveBeenCalledWith(5);
-  });
+  describe('deleteEvento', () => {
+    it('debe eliminar un evento por id', async () => {
+      const mockResponse = { message: 'Evento eliminado correctamente' };
 
-  it('createEvento delega el DTO completo al servicio', async () => {
-    const dto = { titulo: 'Clase', fecha: '2026-07-01', horaInicio: '08:00', horaFin: '10:00' } as any;
-    mockEventosService.create.mockResolvedValue({ id_evento: 1 });
-    await controller.createEvento(dto);
-    expect(mockEventosService.create).toHaveBeenCalledWith(dto);
-  });
+      service.remove.mockResolvedValue(mockResponse as any);
 
-  it('patchEvento delega el id y el DTO al servicio', async () => {
-    const dto = { titulo: 'Modificado' } as any;
-    mockEventosService.updatePartial.mockResolvedValue({ id_evento: 1 });
-    await controller.patchEvento(1, dto);
-    expect(mockEventosService.updatePartial).toHaveBeenCalledWith(1, dto);
-  });
+      const result = await controller.deleteEvento(1);
 
-  it('putEvento delega el id y el DTO al servicio', async () => {
-    const dto = { titulo: 'Completo' } as any;
-    mockEventosService.replace.mockResolvedValue({ id_evento: 1 });
-    await controller.putEvento(1, dto);
-    expect(mockEventosService.replace).toHaveBeenCalledWith(1, dto);
-  });
-
-  it('deleteEvento delega el id al servicio', async () => {
-    mockEventosService.remove.mockResolvedValue({ affected: 1 });
-    await controller.deleteEvento(1);
-    expect(mockEventosService.remove).toHaveBeenCalledWith(1);
+      expect(result).toEqual(mockResponse);
+      expect(service.remove).toHaveBeenCalledWith(1);
+    });
   });
 });

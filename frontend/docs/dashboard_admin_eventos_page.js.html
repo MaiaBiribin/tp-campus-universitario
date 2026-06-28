@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dashboard/admin/eventos/page.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dashboard/admin/eventos/page.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useEffect, useState } from "react";
+import layout from "@/app/styles/layout.module.css";
+import dashboard from "@/app/styles/dashboard.module.css";
+import buttons from "@/app/styles/buttons.module.css";
+import table from "@/app/styles/table.module.css";
+import forms from "@/app/styles/forms.module.css";
+import { getEventos, eliminarEvento as borrarEvento } from "@/app/services/eventos";
+/**
+ * panel de eventos del admin
+ * muestra todos los eventos que creo el admin y tambien el link para ir a la pestana de crear un nuevo evento.
+ * @returns {JSX.Element} vista de los eventos del admin
+ */
+export default function EventosAdmin() {
+    const [eventos, setEventos] = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState("");
+    const [exito, setExito] = useState("");
+    const [eliminando, setEliminando] = useState(null);
+    useEffect(() => {
+        /**
+         * funcion para cargar los eventos a la pestaña
+         *  @throws en el caso que no se pudo cargar los eventos
+         */
+        async function cargarEventos() {
+            try {
+                const data = await getEventos();
+                setEventos(Array.isArray(data) ? data : []);
+            }
+            catch (_a) {
+                setError("No se pudieron cargar los eventos.");
+            }
+            finally {
+                setCargando(false);
+            }
+        }
+        cargarEventos();
+    }, []);
+    /**
+     * esta funcion redirige a la pestaña de crear un nuevo evento.
+     */
+    function crearEvento() {
+        window.location.href = "/dashboard/admin/eventos/nuevo";
+    }
+    /**
+     * esta funcion sirve para poder eliminar del sistema un evento
+     * @param {number} id id del evento que se quiera borrar
+     *  @throws en caso que no se pudo borrar el evento.
+     */
+    async function eliminarEvento(id) {
+        setError("");
+        setExito("");
+        setEliminando(id);
+        try {
+            await borrarEvento(id);
+            setEventos((prev) => prev.filter((e) => e.id_evento !== id));
+            setExito("Evento eliminado correctamente.");
+        }
+        catch (_a) {
+            setError("No se pudo eliminar el evento. Puede tener información asociada.");
+        }
+        finally {
+            setEliminando(null);
+        }
+    }
+    return (_jsx("main", { className: layout.main, children: _jsxs("div", { className: layout.content, children: [_jsxs("header", { className: dashboard.header, children: [_jsxs("div", { children: [_jsx("h1", { children: "Eventos acad\u00E9micos" }), _jsx("p", { children: "Gestion\u00E1 clases, parciales y finales." })] }), _jsx("button", { className: buttons.primary, onClick: crearEvento, children: "Crear evento" })] }), error &amp;&amp; (_jsx("p", { className: forms.error, children: error })), exito &amp;&amp; (_jsx("p", { className: forms.success, children: exito })), eventos.length === 0 ? (_jsxs("div", { className: table.empty, children: [_jsx("h2", { children: "No hay eventos creados" }), _jsx("p", { children: "Cre\u00E1 tu primer evento acad\u00E9mico." })] })) : (_jsx("div", { className: table.tableContainer, children: _jsx("div", { className: table.tableWrapper, children: _jsxs("table", { className: table.table, children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Evento" }), _jsx("th", { children: "Carrera" }), _jsx("th", { children: "Fecha" }), _jsx("th", { children: "Horario" }), _jsx("th", { children: "Aula" }), _jsx("th", { children: "Tipo" }), _jsx("th", { children: "Acciones" })] }) }), _jsx("tbody", { children: eventos.map((evento) => {
+                                        var _a, _b, _c, _d, _e;
+                                        return (_jsxs("tr", { children: [_jsx("td", { children: (_a = evento.materia) === null || _a === void 0 ? void 0 : _a.nombre }), _jsx("td", { children: (_c = (_b = evento.materia) === null || _b === void 0 ? void 0 : _b.carrera) === null || _c === void 0 ? void 0 : _c.nombre }), _jsx("td", { children: evento.fecha }), _jsxs("td", { children: [evento.horaInicio, " - ", evento.horaFin] }), _jsx("td", { children: (_d = evento.aula) === null || _d === void 0 ? void 0 : _d.nombre }), _jsx("td", { children: _jsx("span", { className: `${table.badge} ${table.info}`, children: (_e = evento.tipoEvento) === null || _e === void 0 ? void 0 : _e.nombre }) }), _jsx("td", { children: _jsx("div", { className: table.actions, children: _jsx("button", { className: buttons.danger, disabled: eliminando === evento.id_evento, onClick: () => eliminarEvento(evento.id_evento), children: eliminando === evento.id_evento
+                                                                ? "Eliminando..."
+                                                                : "Eliminar" }) }) })] }, evento.id_evento));
+                                    }) })] }) }) }))] }) }));
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CantidadNotificacionesSinLeer">CantidadNotificacionesSinLeer</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Mapas">Mapas</a></li><li><a href="global.html#NotificacionLeida">NotificacionLeida</a></li><li><a href="global.html#NotificacionLeidas">NotificacionLeidas</a></li><li><a href="global.html#TraerTodasNotificaciones">TraerTodasNotificaciones</a></li><li><a href="global.html#api">api</a></li><li><a href="global.html#aprobarUsuario">aprobarUsuario</a></li><li><a href="global.html#crearAviso">crearAviso</a></li><li><a href="global.html#crearEvento">crearEvento</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#editarAviso">editarAviso</a></li><li><a href="global.html#eliminarAviso">eliminarAviso</a></li><li><a href="global.html#eliminarEvento">eliminarEvento</a></li><li><a href="global.html#getAulas">getAulas</a></li><li><a href="global.html#getAvisoById">getAvisoById</a></li><li><a href="global.html#getAvisos">getAvisos</a></li><li><a href="global.html#getAvisosPorEvento">getAvisosPorEvento</a></li><li><a href="global.html#getCarreras">getCarreras</a></li><li><a href="global.html#getCookie">getCookie</a></li><li><a href="global.html#getEventoPorId">getEventoPorId</a></li><li><a href="global.html#getEventos">getEventos</a></li><li><a href="global.html#getEventosSemana">getEventosSemana</a></li><li><a href="global.html#getInscripcionesPorMateria">getInscripcionesPorMateria</a></li><li><a href="global.html#getMateriasPorCarrera">getMateriasPorCarrera</a></li><li><a href="global.html#getRoleFromToken">getRoleFromToken</a></li><li><a href="global.html#getUsuariosHabilitados">getUsuariosHabilitados</a></li><li><a href="global.html#getUsuariosPendientes">getUsuariosPendientes</a></li><li><a href="global.html#guardarSesion">guardarSesion</a></li><li><a href="global.html#inscribirUsuarios">inscribirUsuarios</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#obtenerIdsUsuariosInscriptos">obtenerIdsUsuariosInscriptos</a></li><li><a href="global.html#obtenerUsuariosDisponibles">obtenerUsuariosDisponibles</a></li><li><a href="global.html#rechazarUsuario">rechazarUsuario</a></li><li><a href="global.html#registrarUsuario">registrarUsuario</a></li><li><a href="global.html#useAsignacionAcademica">useAsignacionAcademica</a></li><li><a href="global.html#useCrearEvento">useCrearEvento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 21:38:07 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/eventoSemanaView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/eventoSemanaView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useEffect, useState } from "react";
+import RenderizarEventosSemana from "@/app/components/renderizarEventosSemana";
+import { getEventosSemana } from "@/app/services/eventos";
+import forms from "@/app/styles/forms.module.css";
+/**
+ * Vista contenedora de los eventos de la semana.
+ * obtiene los eventos mediante el servicio correspondiente y gestiona los estados de carga, error y visualización.
+ * @component
+ * @param {Props} props propiedades del componente.
+ * @param {string} props.titulo título mostrado en pantalla.
+ * @param {string} [props.descripcion] Descripción opcional.
+ * @returns {JSX.Element} Página con los eventos semanales.
+ * @example
+ * &lt;EventosSemanaView
+ *   titulo="Eventos de la semana"
+ *   descripcion="Próximas actividades"
+ * />
+ */
+export default function EventosSemanaView({ titulo, descripcion }) {
+    const [eventos, setEventos] = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState("");
+    useEffect(() => {
+        async function cargar() {
+            try {
+                const data = await getEventosSemana();
+                setEventos(data);
+            }
+            catch (error) {
+                setError("No se pudieron cargar los eventos de la semana.");
+            }
+            finally {
+                setCargando(false);
+            }
+        }
+        cargar();
+    }, []);
+    if (error) {
+        return (_jsx("main", { children: _jsx("p", { className: forms.error, children: error }) }));
+    }
+    return (_jsxs("main", { children: [_jsxs("header", { children: [_jsx("h1", { children: titulo }), descripcion &amp;&amp; (_jsx("p", { children: descripcion }))] }), cargando ? (_jsx("p", { children: "Cargando..." })) : (_jsx(RenderizarEventosSemana, { eventos: eventos }))] }));
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CantidadNotificacionesSinLeer">CantidadNotificacionesSinLeer</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Mapas">Mapas</a></li><li><a href="global.html#NotificacionLeida">NotificacionLeida</a></li><li><a href="global.html#NotificacionLeidas">NotificacionLeidas</a></li><li><a href="global.html#TraerTodasNotificaciones">TraerTodasNotificaciones</a></li><li><a href="global.html#api">api</a></li><li><a href="global.html#aprobarUsuario">aprobarUsuario</a></li><li><a href="global.html#crearAviso">crearAviso</a></li><li><a href="global.html#crearEvento">crearEvento</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#editarAviso">editarAviso</a></li><li><a href="global.html#eliminarAviso">eliminarAviso</a></li><li><a href="global.html#eliminarEvento">eliminarEvento</a></li><li><a href="global.html#getAulas">getAulas</a></li><li><a href="global.html#getAvisoById">getAvisoById</a></li><li><a href="global.html#getAvisos">getAvisos</a></li><li><a href="global.html#getAvisosPorEvento">getAvisosPorEvento</a></li><li><a href="global.html#getCarreras">getCarreras</a></li><li><a href="global.html#getCookie">getCookie</a></li><li><a href="global.html#getEventoPorId">getEventoPorId</a></li><li><a href="global.html#getEventos">getEventos</a></li><li><a href="global.html#getEventosSemana">getEventosSemana</a></li><li><a href="global.html#getInscripcionesPorMateria">getInscripcionesPorMateria</a></li><li><a href="global.html#getMateriasPorCarrera">getMateriasPorCarrera</a></li><li><a href="global.html#getRoleFromToken">getRoleFromToken</a></li><li><a href="global.html#getUsuariosHabilitados">getUsuariosHabilitados</a></li><li><a href="global.html#getUsuariosPendientes">getUsuariosPendientes</a></li><li><a href="global.html#guardarSesion">guardarSesion</a></li><li><a href="global.html#inscribirUsuarios">inscribirUsuarios</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#obtenerIdsUsuariosInscriptos">obtenerIdsUsuariosInscriptos</a></li><li><a href="global.html#obtenerUsuariosDisponibles">obtenerUsuariosDisponibles</a></li><li><a href="global.html#rechazarUsuario">rechazarUsuario</a></li><li><a href="global.html#registrarUsuario">registrarUsuario</a></li><li><a href="global.html#useAsignacionAcademica">useAsignacionAcademica</a></li><li><a href="global.html#useCrearEvento">useCrearEvento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 21:38:07 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

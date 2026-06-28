@@ -10,13 +10,10 @@ type Role =
   | "admin"
   | "docente"
   | "estudiante";
-
 type Props = {
   role: Role;
 };
-
 const linksByRole = {
-
   admin: [
     {
       name: "Inicio",
@@ -43,7 +40,6 @@ const linksByRole = {
       href: "/dashboard/admin/usuarios",
     },
   ],
-
   docente: [
     {
       name: "Inicio",
@@ -61,9 +57,7 @@ const linksByRole = {
       name: "Avisos",
       href: "/dashboard/docente/avisos",
     },
-
   ],
-
   estudiante: [
     {
       name: "Inicio",
@@ -83,7 +77,13 @@ const linksByRole = {
   },
   ],
 };
-
+/**
+ * Renderiza los enlaces de navegación según el rol del usuario.
+ * Para estudiantes, muestra la cantidad de notificaciones sin leer.
+ * @param {Props} props - Propiedades del componente.
+ * @param {"admin"|"docente"|"estudiante"} props.role - Rol del usuario autenticado.
+ * @returns {JSX.Element} Menú de navegación.
+ */
 export default function NavLinks({
   role,
 }: Props) {
@@ -94,6 +94,11 @@ export default function NavLinks({
   const [cargando,setCargando] = useState(false);
 
   useEffect(()=>{
+    /**
+    * Obtiene la cantidad de notificaciones sin leer.
+    * @async
+    * @returns {Promise<void>}
+    */
     async function cargarPendientes(){
       setCargando(true);
       setError("");

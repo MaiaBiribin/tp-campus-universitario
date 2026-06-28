@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: eventos/eventos.service.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: eventos/eventos.service.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __decorate = (this &amp;&amp; this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c &lt; 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c &lt; 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 &amp;&amp; r &amp;&amp; Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this &amp;&amp; this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this &amp;&amp; this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EventosService = void 0;
+const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const evento_entity_1 = require("./evento.entity");
+const aviso_entity_1 = require("../avisos/aviso.entity");
+const inscripcion_entity_1 = require("../inscripciones/inscripcion.entity");
+const notificaciones_service_1 = require("../notificaciones/notificaciones.service");
+/**
+ * Servicio encargado de la gestión de eventos académicos
+ * Incluye creación, consulta, actualización, eliminación y validaciones de negocio.
+ */
+let EventosService = class EventosService {
+    repo;
+    inscripcionRepo;
+    notificacionesService;
+    avisoRepo;
+    constructor(repo, inscripcionRepo, notificacionesService, avisoRepo) {
+        this.repo = repo;
+        this.inscripcionRepo = inscripcionRepo;
+        this.notificacionesService = notificacionesService;
+        this.avisoRepo = avisoRepo;
+    }
+    /**
+     * Obtiene todos los eventos.
+     * @returns {Promise&lt;Evento[]>} Lista de eventos.
+     */
+    findAll() {
+        return this.repo.find();
+    }
+    /**
+     * Obtiene un evento por id.
+     * @param id del evento.
+     * @returns {Promise&lt;Evento | null>} Evento encontrado o null.
+     */
+    findOne(id) {
+        return this.repo.findOneBy({ id_evento: id });
+    }
+    /**
+     * Crea un nuevo evento con validación de horarios y notificaciones a inscriptos.
+     * @param data -dto con los datos del evento.
+     * @throws {BadRequestException} Si el horario es inválido o hay conflictos de aula.
+     * @returns {Promise&lt;Evento>} Evento creado.
+     */
+    async create(data) {
+        if (data.horaInicio >= data.horaFin) {
+            throw new common_1.BadRequestException('La hora de inicio debe ser menor que la hora de fin');
+        }
+        const idAula = Number(data.aula?.id_aula);
+        const eventosExistentes = await this.repo.find({
+            where: {
+                fecha: data.fecha,
+                aula: {
+                    id_aula: idAula,
+                },
+            },
+        });
+        for (const evento of eventosExistentes) {
+            const inicioNuevo = data.horaInicio;
+            const finNuevo = data.horaFin;
+            const inicioExistente = evento.horaInicio;
+            const finExistente = evento.horaFin;
+            const hayConflicto = inicioNuevo &lt; finExistente &amp;&amp; finNuevo > inicioExistente;
+            if (hayConflicto) {
+                throw new common_1.BadRequestException(`El aula ${evento.aula.nombre} ya está ocupada entre ${inicioExistente} y ${finExistente}`);
+            }
+        }
+        const nuevoEvento = this.repo.create({
+            titulo: data.titulo,
+            fecha: data.fecha,
+            horaInicio: data.horaInicio,
+            horaFin: data.horaFin,
+            estado: 'aceptado',
+            aula: {
+                id_aula: idAula,
+            },
+            tipoEvento: {
+                id_tipo_evento: Number(data.tipoEvento?.id_tipo_evento),
+            },
+            materia: {
+                id_materia: Number(data.materia?.id_materia),
+            },
+        });
+        const eventoGuardado = await this.repo.save(nuevoEvento);
+        const inscriptos = await this.inscripcionRepo.find({
+            where: { materia: { id_materia: Number(data.materia?.id_materia) } },
+            relations: { usuario: true },
+        });
+        if (inscriptos.length > 0) {
+            await this.notificacionesService.crearNotificaciones(eventoGuardado.id_evento, `Nuevo evento: ${data.titulo} el ${data.fecha} de ${data.horaInicio} a ${data.horaFin}`, inscriptos.map(i => ({
+                id_usuario: i.usuario.id_usuario,
+            })));
+        }
+        return eventoGuardado;
+    }
+    /**
+     * Obtiene eventos asociados a un usuario.
+     * @param idUsuario id del usuario.
+     * @returns {Promise&lt;Evento[]>} Lista filtrada de eventos.
+     */
+    async eventosUsuario(idUsuario) {
+        const ahora = new Date();
+        const hoy = ahora.toLocaleDateString("sv-SE");
+        const horaActual = ahora.toTimeString().slice(0, 5);
+        const eventos = await this.repo.find({
+            where: {
+                materia: {
+                    inscripciones: {
+                        usuario: {
+                            id_usuario: idUsuario
+                        }
+                    }
+                }
+            },
+            relations: {
+                materia: {
+                    carrera: true,
+                }
+            },
+            order: {
+                fecha: "ASC",
+                horaInicio: "ASC"
+            }
+        });
+        return eventos.filter(evento => {
+            if (evento.fecha > hoy) {
+                return true;
+            }
+            if (evento.fecha === hoy) {
+                return evento.horaInicio >= horaActual;
+            }
+            return false;
+        });
+    }
+    /**
+     * Elimina un evento si cumple reglas de negocio:
+     * - Debe existir
+     * - No puede ser futuro con avisos asociados
+     * @param id id del evento
+     * @throws {BadRequestException} Si no existe o no puede eliminarse.
+     * @returns {{ message: string }} Confirmación de eliminación.
+     */
+    async remove(id) {
+        const evento = await this.repo.findOne({
+            where: { id_evento: id },
+        });
+        if (!evento) {
+            throw new common_1.BadRequestException("El evento no existe");
+        }
+        const avisos = await this.avisoRepo.find({
+            where: { evento: { id_evento: id } },
+        });
+        const ahora = new Date();
+        const fechaEvento = new Date(`${evento.fecha}T${evento.horaInicio}`);
+        const esPasado = fechaEvento &lt; ahora;
+        const tieneAvisos = avisos.length > 0;
+        if (!esPasado &amp;&amp; tieneAvisos) {
+            throw new common_1.BadRequestException("No se puede eliminar un evento futuro con avisos asociados");
+        }
+        await this.repo.delete(id);
+        return {
+            message: "Evento eliminado correctamente",
+        };
+    }
+};
+exports.EventosService = EventosService;
+exports.EventosService = EventosService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(evento_entity_1.Evento)),
+    __param(1, (0, typeorm_1.InjectRepository)(inscripcion_entity_1.Inscripcion)),
+    __param(3, (0, typeorm_1.InjectRepository)(aviso_entity_1.Aviso)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
+        notificaciones_service_1.NotificacionesService,
+        typeorm_2.Repository])
+], EventosService);
+//# sourceMappingURL=eventos.service.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthController.html">AuthController</a></li><li><a href="AuthGuard.html">AuthGuard</a></li><li><a href="AuthService.html">AuthService</a></li><li><a href="Aviso.html">Aviso</a></li><li><a href="Carrera.html">Carrera</a></li><li><a href="CarrerasController.html">CarrerasController</a></li><li><a href="CarrerasService.html">CarrerasService</a></li><li><a href="Evento.html">Evento</a></li><li><a href="EventosController.html">EventosController</a></li><li><a href="EventosService.html">EventosService</a></li><li><a href="Inscripcion.html">Inscripcion</a></li><li><a href="InscripcionesController.html">InscripcionesController</a></li><li><a href="InscripcionesService.html">InscripcionesService</a></li><li><a href="Materia.html">Materia</a></li><li><a href="MateriasController.html">MateriasController</a></li><li><a href="MateriasService.html">MateriasService</a></li><li><a href="Notificacion.html">Notificacion</a></li><li><a href="NotificacionesController.html">NotificacionesController</a></li><li><a href="NotificacionesService.html">NotificacionesService</a></li><li><a href="Rol.html">Rol</a></li><li><a href="RolesGuard.html">RolesGuard</a></li><li><a href="Usuario.html">Usuario</a></li><li><a href="UsuariosService.html">UsuariosService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EstadoUsuario">EstadoUsuario</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 25 2026 22:53:48 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

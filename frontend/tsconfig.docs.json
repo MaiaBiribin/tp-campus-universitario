@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./temp-docs",
+    "declaration": false,
+    "sourceMap": false,
+    "noEmit": false,
+    "jsx": "react-jsx"
+  },
+  "include": ["app/**/*.ts", "app/**/*.tsx"]
+}

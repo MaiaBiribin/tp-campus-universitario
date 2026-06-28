@@ -24,7 +24,7 @@ export default function DashboardAdmin() {
   
   useEffect(() => {
     /**
-     * esta funcion carga datos para el dashboard del admin.
+     * Carga de datos para el dashboard del admin.
      */
   async function cargarDashboard() {
     try {

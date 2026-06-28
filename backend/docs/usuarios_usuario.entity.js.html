@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: usuarios/usuario.entity.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: usuarios/usuario.entity.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __decorate = (this &amp;&amp; this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c &lt; 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c &lt; 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 &amp;&amp; r &amp;&amp; Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this &amp;&amp; this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" &amp;&amp; typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Usuario = exports.EstadoUsuario = void 0;
+const typeorm_1 = require("typeorm");
+const rol_entity_1 = require("../roles/rol.entity");
+const inscripcion_entity_1 = require("../inscripciones/inscripcion.entity");
+/**
+ * Enum que representa el ciclo de vida de la cuenta de un usuario.
+ * - PENDIENTE: recién registrado, aguarda aprobación de un administrador.
+ * - HABILITADO: puede iniciar sesión en el sistema.
+ * - RECHAZADO: solicitud denegada, no puede acceder.
+ */
+var EstadoUsuario;
+(function (EstadoUsuario) {
+    EstadoUsuario["PENDIENTE"] = "pendiente";
+    EstadoUsuario["HABILITADO"] = "habilitado";
+    EstadoUsuario["RECHAZADO"] = "rechazado";
+})(EstadoUsuario || (exports.EstadoUsuario = EstadoUsuario = {}));
+/**
+ * Entidad que representa un usuario del sistema.
+ * Mapea la tabla `usuarios`. El acceso al sistema está controlado por el campo `estado`
+ * y el campo `rol` determina los permisos disponibles (Admin, Docente, Estudiante).
+ * La contraseña se almacena siempre hasheada con bcrypt.
+ */
+let Usuario = class Usuario {
+    id_usuario;
+    nombre;
+    apellido;
+    /** Correo electrónico único — usado como identificador de login. */
+    mail;
+    /** Contraseña hasheada con bcrypt (saltRounds = 12). Nunca se expone en responses. */
+    contrasena;
+    /** DNI único del usuario. */
+    dni;
+    /** Estado de la cuenta. Por defecto PENDIENTE al registrarse. */
+    estado;
+    /** Rol asignado al usuario. Cargado automáticamente (eager). FK: `id_rol`. */
+    rol;
+    /** Inscripciones del usuario a materias. Relación inversa de Inscripcion.usuario. */
+    inscripciones;
+};
+exports.Usuario = Usuario;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
+], Usuario.prototype, "id_usuario", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Usuario.prototype, "nombre", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Usuario.prototype, "apellido", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true }),
+    __metadata("design:type", String)
+], Usuario.prototype, "mail", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Usuario.prototype, "contrasena", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true }),
+    __metadata("design:type", String)
+], Usuario.prototype, "dni", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: EstadoUsuario,
+        default: EstadoUsuario.PENDIENTE,
+    }),
+    __metadata("design:type", String)
+], Usuario.prototype, "estado", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => rol_entity_1.Rol, { eager: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'id_rol' }),
+    __metadata("design:type", rol_entity_1.Rol)
+], Usuario.prototype, "rol", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => inscripcion_entity_1.Inscripcion, inscripcion => inscripcion.usuario),
+    __metadata("design:type", Array)
+], Usuario.prototype, "inscripciones", void 0);
+exports.Usuario = Usuario = __decorate([
+    (0, typeorm_1.Entity)('usuarios')
+], Usuario);
+//# sourceMappingURL=usuario.entity.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthController.html">AuthController</a></li><li><a href="AuthGuard.html">AuthGuard</a></li><li><a href="AuthService.html">AuthService</a></li><li><a href="Aviso.html">Aviso</a></li><li><a href="Carrera.html">Carrera</a></li><li><a href="CarrerasController.html">CarrerasController</a></li><li><a href="CarrerasService.html">CarrerasService</a></li><li><a href="Evento.html">Evento</a></li><li><a href="EventosController.html">EventosController</a></li><li><a href="EventosService.html">EventosService</a></li><li><a href="Inscripcion.html">Inscripcion</a></li><li><a href="InscripcionesController.html">InscripcionesController</a></li><li><a href="InscripcionesService.html">InscripcionesService</a></li><li><a href="Materia.html">Materia</a></li><li><a href="MateriasController.html">MateriasController</a></li><li><a href="MateriasService.html">MateriasService</a></li><li><a href="Notificacion.html">Notificacion</a></li><li><a href="NotificacionesController.html">NotificacionesController</a></li><li><a href="NotificacionesService.html">NotificacionesService</a></li><li><a href="Rol.html">Rol</a></li><li><a href="RolesGuard.html">RolesGuard</a></li><li><a href="Usuario.html">Usuario</a></li><li><a href="UsuariosService.html">UsuariosService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EstadoUsuario">EstadoUsuario</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 25 2026 22:53:48 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

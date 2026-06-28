@@ -3,7 +3,7 @@ import { Usuario } from "../types/entidades";
 /**
  * busca a todos los usuarios habilitados en el sistema
  * @returns {Promise<res>}  devuelve a todos los usuarios habilitados del sistema
- * @throw {Error} si es que no se pudo cargar los usuarios habilitados
+ * @throws {Error} si es que no se pudo cargar los usuarios habilitados
  */
 export async function getUsuariosHabilitados() {
   const res =await api("/usuarios/habilitados");
@@ -28,7 +28,7 @@ export async function getUsuariosPendientes() {
 /**
  * se encarga de aprobar la solicitud del usario para pasar  a habilitado
  * @param {number} id el id del usuario que se va a habilitar
- * @throw {Error} si es que no se pudo cambiar el estado del usuario
+ * @throws {Error} si es que no se pudo cambiar el estado del usuario
  */
 export async function aprobarUsuario(id:number) {
   const res =
@@ -44,7 +44,7 @@ export async function aprobarUsuario(id:number) {
 /**
  * se encarga de rechazar la solicitud del usuario a pasar a habilitado
  * @param {number} id el id del usuario cuya solicitud es rechazada
- * @throw {Error} si es que no se pudo rechazar correctamente la solicitud
+ * @throws {Error} si es que no se pudo rechazar correctamente la solicitud
  */
 export async function rechazarUsuario(id:number) {
   const res =await api(`/usuarios/${id}/rechazar`,

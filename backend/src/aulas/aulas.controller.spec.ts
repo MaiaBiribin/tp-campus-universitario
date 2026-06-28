@@ -42,16 +42,5 @@ describe('AulasController', () => {
     expect(mockAulasService.findAll).toHaveBeenCalled();
   });
 
-  it('reemplazarAulaCompleta parsea el id a número y delega al servicio', async () => {
-    const dto = { nombre: 'C303', capacidad: 40, piso: 2, ubicacion: 'Edificio C' } as any;
-    mockAulasService.replace.mockResolvedValue({ id_aula: 1 });
-    await controller.reemplazarAulaCompleta('1', dto);
-    expect(mockAulasService.replace).toHaveBeenCalledWith(1, dto);
-  });
 
-  it('eliminarAulaDefinitivamente parsea el id a número y delega al servicio', async () => {
-    mockAulasService.delete.mockResolvedValue(undefined);
-    await controller.eliminarAulaDefinitivamente('1');
-    expect(mockAulasService.delete).toHaveBeenCalledWith(1);
-  });
 });

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: registro/page.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: registro/page.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use client";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useRouter } from "next/navigation";
+import { registrarUsuario } from "../services/auth";
+import Link from "next/link";
+import Form from "../components/ui/form";
+import Button from "../components/ui/button";
+import layout from "../styles/layout.module.css";
+import forms from "../styles/forms.module.css";
+import { useState } from "react";
+/**
+ * Renderiza el formulario de solicitud de registro de usuario.
+ * @returns {JSX.Element} Página de registro.
+ */
+export default function Registrarse() {
+    const ruta = useRouter();
+    const [error, setError] = useState("");
+    const [exito, setExito] = useState("");
+    const [cargando, setCargando] = useState(false);
+    /**
+     * Envía la solicitud de registro al servidor.
+     * @async
+     * @param {React.FormEvent&lt;HTMLFormElement>} event Evento de envío del formulario.
+     * @returns {Promise&lt;void>} Promesa que finaliza al completar el proceso.
+     */
+    async function MandarDatos(event) {
+        event.preventDefault();
+        setError("");
+        setExito("");
+        setCargando(true);
+        const formData = new FormData(event.currentTarget);
+        const datosUsuario = Object.fromEntries(formData.entries());
+        try {
+            const response = await registrarUsuario({
+                nombre: String(datosUsuario.nombre),
+                apellido: String(datosUsuario.apellido),
+                mail: String(datosUsuario.mail),
+                dni: String(datosUsuario.dni), contrasena: String(datosUsuario.contrasena),
+            });
+            if (response.ok) {
+                setExito("Solicitud creada. Esperá a que un administrador apruebe tu registro.");
+                setTimeout(() => {
+                    ruta.push("/login");
+                }, 7000);
+            }
+            else {
+                const errorData = await response
+                    .json()
+                    .catch(() => ({}));
+                setError(errorData.message || "Hubo un error en el registro.");
+            }
+        }
+        catch (_a) {
+            setError("Hubo un problema al conectar con el servidor.");
+        }
+        finally {
+            setCargando(false);
+        }
+    }
+    return (_jsx("div", { className: layout.centeredPage, children: _jsxs(Form, { title: "Crear cuenta", description: "Complet\u00E1 tus datos para solicitar acceso al sistema.", onSubmit: MandarDatos, children: [_jsxs("div", { children: [_jsx("label", { children: "Nombre" }), _jsx("input", { type: "text", name: "nombre", required: true, placeholder: "Ej: Juana", className: forms.input })] }), _jsxs("div", { children: [_jsx("label", { children: "Apellido" }), _jsx("input", { type: "text", name: "apellido", required: true, placeholder: "Ej: P\u00E9rez", className: forms.input })] }), _jsxs("div", { children: [_jsx("label", { children: "DNI" }), _jsx("input", { type: "number", name: "dni", required: true, placeholder: "Ej: 45649587", className: forms.input })] }), _jsxs("div", { children: [_jsx("label", { children: "Correo electr\u00F3nico" }), _jsx("input", { type: "email", name: "mail", required: true, placeholder: "Ej: alumno@universidad.edu", className: forms.input })] }), _jsxs("div", { children: [_jsx("label", { children: "Contrase\u00F1a" }), _jsx("input", { type: "password", name: "contrasena", required: true, placeholder: "********", className: forms.input })] }), error &amp;&amp; (_jsx("p", { className: forms.error, children: error })), exito &amp;&amp; (_jsx("p", { className: forms.helper, children: exito })), _jsx(Button, { type: "submit", children: "Solicitar registro" }), _jsxs("p", { className: forms.formFooter, children: ["\u00BFYa ten\u00E9s una cuenta?", _jsx(Link, { href: "/login", children: "Inici\u00E1 sesi\u00F3n" })] })] }) }));
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#CantidadNotificacionesSinLeer">CantidadNotificacionesSinLeer</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Mapas">Mapas</a></li><li><a href="global.html#NotificacionLeida">NotificacionLeida</a></li><li><a href="global.html#NotificacionLeidas">NotificacionLeidas</a></li><li><a href="global.html#TraerTodasNotificaciones">TraerTodasNotificaciones</a></li><li><a href="global.html#api">api</a></li><li><a href="global.html#aprobarUsuario">aprobarUsuario</a></li><li><a href="global.html#crearAviso">crearAviso</a></li><li><a href="global.html#crearEvento">crearEvento</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#editarAviso">editarAviso</a></li><li><a href="global.html#eliminarAviso">eliminarAviso</a></li><li><a href="global.html#eliminarEvento">eliminarEvento</a></li><li><a href="global.html#getAulas">getAulas</a></li><li><a href="global.html#getAvisoById">getAvisoById</a></li><li><a href="global.html#getAvisos">getAvisos</a></li><li><a href="global.html#getAvisosPorEvento">getAvisosPorEvento</a></li><li><a href="global.html#getCarreras">getCarreras</a></li><li><a href="global.html#getCookie">getCookie</a></li><li><a href="global.html#getEventoPorId">getEventoPorId</a></li><li><a href="global.html#getEventos">getEventos</a></li><li><a href="global.html#getEventosSemana">getEventosSemana</a></li><li><a href="global.html#getInscripcionesPorMateria">getInscripcionesPorMateria</a></li><li><a href="global.html#getMateriasPorCarrera">getMateriasPorCarrera</a></li><li><a href="global.html#getRoleFromToken">getRoleFromToken</a></li><li><a href="global.html#getUsuariosHabilitados">getUsuariosHabilitados</a></li><li><a href="global.html#getUsuariosPendientes">getUsuariosPendientes</a></li><li><a href="global.html#guardarSesion">guardarSesion</a></li><li><a href="global.html#inscribirUsuarios">inscribirUsuarios</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#obtenerIdsUsuariosInscriptos">obtenerIdsUsuariosInscriptos</a></li><li><a href="global.html#obtenerUsuariosDisponibles">obtenerUsuariosDisponibles</a></li><li><a href="global.html#rechazarUsuario">rechazarUsuario</a></li><li><a href="global.html#registrarUsuario">registrarUsuario</a></li><li><a href="global.html#useAsignacionAcademica">useAsignacionAcademica</a></li><li><a href="global.html#useCrearEvento">useCrearEvento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 21:38:07 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

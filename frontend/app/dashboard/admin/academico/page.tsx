@@ -8,9 +8,10 @@ import Button from "@/app/components/ui/button";
 import forms from "@/app/styles/forms.module.css";
 import {obtenerUsuariosDisponibles,} from "@/app/services/usuarios";import {useAsignacionAcademica,} from "@/app/hooks/useAsignacionAcademica";
 /**
- * pestaña de asignaciones.
- * muestra a los usarios habilitados pero no inscriptos a una carrera para que le admin los pueda inscribir.
- * @returns {JSX.Element} vista de asginaciones.
+ * Renderiza la gestión de asignaciones académicas.
+ * Permite seleccionar una carrera, visualizar sus materias e
+ * inscribir usuarios en la materia elegida.
+ * @returns {JSX.Element} Vista de asignación académica.
  */
 export default function AcademicoAdmin() {
 
