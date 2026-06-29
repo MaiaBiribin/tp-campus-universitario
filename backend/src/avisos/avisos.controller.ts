@@ -43,16 +43,14 @@ export class AvisosController {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
-  @ApiOperation({
-    summary: "Ver todos los avisos"})
-    @ApiResponse({
-      status:200,
-      description:"Lista de avisos"
-    })
-    findAll() {
+  @UseGuards(AuthGuard, RolesGuard)
+  @ApiBearerAuth()
+  findAll(@Request() req) {
+    if(req.user.rol === 'Admin'){
       return this.avisosService.findAll();
     }
+    return this.avisosService.avisosUsuario(req.user.sub);
+  }
   @Get('evento/:id_evento')
   @ApiOperation({
     summary: 'Ver avisos de un evento',

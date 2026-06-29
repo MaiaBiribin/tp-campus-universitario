@@ -13,6 +13,7 @@ jest.mock("next/navigation",()=>({
 }));
 
 jest.mock("@/app/components/ui/button",()=>({
+  __esModule:true,
   default: function MockButton({
     children,
     ...props
@@ -26,6 +27,7 @@ jest.mock("@/app/components/ui/button",()=>({
 }));
 
 jest.mock("@/app/components/ui/card",()=>({
+  __esModule:true,
   default: function MockCard({
     children
   }:any){

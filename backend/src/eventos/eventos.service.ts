@@ -167,34 +167,29 @@ async eventosUsuario(idUsuario: number) {
    * @returns {{ message: string }} Confirmación de eliminación.
    */
   async remove(id: number) {
-  const evento = await this.repo.findOne({
-    where: { id_evento: id },
-  });
-
-  if (!evento) {
-    throw new BadRequestException("El evento no existe");
+    const evento = await this.repo.findOne({where: { id_evento: id },});
+    if (!evento) {
+      throw new BadRequestException("El evento no existe");}
+    const avisos = await this.avisoRepo.find({where: { evento: { id_evento: id } },});
+    const ahora = new Date();
+    const fechaEvento = new Date(`${evento.fecha}T${evento.horaInicio}`);
+    const esPasado = fechaEvento < ahora;
+    const tieneAvisos = avisos.length > 0;
+    if (!esPasado && tieneAvisos) {
+      throw new BadRequestException("No se puede eliminar un evento futuro con avisos asociados");
+    }
+    await this.repo.delete(id);
+    return {message: "Evento eliminado correctamente",};
   }
 
-  const avisos = await this.avisoRepo.find({
-    where: { evento: { id_evento: id } },
-  });
-
-  const ahora = new Date();
-  const fechaEvento = new Date(`${evento.fecha}T${evento.horaInicio}`);
-
-  const esPasado = fechaEvento < ahora;
-  const tieneAvisos = avisos.length > 0;
-
-  if (!esPasado && tieneAvisos) {
-    throw new BadRequestException(
-      "No se puede eliminar un evento futuro con avisos asociados"
-    );
+  async eventoUsuario(idEvento:number,idUsuario:number){
+    const evento =await this.repo.findOne({where:{
+      id_evento:idEvento,materia:{inscripciones:{usuario:{id_usuario:idUsuario}}}}
+    });
+    if(!evento){
+      throw new BadRequestException("No tenés acceso a este evento");
+    }
+    return evento;
   }
 
-  await this.repo.delete(id);
-
-  return {
-    message: "Evento eliminado correctamente",
-  };
-}
 }
