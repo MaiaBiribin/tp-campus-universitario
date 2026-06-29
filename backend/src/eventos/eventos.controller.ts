@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Patch, Delete, Body, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { EventosService } from './eventos.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
 import { EventoResponseDto } from './dto/evento-response.dto';
@@ -8,6 +8,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ROLES } from '../auth/constants';
+import { Request } from '@nestjs/common';
 /**
  * Controlador de eventos académicos.
  * Expone endpoints para consulta, creación y eliminación de eventos.
@@ -21,14 +22,15 @@ export class EventosController {
    * Lista todos los eventos registrados.
    * @returns {Promise<Evento[]>} Lista de eventos.
    */
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RolesGuard)
   @Get()
-  @ApiOperation({
-    summary: 'Listar todos los eventos',
-    description: 'Devuelve el listado completo de eventos registrados en el sistema.',
-  })
-  @ApiResponse({ status: 200, description: 'Listado de eventos obtenido exitosamente', type: [EventoResponseDto] })
-  getAllEventos() {
-    return this.eventosService.findAll();
+  @ApiOperation({summary: 'Listar eventos según usuario autenticado',})
+  getAllEventos(@Request() req) {
+    if (req.user.rol === ROLES.ADMIN) {
+      return this.eventosService.findAll();
+    }
+    return this.eventosService.eventosUsuario(req.user.sub);
   }
 
   /**
@@ -53,6 +55,8 @@ export class EventosController {
    * @param id del evento.
    * @returns {Promise<Evento | null>} Evento encontrado.
    */
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id')
   @ApiOperation({
     summary: 'Obtener un evento por ID',
@@ -61,8 +65,11 @@ export class EventosController {
   @ApiParam({ name: 'id', description: 'ID numérico del evento', example: 1 })
   @ApiResponse({ status: 200, description: 'Evento encontrado', type: EventoResponseDto })
   @ApiResponse({ status: 404, description: 'Evento no encontrado' })
-  getEventoById(@Param('id') id: number) {
-    return this.eventosService.findOne(id);
+  getEventoById(@Param('id') id:number,@Request() req){
+    if(req.user.rol === ROLES.ADMIN){
+      return this.eventosService.findOne(id);
+    }
+    return this.eventosService.eventoUsuario(Number(id),req.user.sub);
   }
 
   /**

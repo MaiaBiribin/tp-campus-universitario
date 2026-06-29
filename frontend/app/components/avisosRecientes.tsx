@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getAvisosPorEvento } from "@/app/services/avisos";
 import { Aviso } from "@/app/types/entidades";
+import { getAvisos } from "@/app/services/avisos";
 import { getEventos } from "@/app/services/eventos";
 import dashboard from "@/app/styles/dashboard.module.css";
 import forms from "@/app/styles/forms.module.css";
@@ -29,18 +30,7 @@ export default function AvisosRecientes() {
       try{
         setCargando(true);
         setError("");
-
-        const eventos = await getEventos();
-        const todosAvisos: Aviso[] = [];
-
-        for(const evento of eventos){
-          const avisosEvento =await getAvisosPorEvento(evento.id_evento);
-
-          todosAvisos.push(
-            ...avisosEvento
-          );
-        }
-
+        const todosAvisos = await getAvisos();
 
         const ordenados = todosAvisos.sort(
           (a,b)=>

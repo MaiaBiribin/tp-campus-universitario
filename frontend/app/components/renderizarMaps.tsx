@@ -6,13 +6,14 @@ import InfoAula from "./infoAula";
 
 /**
  * Niveles disponibles del edificio para visualizar en el mapa.
- * @enum {string}
  */
-enum Mapas {
-  PB = "PB",
-  P1 = "P1",
-  P2 = "P2",
-}
+const Mapas = {
+  PB: "PB",
+  P1: "P1",
+  P2: "P2",
+} as const;
+
+type Mapas = (typeof Mapas)[keyof typeof Mapas];
 /**
  * Área interactiva de un mapa asociada a un aula.
  */

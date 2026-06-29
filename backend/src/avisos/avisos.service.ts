@@ -169,6 +169,14 @@ export class AvisosService {
   if (!aviso) {
     throw new BadRequestException("El aviso no existe");
   }
-  return aviso;
-}
+  return aviso;}
+  
+  async avisosUsuario(idUsuario:number){
+    return this.avisosRepository.find({
+      where:{evento:{materia:{
+        inscripciones:{usuario:{id_usuario:idUsuario}}}}},
+        relations:{evento:{materia:true},
+        usuarioCreador:true},
+        order:{fecha_creacion:"DESC"}});
+  }
 }
