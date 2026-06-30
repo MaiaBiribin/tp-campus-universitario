@@ -3,6 +3,7 @@ import { EventosController } from './eventos.controller';
 import { EventosService } from './eventos.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { ROLES } from '../auth/constants';
 describe('EventosController', () => {
   let controller: EventosController;
   let service: any;
@@ -13,6 +14,7 @@ describe('EventosController', () => {
     findOne: jest.fn(),
     create: jest.fn(),
     remove: jest.fn(),
+    eventoUsuario: jest.fn()
   };
   const mockAuthGuard = {canActivate: jest.fn(() => true),};
   const mockRolesGuard = {canActivate: jest.fn(() => true),};
@@ -43,14 +45,26 @@ describe('EventosController', () => {
   service = module.get<EventosService>(EventosService);});
 
   describe('getAllEventos', () => {
-    it('debe devolver todos los eventos', async () => {
+    it('debe devolver todos los eventos cuando el usuario es Admin', async () => {
       const mockData = [{ id_evento: 1 }];
       service.findAll.mockResolvedValue(mockData as any);
+      const req = { user: { sub: 1, rol: ROLES.ADMIN } };
 
-      const result = await controller.getAllEventos();
+      const result = await controller.getAllEventos(req);
 
       expect(result).toEqual(mockData);
       expect(service.findAll).toHaveBeenCalledTimes(1);
+    });
+
+    it('debe devolver los eventos del usuario cuando no es Admin', async () => {
+      const mockData = [{ id_evento: 2 }];
+      service.eventosUsuario.mockResolvedValue(mockData as any);
+      const req = { user: { sub: 5, rol: 'Docente' } };
+
+      const result = await controller.getAllEventos(req);
+
+      expect(result).toEqual(mockData);
+      expect(service.eventosUsuario).toHaveBeenCalledWith(5);
     });
   });
 
@@ -67,14 +81,26 @@ describe('EventosController', () => {
   });
 
   describe('getEventoById', () => {
-    it('debe devolver un evento por id', async () => {
+    it('debe devolver un evento por id cuando el usuario es Admin', async () => {
       const mockData = { id_evento: 1 };
       service.findOne.mockResolvedValue(mockData as any);
+      const req = { user: { sub: 1, rol: ROLES.ADMIN } };
 
-      const result = await controller.getEventoById(1);
+      const result = await controller.getEventoById(1, req);
 
       expect(result).toEqual(mockData);
       expect(service.findOne).toHaveBeenCalledWith(1);
+    });
+
+    it('debe devolver el evento del usuario cuando no es Admin', async () => {
+      const mockData = { id_evento: 1 };
+      service.eventoUsuario = jest.fn().mockResolvedValue(mockData as any);
+      const req = { user: { sub: 5, rol: 'Docente' } };
+
+      const result = await controller.getEventoById(1, req);
+
+      expect(result).toEqual(mockData);
+      expect(service.eventoUsuario).toHaveBeenCalledWith(1, 5);
     });
   });
 
