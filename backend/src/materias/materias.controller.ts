@@ -44,6 +44,12 @@ export class MateriasController {
     return this.materiasService.findByCarrera(id_carrera);
   }
 
+  @Get(':id/inscriptos')
+  @ApiOperation({summary:"Cantidad de alumnos inscriptos en una materia"})
+  cantidadInscriptos(@Param('id') id:number){
+    return this.materiasService.cantidadInscriptos(Number(id));
+  }
+
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('Admin')
   @Post()

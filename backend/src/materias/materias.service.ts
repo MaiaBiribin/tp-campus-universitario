@@ -49,4 +49,19 @@ export class MateriasService {
     });
     return this.materiasRepository.save(materia);
   }
+
+  async cantidadInscriptos(id_materia:number): Promise<number>{
+    const materia = await this.materiasRepository.findOne({
+    where:{
+      id_materia
+    },
+    relations:{
+      inscripciones:true
+    }
+  });
+  if(!materia){
+    return 0;
+  }
+
+  return materia.inscripciones.length;}
 }

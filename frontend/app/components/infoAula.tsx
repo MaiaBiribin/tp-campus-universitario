@@ -2,7 +2,8 @@
 
 import {useEffect,useState} from "react";
 import {getEventos} from "../services/eventos";
-import {Evento} from "../types/entidades";
+import {getAulas} from "../services/aulas";
+import {Evento, Aula} from "../types/entidades";
 import Card from "./ui/card";
 import cards from "../styles/cards.module.css";
 import dashboard from "../styles/dashboard.module.css";
@@ -29,10 +30,16 @@ export default function InfoAula({aulaId, nombre}:Props){
     const [eventos,setEventos]=useState<Evento[]>([]);
     const [cargando,setCargando]=useState(true);
     const [error,setError]=useState("");
+    const [capacidad,setCapacidad]=useState(0);
     
     useEffect(()=>{async function cargar(){
         try{
             const data:Evento[] =await getEventos();
+            const aulas:Aula[] = await getAulas();
+            const aula =aulas.find(a=>a.id_aula===aulaId);
+            if(aula){
+              setCapacidad(aula.capacidad);
+            }
             const filtrados = data.filter(ev => {
 
   return Number(ev.aula?.id_aula) === Number(aulaId);
@@ -93,6 +100,7 @@ return (
 <Card className={dashboard.card}>
   <div className={cards.cardHeader}>
     <h3>Aula {nombre}</h3>
+    <p>🪑 Capacidad: {capacidad} personas</p>
   </div>
   {
     eventoActual ? (

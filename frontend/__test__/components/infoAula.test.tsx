@@ -2,26 +2,31 @@ import { render, screen, within } from "@testing-library/react";
 import InfoAula from "@/app/components/infoAula";
 import { Evento } from "@/app/types/entidades";
 import { getEventos } from "@/app/services/eventos";
+import { getAulas } from "@/app/services/aulas";
 
 jest.mock("@/app/services/eventos", () => ({getEventos: jest.fn(),}));
+jest.mock("@/app/services/aulas", () => ({getAulas: jest.fn(),}));
 
 describe("InfoAula", () => {
-beforeEach(() => {
-  jest.clearAllMocks();
-  jest.useRealTimers();
-});
-
-it("muestra cargando inicialmente", () => {
-
-(getEventos as jest.Mock).mockReturnValue(new Promise(() => {}));
-render(
-  <InfoAula
-    aulaId={5}
-    nombre="202"
-  />
-);
-expect(screen.getByText("Cargando información del aula...")).toBeInTheDocument();
-});
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useRealTimers();
+    (getAulas as jest.Mock).mockResolvedValue([
+      {id_aula: 1,nombre:"101",capacidad:30,piso:1,ubicacion:"A"},
+      {id_aula:9,nombre:"202",capacidad:20,piso:2,ubicacion:"A"},
+      {id_aula:7,nombre:"203",capacidad:12,piso:2,ubicacion:"al fondo"}
+    ]);
+  });
+  
+  it("muestra cargando inicialmente", () => {
+    (getEventos as jest.Mock).mockReturnValue(new Promise(() => {}));
+    render(<InfoAula
+      aulaId={5}
+      nombre="202"
+      />
+    );
+    expect(screen.getByText("Cargando información del aula...")).toBeInTheDocument();
+  });
 
 it("muestra aula ocupada cuando hay evento actual", async()=>{
 

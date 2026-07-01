@@ -6,6 +6,7 @@ import {getAulas,} from "@/app/services/aulas";
 import {getMateriasPorCarrera,} from "@/app/services/materias";
 import {crearEvento,} from "@/app/services/eventos";
 import {Aula,Carrera,Materia,CrearEventoDTO} from "@/app/types/entidades";
+import {getCantidadInscriptos} from "@/app/services/inscripciones";
 
 /**
  * Hook para gestionar la creación de eventos.
@@ -26,6 +27,7 @@ export function useCrearEvento() {
   const [aulas,setAulas] =useState<Aula[]>([]);
   const [error,setError] =useState("");
   const [exito,setExito] =useState("");
+  const [cantidadAlumnos,setCantidadAlumnos]=useState(0);
 
   useEffect(() => {
     /**
@@ -70,6 +72,16 @@ export function useCrearEvento() {
     catch {
       setError("No se pudieron cargar materias");
     }
+  }
+
+  async function cambiarMateria(id:string){
+    setIdMateria(id);
+    if(!id){
+      setCantidadAlumnos(0);
+      return;
+    }
+    const cantidad =await getCantidadInscriptos(Number(id));
+    setCantidadAlumnos(cantidad);
   }
 
   /**
@@ -149,6 +161,8 @@ export function useCrearEvento() {
     idAula,
     idTipoEvento,
     setIdMateria,
+    cambiarMateria,
+    cantidadAlumnos,
     setIdAula,
     setIdTipoEvento,
     cambiarCarrera,

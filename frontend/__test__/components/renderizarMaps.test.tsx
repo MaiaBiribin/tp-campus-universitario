@@ -3,21 +3,47 @@ import InfoAula from "@/app/components/infoAula";
 import { render,screen, waitFor} from "@testing-library/react"
 import userEvent from "@testing-library/user-event";
 import { getEventos } from "@/app/services/eventos";
+import { getAulas } from "@/app/services/aulas";
 
 
 
-jest.mock("@/services/eventos",()=>({
-   getEventos:jest.fn()
+jest.mock("@/app/services/eventos",()=>({
+    getEventos: jest.fn()
+}));
+jest.mock("@/app/services/aulas",()=>({
+    getAulas: jest.fn()
 }));
 
 describe("componente renderizar mapas",()=>{
-    beforeAll(()=>{
-        jest.clearAllMocks()
-    })
+    beforeEach(()=>{
+    jest.clearAllMocks();
+    (getEventos as jest.Mock).mockResolvedValue([]);
+    (getAulas as jest.Mock).mockResolvedValue([
+        {
+            id_aula:13,
+            nombre:"101",
+            capacidad:30,
+            piso:1,
+            ubicacion:"A"
+        },
+        {
+            id_aula:14,
+            nombre:"102",
+            capacidad:40,
+            piso:1,
+            ubicacion:"B"
+        },
+        {
+            id_aula:15,
+            nombre:"103",
+            capacidad:50,
+            piso:1,
+            ubicacion:"C"
+        }
+    ]);})
     
     it("que renderice la planta que tiene por defecto, siendo la planta baja",()=>{
          render(<RenderizarMapas/>)
-
          const imagenMapa=screen.getByRole("img");
          expect(imagenMapa).toHaveAttribute("src","/mapaPB.png");
          expect(imagenMapa).toHaveAttribute("useMap","#plantaBaja");
@@ -46,17 +72,10 @@ describe("componente renderizar mapas",()=>{
 
      it("deberia poder mostrarse el aula y sus caracteristicas a la hora de hacer click en ella",async()=>{
          const usuario=userEvent.setup();
-         
-         (getEventos as jest.Mock).mockResolvedValue([]);
-
          render(<RenderizarMapas/>);
-
          const areaPrueba=screen.getByAltText("Aula 102");
          await usuario.click(areaPrueba);
-
-         await waitFor(()=>{
-             expect(screen.getByRole("heading",{level:3,name:/102/i})).toBeInTheDocument()
-             expect(screen.getByText(/no hay eventos programados/i)).toBeInTheDocument()
-         })
-     })
+         expect(await screen.findByRole("heading",{level:3,name:/102/i})).toBeInTheDocument();
+         expect(await screen.findByText(/no hay eventos programados/i)).toBeInTheDocument();
+        })
 })

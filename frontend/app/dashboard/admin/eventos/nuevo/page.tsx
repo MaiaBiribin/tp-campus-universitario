@@ -77,11 +77,8 @@ export default function CrearEvento() {
               <select
                 className={forms.select}
                 value={evento.idMateria}
-                onChange={(e) =>
-                  evento.setIdMateria(
-                    e.target.value
-                  )
-                }
+                onChange={(e)=>
+                  evento.cambiarMateria(e.target.value)}
               >
                 <option value="">
                   Seleccionar materia
@@ -97,6 +94,8 @@ export default function CrearEvento() {
                   )
                 )}
               </select>
+              {evento.cantidadAlumnos > 0 &&(
+                <p>👥 Alumnos inscriptos:{evento.cantidadAlumnos}</p>)}
             </div>
           </div>
           <div className={forms.row}>

@@ -50,6 +50,12 @@ export class EventosService {
       throw new BadRequestException('La hora de inicio debe ser menor que la hora de fin');
     }
     const idAula = Number(data.aula?.id_aula);
+    const aula = await this.repo.manager.getRepository('aulas').findOne({where:{id_aula:idAula}});
+    const inscriptos = await this.inscripcionRepo.find({where:{materia:{
+      id_materia:Number(data.materia?.id_materia)}}});
+      if(aula && inscriptos.length > aula.capacidad){
+        throw new BadRequestException(`El aula ${aula.nombre} no tiene capacidad suficiente. Capacidad: ${aula.capacidad}. Alumnos inscriptos: ${inscriptos.length}`);
+      }
     const eventosExistentes = await this.repo.find({
       where: {
         fecha: data.fecha,
@@ -87,11 +93,6 @@ export class EventosService {
     });
 
     const eventoGuardado = await this.repo.save(nuevoEvento);
-
-    const inscriptos = await this.inscripcionRepo.find({
-      where: { materia: { id_materia: Number(data.materia?.id_materia) } },
-      relations: { usuario: true },
-    });
 
     if (inscriptos.length > 0) {
       await this.notificacionesService.crearNotificaciones(

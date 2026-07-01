@@ -61,5 +61,16 @@ export function obtenerIdsUsuariosInscriptos(inscripciones: Inscripcion[]): numb
     inscripcion =>
       inscripcion.usuario.id_usuario
   );
+}
+
+export async function getCantidadInscriptos(idMateria:number){
+ const res = await api(
+  `/materias/${idMateria}/inscriptos`
+ );
+
+ if(!res.ok){
+  throw new Error("No se pudo obtener cantidad de inscriptos");
+ }
+ return res.json();
 
 }
