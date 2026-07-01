@@ -65,7 +65,7 @@ export class EventosService {
       const finExistente = evento.horaFin;
       const hayConflicto = inicioNuevo < finExistente && finNuevo > inicioExistente;
       if (hayConflicto) {
-        throw new BadRequestException(`El aula ${evento.aula.nombre} ya está ocupada entre ${inicioExistente} y ${finExistente}`);
+        throw new BadRequestException(`El aula ${evento.aula.nombre} ya está ocupada de ${inicioExistente} a ${finExistente}. Elegí otro horario u otra aula.`);
       }
     }
 

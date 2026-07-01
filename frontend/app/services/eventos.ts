@@ -69,7 +69,8 @@ export async function crearEvento(evento:CrearEventoDTO): Promise<Evento> {
     );
 
   if (!res.ok) {
-    throw new Error("Error creando evento");
+    const error = await res.json();
+    throw new Error(error.message || "Error creando evento");
   }
   return res.json();
 }

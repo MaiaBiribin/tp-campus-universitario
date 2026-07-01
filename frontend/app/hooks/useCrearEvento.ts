@@ -124,8 +124,12 @@ export function useCrearEvento() {
       return true;
     }
 
-    catch {
-      setError("Error al crear evento");
+    catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Error al crear evento");
+      }
       return false;
     }
   }
