@@ -8,31 +8,32 @@ import { CrearEventoDTO, Evento } from "../types/entidades";
  */
 export async function getEventos(): Promise<Evento[]> {
   const res = await api("/eventos");
-
   if (!res.ok) {
     throw new Error("Error cargando eventos");
   }
-
   const data: Evento[] = await res.json();
   const ahora = new Date();
-
   return data
     .filter((ev) => {
-      const fechaHora = new Date(
+
+      const inicio = new Date(
         `${ev.fecha}T${ev.horaInicio}`
       );
 
-      return fechaHora >= ahora;
+      const fin = new Date(
+        `${ev.fecha}T${ev.horaFin}`
+      );
+      return fin >= ahora;
     })
-    .sort((a, b) => {
-
-      const fechaA = new Date(
-        `${a.fecha}T${a.horaInicio}`
-      ).getTime();
-      const fechaB = new Date(
-        `${b.fecha}T${b.horaInicio}`
-      ).getTime();
-
+    .sort((a,b)=>{
+      const fechaA =
+        new Date(
+          `${a.fecha}T${a.horaInicio}`
+        ).getTime();
+      const fechaB =
+        new Date(
+          `${b.fecha}T${b.horaInicio}`
+        ).getTime();
       return fechaA - fechaB;
     });
 }
@@ -114,10 +115,8 @@ export async function getEventosSemana(): Promise<Evento[]> {
         new Date(
           `${ev.fecha}T${ev.horaInicio}`
         );
-      return (
-        fechaHora >= ahora &&
-        fechaHora <= limite
-      );
+      const fin =new Date(`${ev.fecha}T${ev.horaFin}`);
+      return (fin >= ahora &&fechaHora <= limite);
     })
     .sort((a,b)=>{
 

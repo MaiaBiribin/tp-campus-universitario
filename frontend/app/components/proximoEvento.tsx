@@ -49,7 +49,8 @@ useEffect(() => {
             new Date(
               `${evento.fecha}T${evento.horaInicio}`
             );
-          return fechaHora >= new Date();
+          const fin =new Date(`${evento.fecha}T${evento.horaFin}`);
+          return fin >= new Date();
 
         })
         .sort((a: Evento,b: Evento) =>

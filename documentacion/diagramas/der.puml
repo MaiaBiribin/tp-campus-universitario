@@ -103,8 +103,8 @@ entity Notificacion {
 
 Rol ||--o{ Usuario : tiene
 Carrera ||--o{ Materia : contiene
-Usuario ||--o{ Inscripcion : realiza
-Materia ||--o{ Inscripcion : recibe
+Usuario ||--o{ Inscripcion : está asignado
+Materia ||--o{ Inscripcion : posee
 Aula ||--o{ Evento : asigna
 TipoEvento ||--o{ Evento : clasifica
 Materia ||--o{ Evento : pertenece

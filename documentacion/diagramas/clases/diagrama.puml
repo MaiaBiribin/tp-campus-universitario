@@ -63,7 +63,10 @@ class Notificacion {
 +fecha_creacion:Date
 }
 
-class TipoEvento
+class TipoEvento{
++id_tipo_evento:int
++nombre:string
+}
 
 ' SERVICIOS
 
@@ -86,8 +89,7 @@ class EventosService {
 +findOne()
 +create()
 +eventosUsuario()
-+updatePartial()
-+replace()
++eventoUsuario()
 +remove()
 }
 
@@ -121,6 +123,9 @@ class AvisosService {
 +create()
 +findByEvento()
 +findAll()
++findOne()
++update()
++remove()
 }
 
 class NotificacionesService {
@@ -168,6 +173,7 @@ UsuariosService ..> Rol
 EventosService ..> Evento
 EventosService ..> Inscripcion
 EventosService ..> NotificacionesService
+EventosService ..> Aviso
 InscripcionesService ..> Inscripcion
 InscripcionesService ..> Usuario
 InscripcionesService ..> Materia

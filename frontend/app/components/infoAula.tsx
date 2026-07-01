@@ -76,10 +76,17 @@ const fin =new Date(`${ev.fecha}T${ev.horaFin}`);
 return ahora >= inicio &&
        ahora <= fin;});
 
-const proximo = eventos.sort((a,b)=>
-  new Date(`${b.fecha}T${b.horaInicio}`).getTime()
-  -
+const proximo = eventos
+.filter(ev=>{
+  const inicio =
+    new Date(`${ev.fecha}T${ev.horaInicio}`);
+
+  return inicio > ahora;
+})
+.sort((a,b)=>
   new Date(`${a.fecha}T${a.horaInicio}`).getTime()
+  -
+  new Date(`${b.fecha}T${b.horaInicio}`).getTime()
 )[0];
 return (
 

@@ -117,7 +117,6 @@ async eventosUsuario(idUsuario: number) {
   const ahora = new Date();
 
   const hoy = ahora.toLocaleDateString("sv-SE");
-  const horaActual = ahora.toTimeString().slice(0,5);
 
 
   const eventos = await this.repo.find({
@@ -147,13 +146,17 @@ async eventosUsuario(idUsuario: number) {
 
 
   return eventos.filter(evento => {
-    if (evento.fecha > hoy) {
-      return true;
-    }
-    if (evento.fecha === hoy) {
-      return evento.horaInicio >= horaActual;
-    }
-    return false;
+
+    const inicio = new Date(
+      `${evento.fecha}T${evento.horaInicio}`
+    );
+
+    const fin = new Date(
+      `${evento.fecha}T${evento.horaFin}`
+    );
+
+    return fin >= ahora;
+
   });
 
 }
