@@ -41,53 +41,28 @@ export default function InfoAula({aulaId, nombre}:Props){
               setCapacidad(aula.capacidad);
             }
             const filtrados = data.filter(ev => {
-
-  return Number(ev.aula?.id_aula) === Number(aulaId);
-});
+              return Number(ev.aula?.id_aula) === Number(aulaId);});
             setEventos(filtrados);
-        }
-        catch(error){
-          setError("No se pudieron cargar los eventos del aula.");
-        }
-        finally{
+          }catch(error){
+            setError("No se pudieron cargar los eventos del aula.");
+          }finally{
             setCargando(false);
-        }
+          }
     }
     cargar();
-},[aulaId]);
-if(cargando){
-  return (
-    <Card className={dashboard.card}>
-      <p>
-        Cargando información del aula...
-      </p>
-    </Card>
-  );
-}
-
-
-if(error){
-  return (
-    <Card className={dashboard.card}>
-      <p className={dashboard.error}>
-        {error}
-      </p>
-    </Card>
-  );
-}
-const ahora = new Date();
-const eventoActual =eventos.find(ev=>{
-const inicio =new Date(`${ev.fecha}T${ev.horaInicio}`);
-const fin =new Date(`${ev.fecha}T${ev.horaFin}`);
-
-return ahora >= inicio &&
-       ahora <= fin;});
-
-const proximo = eventos
-.filter(ev=>{
-  const inicio =
-    new Date(`${ev.fecha}T${ev.horaInicio}`);
-
+  },[aulaId]);
+  if(cargando){
+    return (<Card className={dashboard.card}><p>Cargando información del aula...</p></Card>);
+  }
+  if(error){
+    return (<Card className={dashboard.card}><p className={dashboard.error}>{error}</p></Card>);
+  }
+  const ahora = new Date();
+  const eventoActual =eventos.find(ev=>{
+    const inicio =new Date(`${ev.fecha}T${ev.horaInicio}`);
+    const fin =new Date(`${ev.fecha}T${ev.horaFin}`);
+  return ahora >= inicio &&ahora <= fin;});
+  const proximo = eventos.filter(ev=>{const inicio =new Date(`${ev.fecha}T${ev.horaInicio}`);
   return inicio > ahora;
 })
 .sort((a,b)=>
