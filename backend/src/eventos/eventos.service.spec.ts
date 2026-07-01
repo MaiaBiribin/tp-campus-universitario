@@ -173,29 +173,75 @@ describe('EventosService', () => {
   // ─── eventosUsuario ─────────────────────────────────────────────────────────
 
   describe('eventosUsuario', () => {
-    it('devuelve solo eventos futuros y de hoy no pasados', async () => {
-      const horaFutura = '23:59';
-      const hoy    = new Date().toLocaleDateString('sv-SE');
-      const manana = new Date(Date.now() + 86400000).toLocaleDateString('sv-SE');
-      const ayer   = new Date(Date.now() - 86400000).toLocaleDateString('sv-SE');
-
+    it('devuelve solo eventos futuros y eventos en curso', async () => {
+      const ahora = new Date();
+      const hoy = ahora.toLocaleDateString('sv-SE');
       mockEventoRepo.find.mockResolvedValue([
-        { id_evento: 1, fecha: manana, horaInicio: '08:00', materia: {} },
-        { id_evento: 2, fecha: ayer,   horaInicio: '08:00', materia: {} },
-        { id_evento: 3, fecha: hoy,    horaInicio: horaFutura, materia: {} },
-      ]);
+      {
+        id_evento: 1,
+        fecha: hoy,
+        horaInicio: "08:00",
+        horaFin: "23:59",
+        materia: {
+          inscripciones: [
+            {
+              usuario: {
+                id_usuario: 5
+              }
+            }
+          ]
+        }
+      },
 
-      const result = await service.eventosUsuario(5);
-      const ids = result.map(e => e.id_evento);
-      expect(ids).toContain(1);
-      expect(ids).toContain(3);
-      expect(ids).not.toContain(2);
-    });
+      {
+        id_evento: 2,
+        fecha: "2020-01-01",
+        horaInicio: "08:00",
+        horaFin: "09:00",
+        materia: {
+          inscripciones: [
+            {
+              usuario: {
+                id_usuario: 5
+              }
+            }
+          ]
+        }
+      },
 
-    it('devuelve array vacío si no hay eventos', async () => {
-      mockEventoRepo.find.mockResolvedValue([]);
-      const result = await service.eventosUsuario(5);
-      expect(result).toEqual([]);
-    });
+      {
+        id_evento: 3,
+        fecha: "2099-12-31",
+        horaInicio: "10:00",
+        horaFin: "11:00",
+        materia: {
+          inscripciones: [
+            {
+              usuario: {
+                id_usuario: 5
+              }
+            }
+          ]
+        }
+      }
+    ]);
+
+    const result = await service.eventosUsuario(5);
+    const ids = result.map(e => e.id_evento);
+
+    expect(ids).toContain(1);
+    expect(ids).toContain(3);
+    expect(ids).not.toContain(2);
+
   });
+
+
+  it('devuelve array vacío si no hay eventos', async () => {
+    mockEventoRepo.find.mockResolvedValue([]);
+    const result = await service.eventosUsuario(5);
+    expect(result).toEqual([]);
+
+  });
+
+});
 });

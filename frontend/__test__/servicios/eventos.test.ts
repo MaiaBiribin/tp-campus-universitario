@@ -26,12 +26,9 @@ describe("servicios para conseguir eventos de varias maneras",()=>{
   
 
     it("deberia poder conseguir todos los eventos",async()=>{
-         const listaEventos:Evento[]=[
-          { id: 1, titulo: "Examen", fecha: "2026-07-14", horaInicio: "09:00" },
-          { id: 2, titulo: "defensa tp", fecha: "2026-07-01", horaInicio: "15:00" }
-
-         ] as unknown as Evento[]
-       
+         const listaEventos:Evento[]=[{ id: 1, titulo: "Examen", fecha: "2026-07-14", horaInicio: "09:00",
+          horaFin: "10:00"},{ id: 2, titulo: "defensa tp", fecha: "2026-07-01", horaInicio: "15:00",
+            horaFin: "16:00"}] as unknown as Evento[]
        
         (api as jest.Mock).mockResolvedValue({
             ok:true,
@@ -118,11 +115,9 @@ describe("servicios para conseguir eventos de varias maneras",()=>{
     });
   
    it("deberia poder traer los eventos de la semana",async()=>{
-        const listaEventosSemana:Evento[]=[
-          { id: 4, titulo: "Clase virtual", fecha: "2026-06-20", horaInicio: "09:00" },
-          { id: 6, titulo: "Recuperatorio", fecha: "2026-06-21", horaInicio: "15:00" }
-
-         ] as unknown as Evento[]
+        const listaEventosSemana:Evento[]=[{ id: 4, titulo: "Clase virtual", fecha: "2026-06-20", 
+          horaInicio: "09:00",horaFin: "10:00"},{ id: 6, titulo: "Recuperatorio", fecha: "2026-06-21", 
+            horaInicio: "15:00",horaFin: "16:00"}] as unknown as Evento[]
    
         (api as jest.Mock).mockResolvedValue({
         ok: true,
