@@ -14,6 +14,7 @@ describe('AvisosController', () => {
     findByEvento: jest.fn(),
     remove: jest.fn(),
     update: jest.fn(),
+    avisosUsuario: jest.fn()
   };
 
   beforeEach(async () => {
@@ -44,10 +45,18 @@ describe('AvisosController', () => {
     expect(mockAvisosService.create).toHaveBeenCalledWith('Clase cancelada', 5, 1);
   });
 
-  it('findAll delega al servicio', async () => {
+  it('findAll delega al servicio cuando el usuario es Admin', async () => {
+    const req = { user: { sub: 5, rol: 'Admin' } };
     mockAvisosService.findAll.mockResolvedValue([]);
-    await controller.findAll();
+    await controller.findAll(req);
     expect(mockAvisosService.findAll).toHaveBeenCalled();
+  });
+
+  it('findAll delega en avisosUsuario cuando el usuario no es Admin', async () => {
+      const req = { user: { sub: 5, rol: 'Docente' } };
+      mockAvisosService.avisosUsuario = jest.fn().mockResolvedValue([]);
+      await controller.findAll(req);
+      expect(mockAvisosService.avisosUsuario).toHaveBeenCalledWith(5);
   });
 
   it('findByEvento delega al servicio con el id del evento', async () => {
