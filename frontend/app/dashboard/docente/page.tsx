@@ -33,11 +33,7 @@ export default function DashboardDocente() {
         const eventos = await getEventos();
         const ahora = new Date();
         const hoy = ahora.toISOString().split("T")[0];
-        const clasesDeHoy = eventos.filter((evento: Evento) => {
-          const inicio = new Date(`${evento.fecha}T${evento.horaInicio}`);
-        const fin = new Date(`${evento.fecha}T${evento.horaFin}`);
-        return (evento.fecha === hoy &&ahora >= inicio &&ahora <= fin);
-    });
+        const clasesDeHoy = eventos.filter((evento: Evento) => evento.fecha === hoy);
     setClasesHoy(clasesDeHoy.length);
       let cantidadAvisos = 0;
       for(const evento of eventos){

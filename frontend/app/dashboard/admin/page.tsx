@@ -35,13 +35,13 @@ export default function DashboardAdmin() {
       const eventos = await getEventos();
       const ahora = new Date();
       const hoy = ahora.toISOString().split("T")[0];
-      const eventosDeHoy = eventos.filter((evento: Evento) => {
-        const inicio = new Date(`${evento.fecha}T${evento.horaInicio}`);
-      const fin = new Date(`${evento.fecha}T${evento.horaFin}`);
-      return evento.fecha === hoy && ahora >= inicio && ahora <= fin;
-  });
+      const eventosDeHoy = eventos.filter((evento: Evento) => evento.fecha === hoy);
   setEventosHoy(eventosDeHoy.length);
-  const aulas = new Set(eventosDeHoy.map((evento: Evento) => evento.aula?.id_aula));
+  const eventosEnCurso = eventos.filter((evento: Evento) => {
+  const inicio = new Date(`${evento.fecha}T${evento.horaInicio}`);
+  const fin = new Date(`${evento.fecha}T${evento.horaFin}`);
+  return ahora >= inicio && ahora <= fin;});
+  const aulas = new Set(eventosEnCurso.map((evento: Evento) => evento.aula?.id_aula));
   setAulasOcupadas(aulas.size);
     }
     catch {
