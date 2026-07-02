@@ -31,11 +31,14 @@ export default function DashboardDocente() {
         setError("");
         setCargando(true);
         const eventos = await getEventos();
-        const hoy = new Date().toISOString().split("T")[0];
-        const clasesDeHoy =eventos.filter((evento:Evento)=>
-          evento.fecha === hoy
-      );
-      setClasesHoy(clasesDeHoy.length);
+        const ahora = new Date();
+        const hoy = ahora.toISOString().split("T")[0];
+        const clasesDeHoy = eventos.filter((evento: Evento) => {
+          const inicio = new Date(`${evento.fecha}T${evento.horaInicio}`);
+        const fin = new Date(`${evento.fecha}T${evento.horaFin}`);
+        return (evento.fecha === hoy &&ahora >= inicio &&ahora <= fin);
+    });
+    setClasesHoy(clasesDeHoy.length);
       let cantidadAvisos = 0;
       for(const evento of eventos){
       const avisos =
