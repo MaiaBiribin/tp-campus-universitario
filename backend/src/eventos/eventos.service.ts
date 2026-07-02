@@ -51,8 +51,8 @@ export class EventosService {
     }
     const idAula = Number(data.aula?.id_aula);
     const aula = await this.repo.manager.getRepository('aulas').findOne({where:{id_aula:idAula}});
-    const inscriptos = await this.inscripcionRepo.find({where:{materia:{
-      id_materia:Number(data.materia?.id_materia)}}});
+    const inscriptos = await this.inscripcionRepo.find({where: {materia: {id_materia: Number(data.materia?.id_materia),},
+  },relations: {usuario: true,},});
       if(aula && inscriptos.length > aula.capacidad){
         throw new BadRequestException(`El aula ${aula.nombre} no tiene capacidad suficiente. Capacidad: ${aula.capacidad}. Alumnos inscriptos: ${inscriptos.length}`);
       }
